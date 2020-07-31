@@ -1,6 +1,6 @@
 import {render} from "./view/util.js";
 import {createMajorTripInfoTemplate} from "./view/majorTripInfo.js";
-import {createMajorTripCostTemplate} from "./view/MajorTripCost.js";
+import {createMajorTripCostTemplate} from "./view/majorTripCost.js";
 import {createToggleViewListTripTemplate} from "./view/toggleViewListTrip.js";
 import {createMainTripFilterTemplate} from "./view/mainTripFilter.js";
 import {createTripSortTemplate} from "./view/tripSort.js";
