@@ -8,7 +8,7 @@ import {createTripEventEditContainerTemplate} from "./view/tripEventEditContaine
 import {createTripEditorHeaderTemplate} from "./view/tripEditorHeader.js";
 import {createTripEditorDetailsTemplate} from "./view/tripEditorDetails.js";
 import {createTripPointsListTemplate} from "./view/tripPointsList.js";
-import {createTripDayTemplate} from "./view/tripDay.js";
+import {createTripPointTemplate} from "./view/tripPoint.js";
 
 const COUNT_RENDER_DAYS_TRIP = 3;
 
@@ -43,5 +43,5 @@ render(siteTripEventEditContainer, createTripPointsListTemplate(), `afterend`);
 const siteTripListPoints = siteSiteMainContainer.querySelector(`.trip-days`);
 
 for (let i = 0; i < COUNT_RENDER_DAYS_TRIP; i++) {
-  render(siteTripListPoints, createTripDayTemplate(), `afterbegin`);
+  render(siteTripListPoints, createTripPointTemplate(), `afterbegin`);
 }
