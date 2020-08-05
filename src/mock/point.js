@@ -28,12 +28,17 @@ const setDiscription = () => {
   return splittedText.slice(0, randomIndex);
 };
 
+const setDurationTripTime = () => {
+
+};
+
 export const point = {
   setTypeofPoint,
   setCities,
   setExtras,
   setDiscription,
   photos: `http://picsum.photos/248/152?r=${Math.random()}`,
+  setDurationTripTime,
 };
 
 
