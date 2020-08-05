@@ -17,7 +17,22 @@ export const setCities = () => {
   return cities[randomIndex]
 };
 
-const setExtras = () => {
+const setExtras = (type) => {
+  if (type === `Flight` && type === `Ship` && type === `Bus`) {
+    return {
+      luggage: [`Add luggage`, 30],
+      comfort: [`Switch to comfort class`, 100],
+      meal: [`Add meal`, 15],
+      seats: [`Choose seats`, 5],
+      train: [`Travel by train`, 40],
+    };
+  } else {
+    return {
+      uber: [`Order Uber`, 20],
+      rent: [`Rent a car`, 200],
+      breakfast: [`Add breakfast`, 50],
+    };
+  }
 };
 
 const setDiscription = () => {
@@ -32,13 +47,15 @@ const setDurationTripTime = () => {
 
 };
 
-export const point = {
-  setTypeofPoint,
-  setCities,
-  setExtras,
-  setDiscription,
-  photos: `http://picsum.photos/248/152?r=${Math.random()}`,
-  setDurationTripTime,
+export const point = () => {
+  return {
+    setTypeofPoint,
+    setCities,
+    setExtras,
+    setDiscription,
+    photos: `http://picsum.photos/248/152?r=${Math.random()}`,
+    setDurationTripTime,
+  }
 };
 
 
