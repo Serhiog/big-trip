@@ -1,16 +1,20 @@
-import {render} from "./view/util.js";
-import {createMajorTripInfoTemplate} from "./view/majorTripInfo.js";
-import {createMajorTripCostTemplate} from "./view/majorTripCost.js";
-import {createToggleViewListTripTemplate} from "./view/toggleViewListTrip.js";
-import {createMainTripFilterTemplate} from "./view/mainTripFilter.js";
-import {createTripSortTemplate} from "./view/tripSort.js";
-import {createTripEventEditContainerTemplate} from "./view/tripEventEditContainer.js";
-import {createTripEditorHeaderTemplate} from "./view/tripEditorHeader.js";
-import {createTripEditorDetailsTemplate} from "./view/tripEditorDetails.js";
-import {createTripPointsListTemplate} from "./view/tripPointsList.js";
-import {createTripPointTemplate} from "./view/tripPoint.js";
+import { render } from "./view/util.js";
+import { createMajorTripInfoTemplate } from "./view/majorTripInfo.js";
+import { createMajorTripCostTemplate } from "./view/majorTripCost.js";
+import { createToggleViewListTripTemplate } from "./view/toggleViewListTrip.js";
+import { createMainTripFilterTemplate } from "./view/mainTripFilter.js";
+import { createTripSortTemplate } from "./view/tripSort.js";
+import { createTripEventEditContainerTemplate } from "./view/tripEventEditContainer.js";
+import { createTripEditorHeaderTemplate } from "./view/tripEditorHeader.js";
+import { createTripEditorDetailsTemplate } from "./view/tripEditorDetails.js";
+import { createTripPointsListTemplate } from "./view/tripPointsList.js";
+import { createTripPointTemplate } from "./view/tripPoint.js";
+import { point } from "./mock/point.js";
+import { getRandomInteger } from "./mock/point.js";
 
 const COUNT_RENDER_DAYS_TRIP = 3;
+
+const points = new Array(COUNT_RENDER_DAYS_TRIP).fill().map(point);
 
 const sitePageBodyContent = document.querySelector(`.page-body`);
 const siteHeaderContainer = sitePageBodyContent.querySelector(`.page-header`);
@@ -35,13 +39,13 @@ const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__
 render(siteTripSortTemplate, createTripEventEditContainerTemplate(), `afterend`);
 const siteTripEventEditContainer = siteSiteMainContainer.querySelector(`.trip-events__item`);
 
-render(siteTripEventEditContainer, createTripEditorHeaderTemplate(), `afterbegin`);
+render(siteTripEventEditContainer, createTripEditorHeaderTemplate(points), `afterbegin`);
 
-render(siteTripEventEditContainer, createTripEditorDetailsTemplate(), `beforeend`);
+render(siteTripEventEditContainer, createTripEditorDetailsTemplate(points), `beforeend`);
 
-render(siteTripEventEditContainer, createTripPointsListTemplate(), `afterend`);
-const siteTripListPoints = siteSiteMainContainer.querySelector(`.trip-days`);
+render(siteTripEventEditContainer, createTripPointsListTemplate(points[getRandomInteger(0, points.length - 1)]), `afterend`);
+const siteTripListPoints = siteSiteMainContainer.querySelector(`.trip-events__list`);
 
 for (let i = 0; i < COUNT_RENDER_DAYS_TRIP; i++) {
-  render(siteTripListPoints, createTripPointTemplate(), `afterbegin`);
+  render(siteTripListPoints, createTripPointTemplate(points[i]), `afterbegin`);
 }
