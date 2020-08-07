@@ -12,7 +12,7 @@ import { createTripPointTemplate } from "./view/tripPoint.js";
 import { point } from "./mock/point.js";
 import { getRandomInteger } from "./mock/point.js";
 
-const COUNT_RENDER_DAYS_TRIP = 3;
+const COUNT_RENDER_DAYS_TRIP = 5;
 
 const points = new Array(COUNT_RENDER_DAYS_TRIP).fill().map(point);
 

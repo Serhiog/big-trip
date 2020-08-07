@@ -1,4 +1,4 @@
-
+const TYPES = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -8,9 +8,8 @@ export const getRandomInteger = (a = 0, b = 1) => {
 };
 
 export const getTypeOfPoint = () => {
-  const types = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
-  const randomIndex = getRandomInteger(0, types.length - 1);
-  return types[randomIndex];
+  const randomIndex = getRandomInteger(0, TYPES.length - 1);
+  return TYPES[randomIndex];
 }
 
 const getCities = () => {
@@ -22,9 +21,13 @@ const getCities = () => {
 const getExtras = () => {
 
   const services = [`Add luggage`, `Switch to comfort class`, `Add meal`, `Choose seats`, `Travel by train`];
-  const prices = [30, 100, 15, 5, 40]
+  const prices = [30, 100, 15, 5, 40];
+  const randomOfServices = getRandomInteger(0, services.length - 1);
+  const prepareForServices = services.slice(0, randomOfServices);
+  const finalServices = [].slice.call(prepareForServices);
+  let finalPrices = prices[getRandomInteger(0, prices.length - 1)];
 
-  return [services[getRandomInteger(0, services.length - 1)], prices[getRandomInteger(0, prices.length - 1)]];
+  return [finalServices, finalPrices];
 };
 
 const getDiscription = () => {
@@ -35,44 +38,28 @@ const getDiscription = () => {
   return splittedText[randomIndex];
 };
 
-const getDurationTripTime = () => {
-  let startHours = getRandomInteger(0, 24);
-  let startMinutes = getRandomInteger(0, 60);
-  if (startMinutes < 10) {
-    startMinutes = `0${startMinutes}`;
-  }
-  let endHours = getRandomInteger(0, 24);
-  let endMinutes = getRandomInteger(0, 60);
-  if (endMinutes < 10) {
-    endMinutes = `0${endMinutes}`;
-  }
-  if (startHours > endHours) {
-    startHours = endHours;
-    endHours = `23`;
-  }
-  let firstDate = `${startHours}:${startMinutes}`;
-  let secondDate = `${endHours}:${endMinutes}`;
+const generateDate = (date) => {
+  return new Date(date.getTime() + getRandomInteger(1, 30) * 60 * 60 * 1000);
+}
 
-  let getDate = (string) => new Date(0, 0, 0, string.split(`:`)[0], string.split(`:`)[1]);
-  let different = (getDate(secondDate) - getDate(firstDate));
+const t1 = generateDate(new Date());
+const t2 = generateDate(t1);
 
-  let hours = Math.floor((different % 86400000) / 3600000);
-  let minutes = Math.round(((different % 86400000) % 3600000) / 60000);
-  let result = hours + `H` + ` ` + minutes + `M`;
 
-  return { firstDate, secondDate, result };
+const generatePhotos = () => {
+  const randomPhotos = [`http://picsum.photos/248/152?r=${Math.random()}`, `http://picsum.photos/248/152?r=${Math.random()}`, `http://picsum.photos/248/152?r=${Math.random()}`];
+  return randomPhotos;
 };
 
 export const point = () => {
-  const { firstDate, secondDate, result } = getDurationTripTime();
   return {
     type: getTypeOfPoint(),
     cities: getCities(),
-    extras: getExtras(),
+    extrasServices: getExtras()[0],
+    finalPrices: getExtras()[1],
     discription: getDiscription(),
-    photos: `http://picsum.photos/248/152?r=${Math.random()}`,
-    firstDate,
-    secondDate,
-    result
+    photos: generatePhotos(),
+    timeStart: t1,
+    timeEnd: t2,
   };
 };

@@ -79,9 +79,9 @@ export const createTripEditorHeaderTemplate = (points) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Chamonix" list="destination-list-1">
     <datalist id="destination-list-1">
-      <option value=></option>
-      <option value=></option>
-      <option value=></option>
+      <option value=>${cities}</option>
+      <option value=>${cities}</option>
+      <option value=>${cities}</option>
     </datalist>
   </div>
 
