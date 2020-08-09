@@ -1,3 +1,5 @@
+
+
 const TYPES = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
 
 export const getRandomInteger = (a = 0, b = 1) => {
@@ -36,18 +38,12 @@ const getDiscription = () => {
   return splittedText[randomIndex];
 };
 
-const generateDate = (date) => {
-  return new Date(date.getTime() + getRandomInteger(1, 30) * 60 * 60 * 1000);
-}
-
-const t1 = generateDate(new Date());
-const t2 = generateDate(t1);
-
 
 const generatePhotos = () => {
   const randomPhotos = [`http://picsum.photos/248/152?r=${Math.random()}`, `http://picsum.photos/248/152?r=${Math.random()}`, `http://picsum.photos/248/152?r=${Math.random()}`];
   return randomPhotos;
 };
+
 
 export const point = () => {
   return {
@@ -57,7 +53,5 @@ export const point = () => {
     finalPrices,
     discription: getDiscription(),
     photos: generatePhotos(),
-    timeStart: t1,
-    timeEnd: t2,
   };
 };

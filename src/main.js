@@ -10,7 +10,6 @@ import { createTripEditorDetailsTemplate } from "./view/tripEditorDetails.js";
 import { createTripPointsListTemplate } from "./view/tripPointsList.js";
 import { createTripPointTemplate } from "./view/tripPoint.js";
 import { point } from "./mock/point.js";
-import { getRandomInteger } from "./mock/point.js";
 
 const COUNT_RENDER_DAYS_TRIP = 5;
 
@@ -39,7 +38,9 @@ const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__
 render(siteTripSortTemplate, createTripEventEditContainerTemplate(), `afterend`);
 const siteTripEventEditContainer = siteSiteMainContainer.querySelector(`.trip-events__item`);
 
+
 render(siteTripEventEditContainer, createTripEditorHeaderTemplate(points), `afterbegin`);
+
 
 render(siteTripEventEditContainer, createTripEditorDetailsTemplate(points), `beforeend`);
 
@@ -63,9 +64,8 @@ let startDates = [];
 for (let j = 0; j < datesElement.length; j++) {
   startDates.push(datesElement[j].dateTime);
 }
+console.log(startDates);
 
 let uniqueDates = startDates.filter((elem, index, array) => array.indexOf(elem) === index);
 
-console.log(uniqueDates.length);
-
-
+console.log(uniqueDates);

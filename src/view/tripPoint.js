@@ -3,7 +3,7 @@ import { humanizeTaskDueDateView, humanizeTaskDueDateRobot } from "./util.js";
 import { getRandomInteger } from "../mock/point.js";
 
 export const createTripPointTemplate = (points) => {
-  let { type, cities, finalServices, finalPrices, timeStart, timeEnd } = points;
+  let { type, cities, finalServices, finalPrices } = points;
 
   let randomNumber = getRandomInteger(0, finalServices.length)
 
@@ -14,20 +14,20 @@ export const createTripPointTemplate = (points) => {
     countOfPrices = countOfPrices + price;
   });
 
-  let t1 = humanizeTaskDueDateView(timeStart);
-  let t2 = humanizeTaskDueDateView(timeEnd);
-  let t3 = humanizeTaskDueDateRobot(timeStart);
-  let t4 = humanizeTaskDueDateRobot(timeEnd);
 
-  let firstDate = t1;
-  let secondDate = t2;
+  const generateDate = (date) => {
+    return new Date(date.getTime() + getRandomInteger(1, 30) * 60 * 60 * 1000);
+  }
 
-  let getDate = (string) => new Date(0, 0, 0, string.split(`:`)[0], string.split(`:`)[1]);
-  let different = (getDate(secondDate) - getDate(firstDate));
+  const time1 = generateDate(new Date());
+  const time2 = generateDate(time1);
 
-  let hours = Math.floor((different % 86400000) / 3600000);
-  let minutes = Math.round(((different % 86400000) % 3600000) / 60000);
-  let result = hours + `H ` + minutes + `M `;
+
+  let timeDateStart = humanizeTaskDueDateView(time1);
+  let timeDateEnd = humanizeTaskDueDateView(time2);
+  let timeDateRobotStart = humanizeTaskDueDateRobot(time1);
+  let timeDateRobotEnd = humanizeTaskDueDateRobot(time1);
+
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -39,11 +39,11 @@ export const createTripPointTemplate = (points) => {
 
       <div class="event__schedule">
           <p class="event__time">
-              <time class="event__start-time" datetime=${t3}>${t1}</time>
+              <time class="event__start-time" datetime=${timeDateRobotStart}>${timeDateStart}</time>
               —
-              <time class="event__end-time" datetime=${t4}>${t2}</time>
+              <time class="event__end-time" datetime=${timeDateRobotEnd}>${timeDateEnd}</time>
           </p>
-          <p class="event__duration">${result}</p>
+          <p class="event__duration"></p>
       </div>
 
       <p class="event__price">
