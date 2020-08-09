@@ -43,9 +43,29 @@ render(siteTripEventEditContainer, createTripEditorHeaderTemplate(points), `afte
 
 render(siteTripEventEditContainer, createTripEditorDetailsTemplate(points), `beforeend`);
 
-render(siteTripEventEditContainer, createTripPointsListTemplate(points[getRandomInteger(0, points.length - 1)]), `afterend`);
+
+for (let j = 0; j < 2; j++) {
+  render(siteTripEventEditContainer, createTripPointsListTemplate(points[j]), `afterend`);
+}
+
 const siteTripListPoints = siteSiteMainContainer.querySelector(`.trip-events__list`);
 
 for (let i = 0; i < COUNT_RENDER_DAYS_TRIP; i++) {
   render(siteTripListPoints, createTripPointTemplate(points[i]), `afterbegin`);
 }
+
+const dataTimeStart = document.querySelectorAll(`.event__start-time`);
+
+let datesElement = Array.from(dataTimeStart);
+
+let startDates = [];
+
+for (let j = 0; j < datesElement.length; j++) {
+  startDates.push(datesElement[j].dateTime);
+}
+
+let uniqueDates = startDates.filter((elem, index, array) => array.indexOf(elem) === index);
+
+console.log(uniqueDates.length);
+
+

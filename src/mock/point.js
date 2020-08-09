@@ -13,22 +13,20 @@ export const getTypeOfPoint = () => {
 }
 
 const getCities = () => {
-  const cities = [`Berlin`, `Paris`, `Tallin`, `Belfast`]
+  const cities = [`Berlin`, `Paris`, `Tallin`, `Belfast`];
   const randomIndex = getRandomInteger(0, cities.length - 1);
   return cities[randomIndex];
 };
 
-const getExtras = () => {
+const setOfExtras = new Map();
+setOfExtras.set(` Add luggage`, 30);
+setOfExtras.set(` Switch to comfort class`, 100);
+setOfExtras.set(` Add meal`, 15);
+setOfExtras.set(` Choose seats`, 5);
+setOfExtras.set(` Travel by train`, 40);
 
-  const services = [`Add luggage`, `Switch to comfort class`, `Add meal`, `Choose seats`, `Travel by train`];
-  const prices = [30, 100, 15, 5, 40];
-  const randomOfServices = getRandomInteger(0, services.length - 1);
-  const prepareForServices = services.slice(0, randomOfServices);
-  const finalServices = [].slice.call(prepareForServices);
-  let finalPrices = prices[getRandomInteger(0, prices.length - 1)];
-
-  return [finalServices, finalPrices];
-};
+let finalServices = Array.from(setOfExtras.keys())
+let finalPrices = Array.from(setOfExtras.values())
 
 const getDiscription = () => {
   const discriptionText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
@@ -55,8 +53,8 @@ export const point = () => {
   return {
     type: getTypeOfPoint(),
     cities: getCities(),
-    extrasServices: getExtras()[0],
-    finalPrices: getExtras()[1],
+    finalServices,
+    finalPrices,
     discription: getDiscription(),
     photos: generatePhotos(),
     timeStart: t1,

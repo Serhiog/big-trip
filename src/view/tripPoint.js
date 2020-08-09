@@ -1,9 +1,18 @@
 
-import { humanizeTaskDueDateView } from "./util.js";
-import { humanizeTaskDueDateRobot } from "./util.js";
+import { humanizeTaskDueDateView, humanizeTaskDueDateRobot } from "./util.js";
+import { getRandomInteger } from "../mock/point.js";
 
 export const createTripPointTemplate = (points) => {
-  let { type, cities, extrasServices, finalPrices, timeStart, timeEnd } = points;
+  let { type, cities, finalServices, finalPrices, timeStart, timeEnd } = points;
+
+  let randomNumber = getRandomInteger(0, finalServices.length)
+
+  let userServices = finalServices.slice(0, randomNumber)
+  let userPrices = finalPrices.slice(0, randomNumber)
+  let countOfPrices = 0;
+  userPrices.forEach(price => {
+    countOfPrices = countOfPrices + price;
+  });
 
   let t1 = humanizeTaskDueDateView(timeStart);
   let t2 = humanizeTaskDueDateView(timeEnd);
@@ -13,14 +22,12 @@ export const createTripPointTemplate = (points) => {
   let firstDate = t1;
   let secondDate = t2;
 
-  let getDate = (string) => new Date(0, 0, 0, string.split(':')[0], string.split(':')[1]);
+  let getDate = (string) => new Date(0, 0, 0, string.split(`:`)[0], string.split(`:`)[1]);
   let different = (getDate(secondDate) - getDate(firstDate));
 
   let hours = Math.floor((different % 86400000) / 3600000);
   let minutes = Math.round(((different % 86400000) % 3600000) / 60000);
   let result = hours + `H ` + minutes + `M `;
-
-
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -41,20 +48,20 @@ export const createTripPointTemplate = (points) => {
 
       <p class="event__price">
 
-          ${!extrasServices.length ? `` : `€&nbsp;`}<span class="event__price-value">${!extrasServices.length ? `` : finalPrices}</span>
+          ${!userServices.length ? `` : `€&nbsp;`}<span class="event__price-value">${!userServices.length ? `` : countOfPrices}</span>
       </p>
 
       <h4 class="visually-hidden">Offers:</h4>
       <ul class="event__selected-offers">
           <li class="event__offer">
-              <span class="event__offer-title">${extrasServices}</span>
-              ${!extrasServices.length ? `` :
+              <span class="event__offer-title">${userServices}</span>
+              ${!userServices.length ? `` :
       `<span class="event__offer-symbol">
               +
               €&nbsp;
 
               </span>`}
-              <span class="event__offer-price">${!extrasServices.length ? `` : finalPrices} </span >
+              <span class="event__offer-price">${!userServices.length ? `` : countOfPrices} </span >
           </li >
       </ul >
 
