@@ -9,11 +9,24 @@ import { createTripEditorHeaderTemplate } from "./view/tripEditorHeader.js";
 import { createTripEditorDetailsTemplate } from "./view/tripEditorDetails.js";
 import { createTripPointsListTemplate } from "./view/tripPointsList.js";
 import { createTripPointTemplate } from "./view/tripPoint.js";
-import { point } from "./mock/point.js";
+import { generateMocks } from "./mock/point.js";
+import { createTripEditTemplate } from "./mock/pointEditor.js";
 
-const COUNT_RENDER_DAYS_TRIP = 5;
+const COUNT_RENDER_DAYS_TRIP = 20;
 
-const points = new Array(COUNT_RENDER_DAYS_TRIP).fill().map(point);
+const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
+const groups = new Map();
+
+points.forEach((point) => {
+  const date = point.startDate.toISOString().split('T')[0];
+  if (!groups.has(date)) {
+    groups.set(date, [point]);
+  } else {
+    const items = groups.get(date);
+    items.push(point)
+  }
+});
+
 
 const sitePageBodyContent = document.querySelector(`.page-body`);
 const siteHeaderContainer = sitePageBodyContent.querySelector(`.page-header`);
@@ -35,37 +48,26 @@ const siteTripConstructor = siteSiteMainContainer.querySelector(`.trip-events h2
 render(siteTripConstructor, createTripSortTemplate(), `afterend`);
 const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__trip-sort`);
 
-render(siteTripSortTemplate, createTripEventEditContainerTemplate(), `afterend`);
-const siteTripEventEditContainer = siteSiteMainContainer.querySelector(`.trip-events__item`);
+// render(siteTripSortTemplate, createTripEventEditContainerTemplate(), `afterend`);
+// const siteTripEventEditContainer = siteSiteMainContainer.querySelector(`.trip-events__item`);
 
 
-render(siteTripEventEditContainer, createTripEditorHeaderTemplate(points), `afterbegin`);
+// render(siteTripEventEditContainer, createTripEditorHeaderTemplate(points), `afterbegin`);
 
 
-render(siteTripEventEditContainer, createTripEditorDetailsTemplate(points), `beforeend`);
+// render(siteTripEventEditContainer, createTripEditorDetailsTemplate(points), `beforeend`);
 
+render(siteTripSortTemplate, `<ul class="trip-days"><ul/>`, `afterend`)
+const tripDaysContainer = siteSiteMainContainer.querySelector('.trip-days');
 
-for (let j = 0; j < 2; j++) {
-  render(siteTripEventEditContainer, createTripPointsListTemplate(points[j]), `afterend`);
+let dayNumber = 1;
+for (let group of groups.entries()) {
+  render(tripDaysContainer, createTripPointsListTemplate(group, dayNumber), `beforeend`);
+  dayNumber++;
 }
 
-const siteTripListPoints = siteSiteMainContainer.querySelector(`.trip-events__list`);
+const eventBtns = document.querySelectorAll(`.event__rollup-btn`);
+eventBtns.forEach(btn => {
+  btn.addEventListener(`click`, createTripEditTemplate)
+});
 
-for (let i = 0; i < COUNT_RENDER_DAYS_TRIP; i++) {
-  render(siteTripListPoints, createTripPointTemplate(points[i]), `afterbegin`);
-}
-
-const dataTimeStart = document.querySelectorAll(`.event__start-time`);
-
-let datesElement = Array.from(dataTimeStart);
-
-let startDates = [];
-
-for (let j = 0; j < datesElement.length; j++) {
-  startDates.push(datesElement[j].dateTime);
-}
-console.log(startDates);
-
-let uniqueDates = startDates.filter((elem, index, array) => array.indexOf(elem) === index);
-
-console.log(uniqueDates);

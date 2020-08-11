@@ -1,16 +1,11 @@
 import { getRandomInteger } from "../mock/point";
 
 export const createTripEditorHeaderTemplate = (points) => {
-
-  let userCities = [];
-  points.forEach((element) => {
-
-    userCities.push(element.cities)
-  });
-
-  let citiesForSelect = new Set(userCities);
-  let selectCities = citiesForSelect.values();
-  console.log(selectCities)
+console.log(points)
+  // ${ points[getRandomInteger(0, points.length)].city }
+  // ${ points[getRandomInteger(0, points.length)].city }
+  // ${ points[getRandomInteger(0, points.length)].city }
+  // ${ points[getRandomInteger(0, points.length)].city }
 
   return `<header class="event__header">
   <div class="event__type-wrapper">
@@ -87,10 +82,10 @@ export const createTripEditorHeaderTemplate = (points) => {
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Chamonix" list="destination-list-1">
     <datalist id="destination-list-1">
-    <option value="${citiesForSelect}"></option>
-    <option value="${citiesForSelect}"></option>
-    <option value="${citiesForSelect}"></option>
-    <option value="${citiesForSelect}"></option>
+    <option value=""></option>
+    <option value=""></option>
+    <option value=""></option>
+    <option value=""></option>
   </datalist>
   </div>
 

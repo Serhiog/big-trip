@@ -14,28 +14,27 @@ export const getTypeOfPoint = () => {
   return TYPES[randomIndex];
 }
 
-const getCities = () => {
-  const cities = [`Berlin`, `Paris`, `Tallin`, `Belfast`];
-  const randomIndex = getRandomInteger(0, cities.length - 1);
-  return cities[randomIndex];
+const getcity = () => {
+  const city = [`Berlin`, `Paris`, `Tallin`, `Belfast`];
+  const randomIndex = getRandomInteger(0, city.length - 1);
+  return city[randomIndex];
 };
 
-const setOfExtras = new Map();
-setOfExtras.set(` Add luggage`, 30);
-setOfExtras.set(` Switch to comfort class`, 100);
-setOfExtras.set(` Add meal`, 15);
-setOfExtras.set(` Choose seats`, 5);
-setOfExtras.set(` Travel by train`, 40);
 
-let finalServices = Array.from(setOfExtras.keys())
-let finalPrices = Array.from(setOfExtras.values())
+const getOptions = () => {
+  const options = [
+    [`Add luggage`, 30], [`Switch to comfort`, 100], [`Add meal`, 15], [`Choose seats`, 5], [`Travel by train`, 40]
+  ];
+
+  return options.slice(0, getRandomInteger(0, options.length));
+}
 
 const getDiscription = () => {
   const discriptionText = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.`;
 
   const splittedText = discriptionText.split(`.`);
-  const randomIndex = getRandomInteger(0, splittedText.length - 1);
-  return splittedText[randomIndex];
+  const randomIndex = getRandomInteger(0, splittedText.length);
+  return splittedText.slice(0, randomIndex).join();
 };
 
 
@@ -45,13 +44,35 @@ const generatePhotos = () => {
 };
 
 
-export const point = () => {
+const generateDate = (date) => {
+  return new Date(date.getTime() + getRandomInteger(1, 30) * 60 * 60 * 1000);
+}
+
+const point = (date) => {
+  const time1 = generateDate(date);
+  const time2 = generateDate(time1);
+
   return {
     type: getTypeOfPoint(),
-    cities: getCities(),
-    finalServices,
-    finalPrices,
+    city: getcity(),
+    price: getRandomInteger(25, 150),
+    options: getOptions(),
     discription: getDiscription(),
     photos: generatePhotos(),
+    startDate: time1,
+    endDate: time2
   };
 };
+
+export const generateMocks = (size) => {
+  const mocks = [];
+  let date = new Date();
+
+  for (let i = 0; i < size; i++) {
+    const p = point(date);
+    date = p.endDate;
+    mocks.push(p);
+  }
+
+  return mocks;
+}

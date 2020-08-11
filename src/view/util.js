@@ -4,10 +4,7 @@ export const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
-export const humanizeTaskDueDateView = (date) => {
-  return date.toLocaleString(`en-GB`, { hour: `numeric`, minute: `numeric` });
-};
-export const humanizeTaskDueDateRobot = (date) => {
-  return date.toLocaleString();
+export const humanizeTaskDueDate = (date) => {
+  return date.toISOString().split('T')[1].slice(0, 5);
 };
 
