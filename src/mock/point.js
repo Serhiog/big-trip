@@ -56,7 +56,7 @@ const point = (date) => {
     type: getTypeOfPoint(),
     city: getcity(),
     //price: getRandomInteger(25, 150),
-    price: 111,
+    //price: 111,
     options: getOptions(),
     discription: getDiscription(),
     photos: generatePhotos(),

@@ -10,8 +10,11 @@ export const humanizeTaskDueDate = (date) => {
 
 export const msToTime = (durMilisecunds) => {
   let minutes = Math.floor((durMilisecunds / (1000 * 60)) % 60);
+  minutes <= 0 ? minutes = `` : minutes = minutes + `M `;
   let hours = Math.floor((durMilisecunds / (1000 * 60 * 60)) % 24);
-  let days = Math.floor((durMilisecunds / (1000 * 60 * 60 * 24)) % 24);
+  hours <= 0 ? hours = `` : hours = hours + `H `;
+  let days = Math.floor((durMilisecunds / (1000 * 60 * 60 * 24)));
+  days <= 0 ? days = `` : days = days + `D `;
   return {
     hours,
     minutes,

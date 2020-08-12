@@ -42,7 +42,7 @@ export const createTripPointTemplate = (point) => {
               —
               <time class="event__end-time" datetime=${endDate}>${t2}</time>
           </p>
-          <p class="event__duration">${days <= 0 ? `` : days + `D `} ${hours <= 0 ? `` : hours + `H `} ${minutes <= 0 ? `` : minutes + `M `}</p >
+          <p class="event__duration">${days} ${hours} ${minutes}</p >
       </div>
 
 

@@ -12,7 +12,7 @@ import { createTripPointTemplate } from "./view/tripPoint.js";
 import { generateMocks } from "./mock/point.js";
 import { createTripEditTemplate } from "./mock/pointEditor.js";
 
-const COUNT_RENDER_DAYS_TRIP = 10;
+const COUNT_RENDER_DAYS_TRIP = 3;
 
 const point = generateMocks(COUNT_RENDER_DAYS_TRIP);
 const groups = new Map();
@@ -28,6 +28,7 @@ point.forEach((point) => {
     items.push(point)
   }
 });
+
 
 const sitePageBodyContent = document.querySelector(`.page-body`);
 const siteHeaderContainer = sitePageBodyContent.querySelector(`.page-header`);
@@ -62,19 +63,28 @@ render(siteTripSortTemplate, `<ul class="trip-days"><ul/>`, `afterend`)
 const tripDaysContainer = siteSiteMainContainer.querySelector('.trip-days');
 
 let dayNumber = 1;
+
 for (let group of groups.entries()) {
   render(tripDaysContainer, createTripPointsListTemplate(group, dayNumber), `beforeend`);
   dayNumber++;
+}
+
+let tyt
+
+for (let group of groups.entries()) {
+  tyt = group
 }
 
 const renderPointEditor = (evt) => {
   const pointCommonContainer = evt.target.parentNode.parentNode;
   const pointContainer = evt.target.parentNode;
   pointContainer.classList.add(`visually-hidden`);
-  render(pointCommonContainer, createTripEditTemplate(), `afterbegin`);
+
+  render(pointCommonContainer, createTripEditTemplate(tyt), `afterbegin`);
+
   const closeBtn = pointCommonContainer.querySelector(`.event__rollup-btn`);
   closeBtn.addEventListener(`click`, function () {
-    pointCommonContainer.querySelector(`.event--edit`).remove()
+    pointCommonContainer.querySelector(`.event--edit`).remove();
     pointContainer.classList.remove(`visually-hidden`)
   });
 }

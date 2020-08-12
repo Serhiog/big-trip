@@ -10,7 +10,6 @@ export const createTripPointsListTemplate = (group, dayNumber) => {
   let html = '';
   points.forEach(point => {
     html += createTripPointTemplate(point);
-    createTripEditTemplate(point)
   });
 
   return `

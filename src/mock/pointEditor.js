@@ -1,11 +1,9 @@
 
-import { render } from "../view/util.js";
+import { render, date4User } from "../view/util.js";
 
-export const createTripEditTemplate = (point) => {
+export const createTripEditTemplate = (tyt) => {
 
-  // let { city } = point;
-  console.log(point)
-
+  console.log(tyt)
   return `<form class="event  event--edit" action="#" method="post">
 <header class="event__header">
   <div class="event__type-wrapper">
@@ -80,7 +78,7 @@ export const createTripEditTemplate = (point) => {
     <label class="event__label  event__type-output" for="event-destination-1">
       Flight to
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${``}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${tyt.city}" list="destination-list-1">
     <datalist id="destination-list-1">
       <option value="Amsterdam"></option>
       <option value="Geneva"></option>
