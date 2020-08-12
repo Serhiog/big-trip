@@ -1,23 +1,24 @@
 
 import { humanizeTaskDueDate } from "./util.js";
-
+import { msToTime } from "./util.js";
 
 export const createTripPointTemplate = (point) => {
   const MAX_COUNT_OPTIONS = 3;
   let { type, city, price, options, startDate, endDate } = point;
 
-  const t1 = humanizeTaskDueDate(startDate)
-  const t2 = humanizeTaskDueDate(endDate)
+
+
+  let durMilisecunds = endDate.getTime() - startDate.getTime();
+  let { hours, minutes, days } = msToTime(durMilisecunds);
+
+  const t1 = humanizeTaskDueDate(startDate);
+  const t2 = humanizeTaskDueDate(endDate);
 
   let optionsHtml = '';
 
-  let isEmptyOptions = false;
-
-  if (!point.options.length) {
-    isEmptyOptions = true;
-  }
-
+  let totalPrice = 0;
   options.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
+    totalPrice += option[1];
     optionsHtml += `
         <li class="event__offer">
               <span class="event__offer-title">${option[0]}</span>
@@ -26,15 +27,6 @@ export const createTripPointTemplate = (point) => {
           </li >
     `;
   });
-
-  let durMilisecunds = endDate.getTime() - startDate.getTime()
-  const msToTime = (durMilisecunds) => {
-    let minutes = Math.floor((durMilisecunds / (1000 * 60)) % 60);
-    let hours = Math.floor((durMilisecunds / (1000 * 60 * 60)) % 24);
-
-    return (hours + "H " + minutes + "M")
-  }
-  let duration = msToTime(durMilisecunds);
 
   return `<li class="trip-events__item">
   <div class="event">
@@ -50,12 +42,14 @@ export const createTripPointTemplate = (point) => {
               —
               <time class="event__end-time" datetime=${endDate}>${t2}</time>
           </p>
-          <p class="event__duration">${duration}</p>
+          <p class="event__duration">${days <= 0 ? `` : days + `D `} ${hours <= 0 ? `` : hours + `H `} ${minutes <= 0 ? `` : minutes + `M `}</p >
       </div>
-${isEmptyOptions === false ?
-      `<p class="event__price">
-          € <span class="event__price-value">${price}</span>
-      </p>` : ``}
+
+
+      <p class="event__price">
+          € <span class="event__price-value">${totalPrice}</span>
+      </p>
+
 <h4 class="visually-hidden">Offers:</h4>
   <ul class="event__selected-offers">
     ${optionsHtml}

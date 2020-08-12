@@ -55,7 +55,8 @@ const point = (date) => {
   return {
     type: getTypeOfPoint(),
     city: getcity(),
-    price: getRandomInteger(25, 150),
+    //price: getRandomInteger(25, 150),
+    price: 111,
     options: getOptions(),
     discription: getDiscription(),
     photos: generatePhotos(),
@@ -63,6 +64,7 @@ const point = (date) => {
     endDate: time2
   };
 };
+
 
 export const generateMocks = (size) => {
   const mocks = [];

@@ -1,11 +1,11 @@
 import { getRandomInteger } from "../mock/point";
 
-export const createTripEditorHeaderTemplate = (points) => {
-console.log(points)
-  // ${ points[getRandomInteger(0, points.length)].city }
-  // ${ points[getRandomInteger(0, points.length)].city }
-  // ${ points[getRandomInteger(0, points.length)].city }
-  // ${ points[getRandomInteger(0, points.length)].city }
+export const createTripEditorHeaderTemplate = (point) => {
+console.log(point)
+  // ${ point[getRandomInteger(0, point.length)].city }
+  // ${ point[getRandomInteger(0, point.length)].city }
+  // ${ point[getRandomInteger(0, point.length)].city }
+  // ${ point[getRandomInteger(0, point.length)].city }
 
   return `<header class="event__header">
   <div class="event__type-wrapper">

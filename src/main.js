@@ -12,27 +12,28 @@ import { createTripPointTemplate } from "./view/tripPoint.js";
 import { generateMocks } from "./mock/point.js";
 import { createTripEditTemplate } from "./mock/pointEditor.js";
 
-const COUNT_RENDER_DAYS_TRIP = 20;
+const COUNT_RENDER_DAYS_TRIP = 10;
 
-const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
+const point = generateMocks(COUNT_RENDER_DAYS_TRIP);
 const groups = new Map();
 
-points.forEach((point) => {
+let tripEndDay = 0;
+point.forEach((point) => {
   const date = point.startDate.toISOString().split('T')[0];
   if (!groups.has(date)) {
     groups.set(date, [point]);
+    tripEndDay++;
   } else {
     const items = groups.get(date);
     items.push(point)
   }
 });
 
-
 const sitePageBodyContent = document.querySelector(`.page-body`);
 const siteHeaderContainer = sitePageBodyContent.querySelector(`.page-header`);
 const siteHeaderMainTripContainer = siteHeaderContainer.querySelector(`.trip-main`);
 
-render(siteHeaderMainTripContainer, createMajorTripInfoTemplate(), `afterbegin`);
+render(siteHeaderMainTripContainer, createMajorTripInfoTemplate(point, tripEndDay), `afterbegin`);
 const siteMajorInfoTrip = document.querySelector(`.trip-main__trip-info`);
 
 render(siteMajorInfoTrip, createMajorTripCostTemplate(), `beforeend`);
@@ -52,10 +53,10 @@ const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__
 // const siteTripEventEditContainer = siteSiteMainContainer.querySelector(`.trip-events__item`);
 
 
-// render(siteTripEventEditContainer, createTripEditorHeaderTemplate(points), `afterbegin`);
+// render(siteTripEventEditContainer, createTripEditorHeaderTemplate(point), `afterbegin`);
 
 
-// render(siteTripEventEditContainer, createTripEditorDetailsTemplate(points), `beforeend`);
+// render(siteTripEventEditContainer, createTripEditorDetailsTemplate(point), `beforeend`);
 
 render(siteTripSortTemplate, `<ul class="trip-days"><ul/>`, `afterend`)
 const tripDaysContainer = siteSiteMainContainer.querySelector('.trip-days');
@@ -66,8 +67,20 @@ for (let group of groups.entries()) {
   dayNumber++;
 }
 
-const eventBtns = document.querySelectorAll(`.event__rollup-btn`);
-eventBtns.forEach(btn => {
-  btn.addEventListener(`click`, createTripEditTemplate)
+const renderPointEditor = (evt) => {
+  const pointCommonContainer = evt.target.parentNode.parentNode;
+  const pointContainer = evt.target.parentNode;
+  pointContainer.classList.add(`visually-hidden`);
+  render(pointCommonContainer, createTripEditTemplate(), `afterbegin`);
+  const closeBtn = pointCommonContainer.querySelector(`.event__rollup-btn`);
+  closeBtn.addEventListener(`click`, function () {
+    pointCommonContainer.querySelector(`.event--edit`).remove()
+    pointContainer.classList.remove(`visually-hidden`)
+  });
+}
+
+const eventOpenBtns = document.querySelectorAll(`.event__rollup-btn`);
+eventOpenBtns.forEach(btn => {
+  btn.addEventListener(`click`, renderPointEditor);
 });
 
