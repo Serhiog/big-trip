@@ -1,15 +1,21 @@
 
-import { render, date4User } from "../view/util.js";
+import { render, date4User, date4UserEnd, tripStartEndDates, humanizeTaskDueDate, formatedStartEndDate } from "../view/util.js";
+import { getOptions } from "./point.js";
 
-export const createTripEditTemplate = (tyt) => {
+export const createTripEditTemplate = (point, points) => {
+  const { type, city, price, options, startDate, endDate, id } = point;
 
-  console.log(tyt)
+  console.log(getOptions().fixedOptions)
+
+  const formatedStartDate = formatedStartEndDate(startDate) + humanizeTaskDueDate(startDate);
+  const formatedEndDate = formatedStartEndDate(endDate) + humanizeTaskDueDate(endDate);
+
   return `<form class="event  event--edit" action="#" method="post">
 <header class="event__header">
   <div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
-      <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
     </label>
     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -76,9 +82,9 @@ export const createTripEditTemplate = (tyt) => {
 
   <div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
-      Flight to
+      ${type} to
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${tyt.city}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
     <datalist id="destination-list-1">
       <option value="Amsterdam"></option>
       <option value="Geneva"></option>
@@ -90,12 +96,8 @@ export const createTripEditTemplate = (tyt) => {
     <label class="visually-hidden" for="event-start-time-1">
       From
     </label>
-    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="18/03/19 12:25">
-    —
-    <label class="visually-hidden" for="event-end-time-1">
-      To
-    </label>
-    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="18/03/19 13:35">
+    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${formatedStartDate}>—<label class="visually-hidden" for="event-end-time-1">To</label>
+    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${formatedEndDate}>
   </div>
 
   <div class="event__field-group  event__field-group--price">
@@ -174,6 +176,6 @@ export const createTripEditTemplate = (tyt) => {
     </div>
   </section>
 </section>
-</form>`
+</form>`;
 };
 

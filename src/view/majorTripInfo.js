@@ -1,9 +1,9 @@
 import { date4User, date4UserEnd } from "./util.js";
 
-export const createMajorTripInfoTemplate = (point, tripEndDay) => {
+export const createMajorTripInfoTemplate = (points, tripEndDay) => {
 
   let сities = [];
-  point.forEach(place => {
+  points.forEach(place => {
 
     сities.push(place.city)
 
@@ -11,7 +11,7 @@ export const createMajorTripInfoTemplate = (point, tripEndDay) => {
 
   let routeCities = сities.join(` — `);
 
-  let { type, city, price, options, startDate, endDate } = point;
+  let { type, city, price, options, startDate, endDate } = points;
 
   let userDate = date4User(startDate);
   const userTripsEnd = +date4UserEnd(userDate) + tripEndDay;

@@ -4,7 +4,7 @@ import { msToTime } from "./util.js";
 
 export const createTripPointTemplate = (point) => {
   const MAX_COUNT_OPTIONS = 3;
-  let { type, city, price, options, startDate, endDate } = point;
+  let { type, city, price, options, startDate, endDate, id } = point;
 
 
 
@@ -47,7 +47,7 @@ export const createTripPointTemplate = (point) => {
 
 
       <p class="event__price">
-          € <span class="event__price-value">${totalPrice}</span>
+          € <span class="event__price-value">${price}</span>
       </p>
 
 <h4 class="visually-hidden">Offers:</h4>
@@ -55,7 +55,7 @@ export const createTripPointTemplate = (point) => {
     ${optionsHtml}
   </ul>
 
-  <button class="event__rollup-btn" type="button">
+  <button class="event__rollup-btn" type="button" data-index=${id}>
     <span class="visually-hidden">Open event</span>
   </button>
   </div >

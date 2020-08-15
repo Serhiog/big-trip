@@ -21,12 +21,16 @@ const getcity = () => {
 };
 
 
-const getOptions = () => {
+export const getOptions = () => {
   const options = [
     [`Add luggage`, 30], [`Switch to comfort`, 100], [`Add meal`, 15], [`Choose seats`, 5], [`Travel by train`, 40]
   ];
+  const fixedOptions = [...options];
 
-  return options.slice(0, getRandomInteger(0, options.length));
+  return {
+    options: options.slice(0, getRandomInteger(0, options.length)),
+    fixedOptions,
+  }
 }
 
 const getDiscription = () => {
@@ -55,9 +59,8 @@ const point = (date) => {
   return {
     type: getTypeOfPoint(),
     city: getcity(),
-    //price: getRandomInteger(25, 150),
-    //price: 111,
-    options: getOptions(),
+    price: getRandomInteger(25, 150),
+    options: getOptions().options,
     discription: getDiscription(),
     photos: generatePhotos(),
     startDate: time1,
@@ -72,6 +75,7 @@ export const generateMocks = (size) => {
 
   for (let i = 0; i < size; i++) {
     const p = point(date);
+    p.id = i;
     date = p.endDate;
     mocks.push(p);
   }

@@ -22,11 +22,18 @@ export const msToTime = (durMilisecunds) => {
   };
 };
 
-export let date4User = (date) => {
+export const date4User = (date) => {
   return new Date(date).toDateString().slice(4, 10);
 };
 
-export let date4UserEnd = (date) => {
+export const date4UserEnd = (date) => {
   return date.split(` `).join().slice(4, 6);
 };
 
+export const tripStartEndDates = (date) => {
+  return date.toLocaleDateString().split(`.`).join(`/`);
+}
+
+export const formatedStartEndDate = (date) => {
+  return tripStartEndDates(date).slice(0, 5) + `/` + date.getUTCFullYear().toString().slice(2, 4)
+}
