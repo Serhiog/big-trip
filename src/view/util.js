@@ -8,18 +8,15 @@ export const humanizeTaskDueDate = (date) => {
 };
 
 
-export const msToTime = (durMilisecunds) => {
-  let minutes = Math.floor((durMilisecunds / (1000 * 60)) % 60);
+export const msToTime = (durMiliseconds) => {
+  let minutes = Math.floor((durMiliseconds / (1000 * 60)) % 60).toFixed();
   minutes <= 0 ? minutes = `` : minutes = minutes + `M `;
-  let hours = Math.floor((durMilisecunds / (1000 * 60 * 60)) % 24);
+  let hours = (Math.floor((durMiliseconds / (1000 * 60 * 60)) % 24)).toFixed();
   hours <= 0 ? hours = `` : hours = hours + `H `;
-  let days = Math.floor((durMilisecunds / (1000 * 60 * 60 * 24)));
+  let days = Math.floor((durMiliseconds / (1000 * 60 * 60 * 24))).toFixed();
   days <= 0 ? days = `` : days = days + `D `;
-  return {
-    hours,
-    minutes,
-    days,
-  };
+  const duration = hours + minutes + days;
+  return duration;
 };
 
 export const date4User = (date) => {

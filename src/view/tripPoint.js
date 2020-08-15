@@ -6,10 +6,8 @@ export const createTripPointTemplate = (point) => {
   const MAX_COUNT_OPTIONS = 3;
   let { type, city, price, options, startDate, endDate, id } = point;
 
-
-
-  let durMilisecunds = endDate.getTime() - startDate.getTime();
-  let { hours, minutes, days } = msToTime(durMilisecunds);
+  let durMiliseconds = endDate.getTime() - startDate.getTime();
+  let duration = msToTime(durMiliseconds);
 
   const t1 = humanizeTaskDueDate(startDate);
   const t2 = humanizeTaskDueDate(endDate);
@@ -42,7 +40,7 @@ export const createTripPointTemplate = (point) => {
               —
               <time class="event__end-time" datetime=${endDate}>${t2}</time>
           </p>
-          <p class="event__duration">${days} ${hours} ${minutes}</p >
+          <p class="event__duration">${duration}</p >
       </div>
 
 

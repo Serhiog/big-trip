@@ -1,6 +1,4 @@
-
-
-const TYPES = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
+import { TYPES, CITIES } from "../consts.js";
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -15,9 +13,8 @@ export const getTypeOfPoint = () => {
 }
 
 const getcity = () => {
-  const city = [`Berlin`, `Paris`, `Tallin`, `Belfast`];
-  const randomIndex = getRandomInteger(0, city.length - 1);
-  return city[randomIndex];
+  const randomIndex = getRandomInteger(0, CITIES.length - 1);
+  return CITIES[randomIndex];
 };
 
 

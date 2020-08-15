@@ -10,7 +10,7 @@ import { createTripPointTemplate } from "./view/tripPoint.js";
 import { generateMocks } from "./mock/point.js";
 import { createTripEditTemplate } from "./mock/pointEditor.js";
 
-const COUNT_RENDER_DAYS_TRIP = 3;
+const COUNT_RENDER_DAYS_TRIP = 20;
 
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 const groups = new Map();
@@ -35,7 +35,7 @@ const siteHeaderMainTripContainer = siteHeaderContainer.querySelector(`.trip-mai
 render(siteHeaderMainTripContainer, createMajorTripInfoTemplate(points, tripEndDay), `afterbegin`);
 const siteMajorInfoTrip = document.querySelector(`.trip-main__trip-info`);
 
-render(siteMajorInfoTrip, createMajorTripCostTemplate(), `beforeend`);
+render(siteMajorInfoTrip, createMajorTripCostTemplate(points), `beforeend`);
 
 const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-main__trip-controls`);
 const siteHeaderFilterToggleView = siteHeaderFilterTrip.querySelector(`.trip-main__trip-controls h2`);
