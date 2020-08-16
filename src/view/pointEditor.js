@@ -28,9 +28,6 @@ export const createTripEditTemplate = (point, points) => {
 
   for (let i = 0; i < fixedOptions.length; i++) {
 
-    console.log(typeof(fixedOptions[i][1]) )
-    console.log(typeof(options[i][1]) )
-
     let optionName = fixedOptions[i][0];
     let optionPrice = fixedOptions[i][1];
     if (options[i] != null && fixedOptions[i][0] === options[i][0]) {

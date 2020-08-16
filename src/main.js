@@ -1,12 +1,13 @@
-import {render} from "./view/util.js";
-import {createMajorTripInfoTemplate} from "./view/majorTripInfo.js";
-import {createMajorTripCostTemplate} from "./view/majorTripCost.js";
-import {createToggleViewListTripTemplate} from "./view/toggleViewListTrip.js";
-import {createMainTripFilterTemplate} from "./view/mainTripFilter.js";
-import {createTripSortTemplate} from "./view/tripSort.js";
-import {createTripPointsListTemplate} from "./view/tripPointsList.js";
-import {generateMocks} from "./mock/point.js";
-import {createTripEditTemplate} from "./view/pointEditor.js";
+import { renderTemplate, render, RenderPosition } from "./view/util.js";
+import MajotTripRouteView from "./view/majorTripInfo.js";
+import MajorTripCostView from "./view/majorTripCost.js";
+import TripListToggleView from "./view/toggleViewListTrip.js";
+import TripFilterView from "./view/mainTripFilter.js";
+import TripSortView from "./view/tripSort.js";
+import TripsContainerView from "./view/tripsContainer.js";
+import TripPointListView from "./view/tripPointsList.js";
+import { generateMocks } from "./mock/point.js";
+import { createTripEditTemplate } from "./view/pointEditor.js";
 
 const COUNT_RENDER_DAYS_TRIP = 20;
 
@@ -30,29 +31,31 @@ const sitePageBodyContent = document.querySelector(`.page-body`);
 const siteHeaderContainer = sitePageBodyContent.querySelector(`.page-header`);
 const siteHeaderMainTripContainer = siteHeaderContainer.querySelector(`.trip-main`);
 
-render(siteHeaderMainTripContainer, createMajorTripInfoTemplate(points, tripEndDay), `afterbegin`);
+render(siteHeaderMainTripContainer, new MajotTripRouteView(points, tripEndDay).getElement(), RenderPosition.AFTERBEGIN);
+
 const siteMajorInfoTrip = document.querySelector(`.trip-main__trip-info`);
 
-render(siteMajorInfoTrip, createMajorTripCostTemplate(points), `beforeend`);
+render(siteMajorInfoTrip, new MajorTripCostView(points).getElement(), RenderPosition.BEFOREEND);
 
 const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-main__trip-controls`);
 const siteHeaderFilterToggleView = siteHeaderFilterTrip.querySelector(`.trip-main__trip-controls h2`);
-render(siteHeaderFilterToggleView, createToggleViewListTripTemplate(), `afterEnd`);
-render(siteHeaderFilterTrip, createMainTripFilterTemplate(), `beforeend`);
+
+render(siteHeaderFilterToggleView, new TripListToggleView().getElement(), RenderPosition.AFTEREND);
+
+render(siteHeaderFilterTrip, new TripFilterView().getElement(), RenderPosition.BEFOREEND);
 
 const siteSiteMainContainer = sitePageBodyContent.querySelector(`.page-body__page-main`);
 const siteTripConstructor = siteSiteMainContainer.querySelector(`.trip-events h2`);
 
-render(siteTripConstructor, createTripSortTemplate(), `afterend`);
+render(siteTripConstructor, new TripSortView().getElement(), `afterend`);
 const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__trip-sort`);
 
-render(siteTripSortTemplate, `<ul class="trip-days"><ul/>`, `afterend`);
+render(siteTripSortTemplate, new TripsContainerView().getElement(), RenderPosition.AFTEREND);
 const tripDaysContainer = siteSiteMainContainer.querySelector(`.trip-days`);
 
 let dayNumber = 1;
-
 for (let group of groups.entries()) {
-  render(tripDaysContainer, createTripPointsListTemplate(group, dayNumber), `beforeend`);
+  render(tripDaysContainer, new TripPointListView(group, dayNumber).getElement(), RenderPosition.AFTERBEGIN);
   dayNumber++;
 }
 
@@ -61,7 +64,7 @@ const renderPointEditor = (evt) => {
   const pointContainer = evt.target.parentNode;
   pointContainer.classList.add(`visually-hidden`);
   const index = evt.target.dataset.index;
-  render(pointCommonContainer, createTripEditTemplate(points[index], points), `afterbegin`);
+  renderTemplate(pointCommonContainer, createTripEditTemplate(points[index], points), `afterbegin`);
   const closeBtn = pointCommonContainer.querySelector(`.event__rollup-btn`);
   closeBtn.addEventListener(`click`, function () {
     pointCommonContainer.querySelector(`.event--edit`).remove();
