@@ -1,14 +1,12 @@
-import { render } from "./view/util.js";
-import { createMajorTripInfoTemplate } from "./view/majorTripInfo.js";
-import { createMajorTripCostTemplate } from "./view/majorTripCost.js";
-import { createToggleViewListTripTemplate } from "./view/toggleViewListTrip.js";
-import { createMainTripFilterTemplate } from "./view/mainTripFilter.js";
-import { createTripSortTemplate } from "./view/tripSort.js";
-import { createTripEventEditContainerTemplate } from "./view/tripEventEditContainer.js";
-import { createTripPointsListTemplate } from "./view/tripPointsList.js";
-import { createTripPointTemplate } from "./view/tripPoint.js";
-import { generateMocks } from "./mock/point.js";
-import { createTripEditTemplate } from "./mock/pointEditor.js";
+import {render} from "./view/util.js";
+import {createMajorTripInfoTemplate} from "./view/majorTripInfo.js";
+import {createMajorTripCostTemplate} from "./view/majorTripCost.js";
+import {createToggleViewListTripTemplate} from "./view/toggleViewListTrip.js";
+import {createMainTripFilterTemplate} from "./view/mainTripFilter.js";
+import {createTripSortTemplate} from "./view/tripSort.js";
+import {createTripPointsListTemplate} from "./view/tripPointsList.js";
+import {generateMocks} from "./mock/point.js";
+import {createTripEditTemplate} from "./view/pointEditor.js";
 
 const COUNT_RENDER_DAYS_TRIP = 20;
 
@@ -17,13 +15,13 @@ const groups = new Map();
 
 let tripEndDay = 0;
 points.forEach((point) => {
-  const date = point.startDate.toISOString().split('T')[0];
+  const date = point.startDate.toISOString().split(`T`)[0];
   if (!groups.has(date)) {
     groups.set(date, [point]);
     tripEndDay++;
   } else {
     const items = groups.get(date);
-    items.push(point)
+    items.push(point);
   }
 });
 
@@ -48,8 +46,8 @@ const siteTripConstructor = siteSiteMainContainer.querySelector(`.trip-events h2
 render(siteTripConstructor, createTripSortTemplate(), `afterend`);
 const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__trip-sort`);
 
-render(siteTripSortTemplate, `<ul class="trip-days"><ul/>`, `afterend`)
-const tripDaysContainer = siteSiteMainContainer.querySelector('.trip-days');
+render(siteTripSortTemplate, `<ul class="trip-days"><ul/>`, `afterend`);
+const tripDaysContainer = siteSiteMainContainer.querySelector(`.trip-days`);
 
 let dayNumber = 1;
 
@@ -67,11 +65,11 @@ const renderPointEditor = (evt) => {
   const closeBtn = pointCommonContainer.querySelector(`.event__rollup-btn`);
   closeBtn.addEventListener(`click`, function () {
     pointCommonContainer.querySelector(`.event--edit`).remove();
-    pointContainer.classList.remove(`visually-hidden`)
+    pointContainer.classList.remove(`visually-hidden`);
   });
-}
+};
 
 const eventOpenBtns = [...document.querySelectorAll(`.event__rollup-btn`)];
-eventOpenBtns.forEach(btn => {
+eventOpenBtns.forEach((btn) => {
   btn.addEventListener(`click`, renderPointEditor);
 });

@@ -1,10 +1,10 @@
 
-import { humanizeTaskDueDate } from "./util.js";
-import { msToTime } from "./util.js";
+import {humanizeTaskDueDate} from "./util.js";
+import {msToTime} from "./util.js";
 
 export const createTripPointTemplate = (point) => {
   const MAX_COUNT_OPTIONS = 3;
-  let { type, city, price, options, startDate, endDate, id } = point;
+  let {type, city, price, options, startDate, endDate, id} = point;
 
   let durMiliseconds = endDate.getTime() - startDate.getTime();
   let duration = msToTime(durMiliseconds);
@@ -12,7 +12,7 @@ export const createTripPointTemplate = (point) => {
   const t1 = humanizeTaskDueDate(startDate);
   const t2 = humanizeTaskDueDate(endDate);
 
-  let optionsHtml = '';
+  let optionsHtml = ``;
 
   let totalPrice = 0;
   options.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {

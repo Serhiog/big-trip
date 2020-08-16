@@ -1,12 +1,22 @@
-const MAX_COUNT_OPTIONS = 3;
 
-
-import { render, date4User, date4UserEnd, tripStartEndDates, humanizeTaskDueDate, formatedStartEndDate } from "../view/util.js";
-import { getOptions } from "./point.js";
+import {humanizeTaskDueDate, formatedStartEndDate} from "./util.js";
+import {getOptions} from "../mock/point.js";
 
 export const createTripEditTemplate = (point, points) => {
-  const { type, city, price, options, startDate, endDate, id } = point;
+  const {type, city, price, options, startDate, endDate} = point;
 
+
+  let citiesInSelectList = [];
+  points.forEach((place) => {
+    citiesInSelectList.push(place.city);
+  });
+
+  const userSelectCities = Array.from(new Set(citiesInSelectList));
+
+  let cities = ``;
+  userSelectCities.forEach((city) => {
+    cities = cities + `<option value=${city}></option>`;
+  });
 
   const formatedStartDate = formatedStartEndDate(startDate) + humanizeTaskDueDate(startDate);
   const formatedEndDate = formatedStartEndDate(endDate) + humanizeTaskDueDate(endDate);
@@ -17,9 +27,10 @@ export const createTripEditTemplate = (point, points) => {
   let checked = ``;
 
   for (let i = 0; i < fixedOptions.length; i++) {
-    let optionName = fixedOptions[i][0]
-    let optionPrice = fixedOptions[i][1]
-    if (fixedOptions[i] = options[i] && i < MAX_COUNT_OPTIONS) {
+
+    let optionName = fixedOptions[i][0];
+    let optionPrice = fixedOptions[i][1];
+    if (fixedOptions[i] = options[i] && options[i] !== null) {
       checked = `checked`;
     } else {
       checked = ``;
@@ -42,7 +53,7 @@ export const createTripEditTemplate = (point, points) => {
   <div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
-      <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
+      <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
     </label>
     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -109,13 +120,11 @@ export const createTripEditTemplate = (point, points) => {
 
   <div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
-      ${type} to
+      ${type.toLowerCase()} to
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
     <datalist id="destination-list-1">
-      <option value="Amsterdam"></option>
-      <option value="Geneva"></option>
-      <option value="Chamonix"></option>
+// ${cities}
     </datalist>
   </div>
 

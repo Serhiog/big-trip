@@ -1,6 +1,6 @@
 export const createMajorTripCostTemplate = (points) => {
   let totalPrice = 0;
-  points.forEach(point => {
+  points.forEach((point) => {
     totalPrice += point.price;
   });
 

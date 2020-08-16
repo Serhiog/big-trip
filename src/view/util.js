@@ -4,7 +4,7 @@ export const render = (container, template, place) => {
 };
 
 export const humanizeTaskDueDate = (date) => {
-  return date.toISOString().split('T')[1].slice(0, 5);
+  return date.toISOString().split(`T`)[1].slice(0, 5);
 };
 
 
@@ -29,8 +29,8 @@ export const date4UserEnd = (date) => {
 
 export const tripStartEndDates = (date) => {
   return date.toLocaleDateString().split(`.`).join(`/`);
-}
+};
 
 export const formatedStartEndDate = (date) => {
-  return tripStartEndDates(date).slice(0, 5) + `/` + date.getUTCFullYear().toString().slice(2, 4)
-}
+  return tripStartEndDates(date).slice(0, 5) + `/` + date.getUTCFullYear().toString().slice(2, 4);
+};

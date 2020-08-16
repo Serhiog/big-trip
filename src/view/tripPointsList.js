@@ -1,14 +1,13 @@
-import { createTripPointTemplate } from "./tripPoint.js";
-import { date4User } from "./util.js";
-import { createTripEditTemplate } from "../mock/pointEditor.js";
+import {createTripPointTemplate} from "./tripPoint.js";
+import {date4User} from "./util.js";
 
 export const createTripPointsListTemplate = (group, dayNumber) => {
 
   let [date, points] = group;
   let userDate = date4User(date);
 
-  let html = '';
-  points.forEach(point => {
+  let html = ``;
+  points.forEach((point) => {
     html += createTripPointTemplate(point);
   });
 
