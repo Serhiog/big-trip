@@ -39,7 +39,7 @@ export default class TripSortView {
   }
 
   getTemplate() {
-    return new TripSortView().createTripSortTemplate();
+    return this.createTripSortTemplate();
   }
 
   getElement() {

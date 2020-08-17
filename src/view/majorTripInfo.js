@@ -17,7 +17,7 @@ export default class MajotTripRouteView {
 
     let routeCities = сities.join(` — `);
 
-    if (сities.length > MAX_CITIES_LIST) {
+    if (сities.length >= MAX_CITIES_LIST) {
       routeCities = `... — ` + сities[сities.length - 1];
     }
 
@@ -33,7 +33,7 @@ export default class MajotTripRouteView {
   }
 
   getTemplate() {
-    return new MajotTripRouteView().createMajorTripInfoTemplate(this._points, this._tripEndDay);
+    return this.createMajorTripInfoTemplate(this._points, this._tripEndDay);
   }
 
   getElement() {

@@ -58,6 +58,7 @@ const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__
 render(siteTripSortTemplate, new TripsContainerView().getElement(), RenderPosition.AFTEREND);
 const tripDaysContainer = siteSiteMainContainer.querySelector(`.trip-days`);
 
+// -----------------------------------------------------
 
 const renderPoint = (pointsContainer, point) => {
   const pointComponent = new PointView(point);
@@ -91,10 +92,12 @@ const renderPoint = (pointsContainer, point) => {
 let dayNumber = 1;
 
 for (let group of groups.entries()) {
-  render(tripDaysContainer, new TripPointListView(group, dayNumber).getElement(), RenderPosition.AFTERBEGIN);
+  const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
+
+  render(tripDaysContainer, tripPointListElement, RenderPosition.BEFOREEND); // <---
   dayNumber++;
   group[1].forEach(point => {
-    const pointsContainer = document.querySelector(`.trip-events__list`);
+    const pointsContainer = tripPointListElement.querySelector(`.trip-events__list`);
     renderPoint(pointsContainer, point);
   });
 }

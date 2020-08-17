@@ -13,7 +13,7 @@ export default class TripListToggleView {
   }
 
   getTemplate() {
-    return new TripListToggleView().createToggleViewListTripTemplate();
+    return this.createToggleViewListTripTemplate();
   }
 
   getElement() {

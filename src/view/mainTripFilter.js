@@ -28,7 +28,7 @@ export default class TripFilterView {
   }
 
   getTemplate() {
-    return new TripFilterView().createMainTripFilterTemplate();
+    return this.createMainTripFilterTemplate()
   }
 
   getElement() {

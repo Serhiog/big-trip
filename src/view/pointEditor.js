@@ -180,7 +180,7 @@ export default class PointEditView {
   }
 
   getTemplate() {
-    return new PointEditView().createTripEditTemplate(this._point, this._points);
+    return this.createTripEditTemplate(this._point, this._points);
   }
 
   getElement() {

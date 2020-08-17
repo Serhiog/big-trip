@@ -9,7 +9,9 @@ export default class MajorTripCostView {
 
   createMajorTripCostTemplate(points) {
     let totalPrice = 0;
+
     points.forEach((point) => {
+      totalPrice += point.price;
       point.options.forEach((price) => {
         totalPrice += price[1];
       });
@@ -21,7 +23,7 @@ export default class MajorTripCostView {
   }
 
   getTemplate() {
-    return new MajorTripCostView().createMajorTripCostTemplate(this._points);
+    return this.createMajorTripCostTemplate(this._points);
   }
 
   getElement() {

@@ -11,7 +11,7 @@ export default class TripsContainerView {
   }
 
   getTemplate() {
-    return new TripsContainerView().createTripsContainerTemplate();
+    return this.createTripsContainerTemplate();
   }
 
   getElement() {

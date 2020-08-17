@@ -25,7 +25,7 @@ export default class TripPointListView {
   }
 
   getTemplate() {
-    return new TripPointListView().createTripPointsListTemplate(this._group, this._dayNumber);
+    return this.createTripPointsListTemplate(this._group, this._dayNumber);
   }
 
   getElement() {
