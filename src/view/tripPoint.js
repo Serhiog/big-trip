@@ -2,6 +2,7 @@
 import { humanizeTaskDueDate, msToTime, createElement } from "./util.js";
 
 const createTripPointTemplate = (point) => {
+
   const MAX_COUNT_OPTIONS = 3;
   let { type, city, price, options, startDate, endDate, id } = point;
 
