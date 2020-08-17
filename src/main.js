@@ -11,7 +11,7 @@ import { generateMocks } from "./mock/point.js";
 import PointEditView from "./view/pointEditor.js";
 import NoPoints from "./view/no-Points.js";
 
-const COUNT_RENDER_DAYS_TRIP = 0;
+const COUNT_RENDER_DAYS_TRIP = 20;
 
 
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
@@ -90,9 +90,6 @@ const renderPoint = (pointsContainer, point) => {
 
 let dayNumber = 1;
 
-
-render(siteTripConstructor, new NoPoints().getElement(), RenderPosition.AFTEREND);
-
 for (let group of groups.entries()) {
   render(tripDaysContainer, new TripPointListView(group, dayNumber).getElement(), RenderPosition.AFTERBEGIN);
   dayNumber++;
@@ -101,3 +98,5 @@ for (let group of groups.entries()) {
     renderPoint(pointsContainer, point);
   });
 }
+
+//render(siteTripConstructor, new NoPoints().getElement(), RenderPosition.AFTEREND);
