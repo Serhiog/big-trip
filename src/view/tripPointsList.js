@@ -1,6 +1,6 @@
-import { createTripPointTemplate } from "./tripPoint.js";
-import { date4User, createElement } from "./util.js";
 
+import { date4User, createElement, render, RenderPosition } from "./util.js";
+import PointView from "./tripPoint.js";
 
 export default class TripPointListView {
   constructor(group, dayNumber) {
@@ -14,22 +14,22 @@ export default class TripPointListView {
     let userDate = date4User(date);
 
     let html = ``;
+
     points.forEach((point) => {
-      html += createTripPointTemplate(point);
+      // html += new PointView(point).getElement();
     });
 
-    return `
-    <li class="trip-days__item  day">
-        <div class="day__info">
-            <span class="day__counter">${dayNumber}</span>
-            <time class="day__date" datetime=${date}>${userDate}</time>
-        </div>
+    return `<li class="trip-days__item  day">
+      <div div class="day__info" >
+        <span class="day__counter">${dayNumber}</span>
+        <time class="day__date" datetime=${date}>${userDate}</time>
+        </div >
 
-        <ul class="trip-events__list">
-        ${html}
-        </ul>
-    </li>
-  `;
+      <ul class="trip-events__list">
+        ${console.log(html)}
+      </ul>
+    </li >
+      `;
   }
 
   getTemplate() {

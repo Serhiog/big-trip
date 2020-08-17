@@ -7,7 +7,8 @@ import TripSortView from "./view/tripSort.js";
 import TripsContainerView from "./view/tripsContainer.js";
 import TripPointListView from "./view/tripPointsList.js";
 import { generateMocks } from "./mock/point.js";
-import { createTripEditTemplate } from "./view/pointEditor.js";
+import PointEditView from "./view/pointEditor.js";
+//import PointView from "./tripPoint.js";
 
 const COUNT_RENDER_DAYS_TRIP = 20;
 
@@ -64,7 +65,8 @@ const renderPointEditor = (evt) => {
   const pointContainer = evt.target.parentNode;
   pointContainer.classList.add(`visually-hidden`);
   const index = evt.target.dataset.index;
-  renderTemplate(pointCommonContainer, createTripEditTemplate(points[index], points), `afterbegin`);
+
+  render(pointCommonContainer, new PointEditView(points[index], points).getElement(), RenderPosition.AFTERBEGIN);
   const closeBtn = pointCommonContainer.querySelector(`.event__rollup-btn`);
   closeBtn.addEventListener(`click`, function () {
     pointCommonContainer.querySelector(`.event--edit`).remove();
@@ -76,3 +78,11 @@ const eventOpenBtns = [...document.querySelectorAll(`.event__rollup-btn`)];
 eventOpenBtns.forEach((btn) => {
   btn.addEventListener(`click`, renderPointEditor);
 });
+
+
+// const renderPoint = (pointContainer, point) => {
+//   const pointComponent = new PointView(point);
+//   const pointEditComponent = new PointEditViewTEST(point);
+
+//   render(pointContainer, pointComponent.getElement(), RenderPosition.BEFOREEND);
+// }

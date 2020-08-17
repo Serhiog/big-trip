@@ -6,7 +6,8 @@ export default class TripsContainerView {
   }
 
   createTripsContainerTemplate() {
-    return `<ul class="trip-days"><ul/>`;
+    return `<ul class="trip-days">
+    </ul>`;
   }
 
   getTemplate() {

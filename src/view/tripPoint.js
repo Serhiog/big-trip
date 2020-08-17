@@ -1,10 +1,9 @@
 
-import {humanizeTaskDueDate} from "./util.js";
-import {msToTime} from "./util.js";
+import { humanizeTaskDueDate, msToTime, createElement } from "./util.js";
 
-export const createTripPointTemplate = (point) => {
+const createTripPointTemplate = (point) => {
   const MAX_COUNT_OPTIONS = 3;
-  let {type, city, price, options, startDate, endDate, id} = point;
+  let { type, city, price, options, startDate, endDate, id } = point;
 
   let durMiliseconds = endDate.getTime() - startDate.getTime();
   let duration = msToTime(durMiliseconds);
@@ -59,3 +58,27 @@ export const createTripPointTemplate = (point) => {
   </div >
 </li > `;
 };
+
+export default class PointView {
+  constructor(point) {
+
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTripPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
