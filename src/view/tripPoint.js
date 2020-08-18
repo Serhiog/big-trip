@@ -1,11 +1,12 @@
 
-import { humanizeTaskDueDate, msToTime, createElement } from "./util.js";
+import { humanizeTaskDueDate, msToTime } from "../utils/dates.js";
+import Abstract from "./abstract.js";
 
-export default class PointView {
+export default class PointView extends Abstract {
   constructor(point) {
-
+    super()
     this._point = point;
-    this._element = null;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   createTripPointTemplate(point) {
@@ -71,15 +72,13 @@ export default class PointView {
     return this.createTripPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
   }
 }

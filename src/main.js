@@ -1,4 +1,5 @@
-import { render, RenderPosition, debounce } from "./view/util.js";
+import { render, RenderPosition } from "./utils/render.js";
+import { debounce } from "./utils/common.js"
 import MajotTripRouteView from "./view/majorTripInfo.js";
 import MajorTripCostView from "./view/majorTripCost.js";
 import TripListToggleView from "./view/toggleViewListTrip.js";
@@ -10,6 +11,7 @@ import PointView from "./view/tripPoint.js";
 import { generateMocks } from "./mock/point.js";
 import PointEditView from "./view/pointEditor.js";
 import NoPoints from "./view/no-Points.js";
+import Abstract from "./view/abstract.js";
 
 const COUNT_RENDER_DAYS_TRIP = 20;
 
@@ -67,7 +69,7 @@ const renderPoint = (pointsContainer, point) => {
   const replacePointToEdit = () => {
     pointsContainer.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
     pointComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, replacePointToEdit);
-    pointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, debounce(replaceEditToForm));
+    pointEditComponent.setEditClickHandler(debounce(replaceEditToForm))
     document.addEventListener(`keydown`, onEscKeyDown);
   };
 
@@ -84,7 +86,7 @@ const renderPoint = (pointsContainer, point) => {
     }
   };
 
-  pointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, debounce(replacePointToEdit));
+  pointComponent.setEditClickHandler(debounce(replacePointToEdit));
 
   render(pointsContainer, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
@@ -94,7 +96,7 @@ let dayNumber = 1;
 for (let group of groups.entries()) {
   const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
 
-  render(tripDaysContainer, tripPointListElement, RenderPosition.BEFOREEND); // <---
+  render(tripDaysContainer, tripPointListElement, RenderPosition.BEFOREEND);
   dayNumber++;
   group[1].forEach(point => {
     const pointsContainer = tripPointListElement.querySelector(`.trip-events__list`);

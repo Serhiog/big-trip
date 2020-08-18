@@ -1,12 +1,14 @@
 const MAX_CITIES_LIST = 4;
 
-import { date4User, date4UserEnd, createElement } from "./util.js";
+import { date4User, date4UserEnd } from "../utils/dates.js";
+import Abstract from "./abstract.js";
 
-export default class MajotTripRouteView {
+
+export default class MajotTripRouteView extends Abstract {
   constructor(points, tripEndDay) {
+    super();
     this._points = points;
     this._tripEndDay = tripEndDay;
-    this._element = null;
   }
 
   createMajorTripInfoTemplate(points, tripEndDay) {
@@ -34,17 +36,5 @@ export default class MajotTripRouteView {
 
   getTemplate() {
     return this.createMajorTripInfoTemplate(this._points, this._tripEndDay);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

@@ -1,11 +1,12 @@
 
-import { date4User, createElement } from "./util.js";
+import { date4User } from "../utils/dates.js";
+import Abstract from "./abstract.js";
 
-export default class TripPointListView {
+export default class TripPointListView extends Abstract {
   constructor(group, dayNumber) {
+    super()
     this._group = group;
     this._dayNumber = dayNumber;
-    this._element = null;
   }
 
   createTripPointsListTemplate(group, dayNumber) {
@@ -26,17 +27,5 @@ export default class TripPointListView {
 
   getTemplate() {
     return this.createTripPointsListTemplate(this._group, this._dayNumber);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

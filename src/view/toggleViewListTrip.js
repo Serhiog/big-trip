@@ -1,9 +1,7 @@
-import { createElement } from "./util.js";
 
-export default class TripListToggleView {
-  constructor() {
-    this._element = null;
-  }
+import Abstract from "./abstract.js";
+
+export default class TripListToggleView extends Abstract {
 
   createToggleViewListTripTemplate() {
     return `<nav class="trip-controls__trip-tabs  trip-tabs">
@@ -14,17 +12,5 @@ export default class TripListToggleView {
 
   getTemplate() {
     return this.createToggleViewListTripTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

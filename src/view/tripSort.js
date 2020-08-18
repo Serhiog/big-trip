@@ -1,9 +1,7 @@
-import { createElement } from "./util.js";
 
-export default class TripSortView {
-  constructor() {
-    this._element = null;
-  }
+import Abstract from "./abstract.js";
+
+export default class TripSortView extends Abstract {
 
   createTripSortTemplate() {
     return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -40,17 +38,5 @@ export default class TripSortView {
 
   getTemplate() {
     return this.createTripSortTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
