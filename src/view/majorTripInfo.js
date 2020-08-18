@@ -4,7 +4,7 @@ import { date4User, date4UserEnd } from "../utils/dates.js";
 import Abstract from "./abstract.js";
 
 
-export default class MajotTripRouteView extends Abstract {
+export default class MajorTripRouteView extends Abstract {
   constructor(points, tripEndDay) {
     super();
     this._points = points;
