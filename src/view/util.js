@@ -1,5 +1,37 @@
+const DEBOUNCE_INTERVAL = 500;
 
-export const render = (container, template, place) => {
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREBEGIN: `beforebegin`,
+  AFTEREND: `afterend`,
+  BEFOREEND: `beforeend`,
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+    case RenderPosition.AFTEREND:
+      container.after(element);
+      break;
+    case RenderPosition.BEFOREBEGIN:
+      container.before(element);
+      break;
+  }
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
+
+export const renderTemplate = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
 
@@ -33,4 +65,23 @@ export const tripStartEndDates = (date) => {
 
 export const formatedStartEndDate = (date) => {
   return tripStartEndDates(date).slice(0, 5) + `/` + date.getUTCFullYear().toString().slice(2, 4);
+};
+
+export const debounce = (cb) => {
+  const cardClose = document.querySelector('.popup__close');
+  if (cardClose) {
+    cardClose.removeEventListener('click', window.cardClose.byClick);
+    document.removeEventListener('keydown', window.cardClose.byKeyDown);
+  }
+  let lastTimeout = null;
+
+  return function () {
+    const parameters = arguments;
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(function () {
+      cb.apply(null, parameters);
+    }, DEBOUNCE_INTERVAL);
+  };
 };
