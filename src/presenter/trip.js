@@ -1,69 +1,50 @@
-import MajorTripRouteView from "../view/majorTripInfo.js";
-import MajorTripCostView from "../view/majorTripCost.js";
-import TripListToggleView from "../view/toggleViewListTrip.js";
-import TripFilterView from "../view/mainTripFilter.js";
+
 import TripSortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
 import PointView from "../view/tripPoint.js";
 import PointEditView from "../view/pointEditor.js";
 import TripPointListView from "../view/tripPointsList.js";
-import { render, RenderPosition } from "../utils/render.js";
+import { render, RenderPosition, replace } from "../utils/render.js";
 import { debounce } from "../utils/common.js";
 
 export default class PointsPresenter {
-  constructor(points, groups, tripEndDay) {
+  constructor(points, groups, tripEndDay, siteSiteMainContainer) {
     this._points = points;
     this._groups = groups;
     this._tripEndDay = tripEndDay;
+    this._sortView = new TripSortView().getElement();
+    this._containerView = new TripsContainerView().getElement();
+    this._siteSiteMainContainer = siteSiteMainContainer;
   }
 
 
-  _renderHeader() {
-    const sitePageBodyContent = document.querySelector(`.page-body`);
-    const siteHeaderContainer = sitePageBodyContent.querySelector(`.page-header`);
-    const siteHeaderMainTripContainer = siteHeaderContainer.querySelector(`.trip-main`);
-
-    render(siteHeaderMainTripContainer, new MajorTripRouteView(this._points, this._tripEndDay).getElement(), RenderPosition.AFTERBEGIN);
-
-    const siteMajorInfoTrip = document.querySelector(`.trip-main__trip-info`);
-
-    render(siteMajorInfoTrip, new MajorTripCostView(this._points).getElement(), RenderPosition.BEFOREEND);
-
-    const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-main__trip-controls`);
-    const siteHeaderFilterToggleView = siteHeaderFilterTrip.querySelector(`.trip-main__trip-controls h2`);
-
-
-    render(siteHeaderFilterToggleView, new TripListToggleView().getElement(), RenderPosition.AFTEREND);
-
-    render(siteHeaderFilterTrip, new TripFilterView().getElement(), RenderPosition.BEFOREEND);
+  init() {
+    this.renderSortDays();
+    this.renderPoints();
   }
 
-  _renderSortDays() {
-    const siteSiteMainContainer = document.querySelector(`.page-body__page-main`);
-    const siteTripConstructor = siteSiteMainContainer.querySelector(`.trip-events h2`);
-
-    render(siteTripConstructor, new TripSortView().getElement(), RenderPosition.AFTEREND);
-    const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__trip-sort`);
-
-    render(siteTripSortTemplate, new TripsContainerView().getElement(), RenderPosition.AFTEREND);
+  renderSortDays() {
+    render(this._siteSiteMainContainer, this._sortView, RenderPosition.BEFOREEND);
+    render(this._siteSiteMainContainer, this._containerView, RenderPosition.BEFOREEND);
   }
 
-  _renderPoints() {
+  renderPoints() {
     const tripDaysContainer = document.querySelector(`.trip-days`);
+
     const renderPoint = (pointsContainer, point) => {
       const pointComponent = new PointView(point);
       const pointEditComponent = new PointEditView(point, this._points);
 
       const replacePointToEdit = () => {
-        pointsContainer.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
-        pointComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, replacePointToEdit);
+        replace(pointEditComponent, pointComponent);
+        pointComponent.removePointClickHandler(debounce(replacePointToEdit));
         pointEditComponent.setEditClickHandler(debounce(replaceEditToForm))
         document.addEventListener(`keydown`, onEscKeyDown);
       };
 
       const replaceEditToForm = () => {
-        pointsContainer.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
-        pointEditComponent.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, replaceEditToForm);
+        replace(pointComponent, pointEditComponent);
+        pointEditComponent.removeEditClickHandler(debounce(replaceEditToForm))
       };
 
       const onEscKeyDown = (evt) => {
@@ -74,19 +55,24 @@ export default class PointsPresenter {
         }
       };
 
-      pointComponent.setEditClickHandler(debounce(replacePointToEdit));
+      pointComponent.setPointClickHandler(debounce(replacePointToEdit));
 
       render(pointsContainer, pointComponent.getElement(), RenderPosition.BEFOREEND);
     };
 
+    // let sortPriceBtn = document.querySelector(`#sort-price`);
+    // sortPriceBtn.addEventListener(`click`, function () {
+    //   console.log('click')
+    // })
+    console.log(this._groups);
     let dayNumber = 1;
-
     for (let group of this._groups.entries()) {
       const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
-
       render(tripDaysContainer, tripPointListElement, RenderPosition.BEFOREEND);
       dayNumber++;
+
       group[1].forEach(point => {
+        //let numstest = numSort.sort((prev, next) => prev.price - next.price);
         const pointsContainer = tripPointListElement.querySelector(`.trip-events__list`);
         renderPoint(pointsContainer, point);
       });

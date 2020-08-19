@@ -9,6 +9,9 @@ export default class MajorTripCostView extends Abstract {
   }
 
   createMajorTripCostTemplate(points) {
+    if (points.length === 0) {
+      return ` `;
+    }
     let totalPrice = 0;
 
     points.forEach((point) => {

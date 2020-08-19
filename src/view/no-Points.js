@@ -6,4 +6,9 @@ export default class NoPoints extends Abstract {
   createNoPointTemplate() {
     return `<p class="trip-events__msg">Click New Event to create your first point</p>`;
   }
+
+  getTemplate() {
+    return this.createNoPointTemplate();
+  }
 }
+

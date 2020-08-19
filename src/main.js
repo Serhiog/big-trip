@@ -1,14 +1,16 @@
 import { render, RenderPosition } from "./utils/render.js";
-import { debounce } from "./utils/common.js"
 import { generateMocks } from "./mock/point.js";
 import NoPoints from "./view/no-Points.js";
-import Abstract from "./view/abstract.js";
 import PointsPresenter from "./presenter/trip.js";
+import MajorTripRouteView from "./view/majorTripInfo.js";
+import MajorTripCostView from "./view/majorTripCost.js";
+import TripListToggleView from "./view/toggleViewListTrip.js";
+import TripFilterView from "./view/mainTripFilter.js";
 
-const COUNT_RENDER_DAYS_TRIP = 20;
-
+const COUNT_RENDER_DAYS_TRIP = 3;
 
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
+
 const groups = new Map();
 
 let tripEndDay = 0;
@@ -23,9 +25,32 @@ points.forEach((point) => {
     items.push(point);
   }
 });
-const TripPresenter = new PointsPresenter(points, groups, tripEndDay);
-TripPresenter._renderHeader();
-TripPresenter._renderSortDays();
-TripPresenter._renderPoints();
 
-//render(siteTripConstructor, new NoPoints().getElement(), RenderPosition.AFTEREND);
+let arra = []
+points.forEach(point => {
+  arra.push(point.price)
+});
+
+
+const siteHeaderMainTripContainer = document.querySelector(`.trip-main`);
+render(siteHeaderMainTripContainer, new MajorTripRouteView(points, tripEndDay).getElement(), RenderPosition.AFTERBEGIN);
+
+const siteMajorInfoTrip = document.querySelector(`.trip-main__trip-info`);
+render(siteMajorInfoTrip, new MajorTripCostView(points).getElement(), RenderPosition.BEFOREEND);
+
+const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-main__trip-controls`);
+const siteHeaderFilterToggleView = siteHeaderFilterTrip.querySelector(`.trip-main__trip-controls h2`);
+
+render(siteHeaderFilterToggleView, new TripListToggleView().getElement(), RenderPosition.AFTEREND);
+render(siteHeaderFilterTrip, new TripFilterView().getElement(), RenderPosition.BEFOREEND);
+
+const siteSiteMainContainer = document.querySelector(`.trip-events`);
+
+if (points.length === 0) {
+  render(siteSiteMainContainer, new NoPoints().getElement(), RenderPosition.AFTEREND);
+} else {
+  const TripPresenter = new PointsPresenter(points, groups, tripEndDay, siteSiteMainContainer);
+  TripPresenter.init();
+}
+
+
