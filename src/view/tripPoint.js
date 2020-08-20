@@ -1,6 +1,7 @@
 
 import { humanizeTaskDueDate, msToTime } from "../utils/dates.js";
 import Abstract from "./abstract.js";
+import { createElement } from "../utils/render.js";
 
 export default class PointView extends Abstract {
   constructor(point) {
@@ -10,7 +11,6 @@ export default class PointView extends Abstract {
   }
 
   createTripPointTemplate(point) {
-
     const MAX_COUNT_OPTIONS = 3;
     let { type, city, price, options, startDate, endDate, id } = point;
 
@@ -68,6 +68,7 @@ export default class PointView extends Abstract {
   </li > `;
   }
 
+
   getTemplate() {
     return this.createTripPointTemplate(this._point);
   }
@@ -82,8 +83,7 @@ export default class PointView extends Abstract {
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
   }
 
-  removePointClickHandler(callback) {
-    this._callback.editClick = callback;
+  removePointClickHandler() {
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
   }
 }

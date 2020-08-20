@@ -8,18 +8,19 @@ import { render, RenderPosition, replace } from "../utils/render.js";
 import { debounce } from "../utils/common.js";
 
 export default class PointsPresenter {
-  constructor(points, groups, tripEndDay, siteSiteMainContainer) {
+  constructor(points, groups, tripEndDay, siteSiteMainContainer, originalPoints) {
     this._points = points;
     this._groups = groups;
     this._tripEndDay = tripEndDay;
     this._sortView = new TripSortView().getElement();
     this._containerView = new TripsContainerView().getElement();
     this._siteSiteMainContainer = siteSiteMainContainer;
+    this._originalPoints = originalPoints;
   }
-
 
   init() {
     this.renderSortDays();
+    this.renderSortPrice();
     this.renderPoints();
   }
 
@@ -28,7 +29,42 @@ export default class PointsPresenter {
     render(this._siteSiteMainContainer, this._containerView, RenderPosition.BEFOREEND);
   }
 
+  renderSortPrice() {
+
+    let setSort = function () {
+      let allPoints = document.querySelectorAll(`.trip-events__item`);
+      let allDays = document.querySelectorAll(`.day__counter`);
+      let allDates = document.querySelectorAll(`.day__date`);
+      let tripSortLabel = document.querySelector(`.trip-sort__item--day`)
+      const pointsContainer = document.querySelector(`.trip-events__list`);
+
+      allPoints.forEach(point => {
+        point.remove()
+      });
+
+      allDays.forEach(day => {
+        day.remove()
+      });
+
+      allDates.forEach(date => {
+        date.remove()
+      });
+
+      tripSortLabel.textContent = ``;
+
+      sortedPoints.forEach(element => {
+        render(pointsContainer, new PointView(element).getElement(), RenderPosition.AFTERBEGIN);
+      });
+    };
+
+    let sortedPoints = this._points.sort((prev, next) => prev.price - next.price);
+    document.querySelector(`#sort-price`).addEventListener(`click`, setSort)
+
+  }
+
+
   renderPoints() {
+
     const tripDaysContainer = document.querySelector(`.trip-days`);
 
     const renderPoint = (pointsContainer, point) => {
@@ -37,14 +73,14 @@ export default class PointsPresenter {
 
       const replacePointToEdit = () => {
         replace(pointEditComponent, pointComponent);
-        pointComponent.removePointClickHandler(debounce(replacePointToEdit));
+        pointComponent.removePointClickHandler();
         pointEditComponent.setEditClickHandler(debounce(replaceEditToForm))
         document.addEventListener(`keydown`, onEscKeyDown);
       };
 
       const replaceEditToForm = () => {
         replace(pointComponent, pointEditComponent);
-        pointEditComponent.removeEditClickHandler(debounce(replaceEditToForm))
+        pointEditComponent.removeEditClickHandler()
       };
 
       const onEscKeyDown = (evt) => {
@@ -60,22 +96,18 @@ export default class PointsPresenter {
       render(pointsContainer, pointComponent.getElement(), RenderPosition.BEFOREEND);
     };
 
-    // let sortPriceBtn = document.querySelector(`#sort-price`);
-    // sortPriceBtn.addEventListener(`click`, function () {
-    //   console.log('click')
-    // })
-    console.log(this._groups);
     let dayNumber = 1;
+
     for (let group of this._groups.entries()) {
       const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
       render(tripDaysContainer, tripPointListElement, RenderPosition.BEFOREEND);
       dayNumber++;
 
       group[1].forEach(point => {
-        //let numstest = numSort.sort((prev, next) => prev.price - next.price);
         const pointsContainer = tripPointListElement.querySelector(`.trip-events__list`);
         renderPoint(pointsContainer, point);
       });
     }
+
   }
 }

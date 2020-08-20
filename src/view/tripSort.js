@@ -39,4 +39,14 @@ export default class TripSortView extends Abstract {
   getTemplate() {
     return this.createTripSortTemplate();
   }
+
+  _toChangeSort(evt) {
+    evt.preventDefault();
+    this._callback.getSortBtn();
+  }
+
+  getSortBtn(callback) {
+    this._callback.getSortBtn = callback;
+    this.getTemplate().querySelector(`.trip-sort__btn`).addEventListener(`click`, this._toChangeSort);
+  }
 }

@@ -7,12 +7,13 @@ import MajorTripCostView from "./view/majorTripCost.js";
 import TripListToggleView from "./view/toggleViewListTrip.js";
 import TripFilterView from "./view/mainTripFilter.js";
 
-const COUNT_RENDER_DAYS_TRIP = 3;
+const COUNT_RENDER_DAYS_TRIP = 20;
 
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 
-const groups = new Map();
+let originalPoints = [].slice.call(points);
 
+const groups = new Map();
 let tripEndDay = 0;
 
 points.forEach((point) => {
@@ -24,11 +25,6 @@ points.forEach((point) => {
     const items = groups.get(date);
     items.push(point);
   }
-});
-
-let arra = []
-points.forEach(point => {
-  arra.push(point.price)
 });
 
 
@@ -49,7 +45,7 @@ const siteSiteMainContainer = document.querySelector(`.trip-events`);
 if (points.length === 0) {
   render(siteSiteMainContainer, new NoPoints().getElement(), RenderPosition.AFTEREND);
 } else {
-  const TripPresenter = new PointsPresenter(points, groups, tripEndDay, siteSiteMainContainer);
+  const TripPresenter = new PointsPresenter(points, groups, tripEndDay, siteSiteMainContainer, originalPoints);
   TripPresenter.init();
 }
 
