@@ -2,6 +2,10 @@
 import Abstract from "./abstract.js";
 
 export default class TripSortView extends Abstract {
+  constructor() {
+    super();
+    this._toChangeSort = this._toChangeSort.bind(this);
+  }
 
   createTripSortTemplate() {
     return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
@@ -42,11 +46,15 @@ export default class TripSortView extends Abstract {
 
   _toChangeSort(evt) {
     evt.preventDefault();
-    this._callback.getSortBtn();
+    this._callback.sortHandler(evt.target.getAttribute(`for`));
+    console.log();
   }
 
-  getSortBtn(callback) {
-    this._callback.getSortBtn = callback;
-    this.getTemplate().querySelector(`.trip-sort__btn`).addEventListener(`click`, this._toChangeSort);
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortHandler = callback;
+    this.getElement().querySelectorAll(`.trip-sort__btn`).forEach(element => {
+      element.addEventListener(`click`, this._toChangeSort);
+    });
+
   }
 }

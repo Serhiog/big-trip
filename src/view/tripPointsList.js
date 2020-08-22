@@ -12,6 +12,9 @@ export default class TripPointListView extends Abstract {
   createTripPointsListTemplate(group, dayNumber) {
     let [date] = group;
     let userDate = date4User(date);
+    if (group === ``) {
+      userDate = ``;
+    }
 
     return `<li class="trip-days__item  day">
       <div div class="day__info" >
