@@ -15,7 +15,6 @@ export default class BoardPointsPresenter {
         break;
       default:
         render(this._siteSiteMainContainer, this._sortView, RenderPosition.BEFOREEND);
-        this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
     }
   }
 

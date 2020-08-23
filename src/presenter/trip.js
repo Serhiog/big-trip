@@ -8,22 +8,23 @@ import { render, RenderPosition, replace } from "../utils/render.js";
 import { SORT_TYPES } from "../consts.js";
 
 export default class PointsPresenter {
-  constructor(siteSiteMainContainer) {
+  constructor(siteSiteMainContainer, points) {
     this._sortView = new TripSortView();
     this._containerView = new TripsContainerView();
     this._siteSiteMainContainer = siteSiteMainContainer;
-    this._currentSortType = 'sort-event';
+    this._currentSortType = SORT_TYPES.default;
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._points = points;
   }
 
-  init(points) {
-    this._points = points.slice();
-    this._defaultPoints = points.slice();
+  init() {
+    this._points = this._points.slice();
+    this._defaultPoints = this._points.slice();
     this._renderPoints();
+    this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderPoints() {
-
     const renderPoint = (pointsContainer, point) => {
       const pointComponent = new PointView(point);
       const pointEditComponent = new PointEditView(point, this._points);
@@ -53,7 +54,7 @@ export default class PointsPresenter {
       render(pointsContainer, pointComponent, RenderPosition.BEFOREEND);
     };
 
-    if (this._currentSortType === 'sort-event') {
+    if (this._currentSortType === SORT_TYPES.default) {
       const groups = new Map();
       this._defaultPoints.forEach((point) => {
         const date = point.startDate.toISOString().split(`T`)[0];
@@ -82,7 +83,7 @@ export default class PointsPresenter {
       }
     }
 
-    if (this._currentSortType === 'sort-time') {
+    if (this._currentSortType === SORT_TYPES.time) {
       this._points.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
       const tripPointListElement = new TripPointListView(``, ``).getElement();
       render(this._containerView, tripPointListElement, RenderPosition.BEFOREEND);
@@ -93,7 +94,7 @@ export default class PointsPresenter {
       document.querySelector(`.trip-sort__item--day`).innerHTML = ``;
     }
 
-    if (this._currentSortType === 'sort-price') {
+    if (this._currentSortType === SORT_TYPES.price) {
       this._points.sort((a, b) => b.price - a.price);
       const tripPointListElement = new TripPointListView(``, ``).getElement();
       render(this._containerView, tripPointListElement, RenderPosition.BEFOREEND);

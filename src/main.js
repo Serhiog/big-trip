@@ -19,5 +19,5 @@ HeaderPresenter.init();
 const TripBoardPresenter = new BoardPointsPresenter(siteSiteMainContainer, points);
 TripBoardPresenter.init();
 
-const TripPresenter = new PointsPresenter(siteSiteMainContainer, tripDaysContainer);
-TripPresenter.init(points);
+const TripPresenter = new PointsPresenter(siteSiteMainContainer, points);
+TripPresenter.init();
