@@ -9,7 +9,6 @@ const COUNT_RENDER_DAYS_TRIP = 10;
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 
 const siteSiteMainContainer = document.querySelector(`.trip-events`);
-const tripDaysContainer = siteSiteMainContainer.querySelector(`.trip-days`);
 
 render(siteSiteMainContainer, new NoPoints(points), RenderPosition.AFTEREND);
 

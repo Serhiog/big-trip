@@ -3,8 +3,8 @@ import { date4User } from "../utils/dates.js";
 import Abstract from "./abstract.js";
 
 export default class TripPointListView extends Abstract {
-  constructor(group, dayNumber) {
-    super()
+  constructor(group = ``, dayNumber = ``) {
+    super();
     this._group = group;
     this._dayNumber = dayNumber;
   }
