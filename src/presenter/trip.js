@@ -63,12 +63,10 @@ export default class PointsPresenter {
     });
 
     render(this._siteSiteMainContainer, this._containerView, RenderPosition.BEFOREEND);
-    const tripDaysContainer = document.querySelector(`.trip-days`);
-
     let dayNumber = 1;
     for (let group of groups.entries()) {
       const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
-      render(tripDaysContainer, tripPointListElement, RenderPosition.BEFOREEND);
+      render(this._containerView, tripPointListElement, RenderPosition.BEFOREEND);
       dayNumber++;
 
       group[1].forEach(point => {
