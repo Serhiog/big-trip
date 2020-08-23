@@ -19,4 +19,5 @@ export default class HeaderPresenter {
     render(siteHeaderFilterToggleView, new TripListToggleView(), RenderPosition.AFTEREND);
     render(this._siteHeaderFilterTrip, new TripFilterView(), RenderPosition.BEFOREEND)
   }
+
 }

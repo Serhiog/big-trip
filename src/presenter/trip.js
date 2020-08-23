@@ -22,6 +22,7 @@ export default class PointsPresenter {
     this._renderPoints();
   }
 
+
   _renderPoints() {
 
     const renderPoint = (pointsContainer, point) => {
@@ -114,4 +115,5 @@ export default class PointsPresenter {
     this._clearPoints();
     this._renderPoints();
   }
+
 }
