@@ -20,7 +20,7 @@ export default class PointsPresenter {
   init() {
     this._points = this._points.slice();
     this._defaultPoints = this._points.slice();
-    this._sortingPoints();
+
     this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
     this.defaultSortedByDaysPoints()
   }
@@ -68,7 +68,6 @@ export default class PointsPresenter {
       const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
       render(this._containerView, tripPointListElement, RenderPosition.BEFOREEND);
       dayNumber++;
-
       group[1].forEach(point => {
         const pointsContainer = tripPointListElement.querySelector(`.trip-events__list`);
         this.renderPoint(pointsContainer, point);
@@ -96,7 +95,7 @@ export default class PointsPresenter {
         });
         this._sortView.getElement().querySelector(`.trip-sort__item--day`).innerHTML = ``;
         break;
-      default:
+      case SORT_TYPES.default:
         this._clearPoints();
         this.defaultSortedByDaysPoints();
         break;

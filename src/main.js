@@ -5,7 +5,7 @@ import HeaderTripPresenter from "./presenter/header.js";
 import BoardPointsPresenter from "./presenter/boardPoints.js";
 import PointsPresenter from "./presenter/trip.js";
 
-const COUNT_RENDER_DAYS_TRIP = 10;
+const COUNT_RENDER_DAYS_TRIP = 3;
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 
 const siteSiteMainContainer = document.querySelector(`.trip-events`);

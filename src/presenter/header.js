@@ -12,7 +12,7 @@ export default class HeaderPresenter {
   }
 
   init() {
-    render(this._siteHeaderMainTripContainer, new MajorTripRouteView(this._points, 1), RenderPosition.AFTERBEGIN);
+    render(this._siteHeaderMainTripContainer, new MajorTripRouteView(this._points), RenderPosition.AFTERBEGIN);
     const siteMajorInfoTrip =  this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
     render(siteMajorInfoTrip, new MajorTripCostView(this._points), RenderPosition.BEFOREEND);
     const siteHeaderFilterToggleView = this._siteHeaderFilterTrip.querySelector(`.trip-main__trip-controls h2`);

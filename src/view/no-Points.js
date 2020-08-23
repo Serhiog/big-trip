@@ -8,17 +8,11 @@ export default class NoPoints extends Abstract {
   }
 
   createNoPointTemplate() {
-    return `<p class="trip-events__msg">Click New Event to create your first point</p>`;
+    return `${!this._points.length ? `<p class="trip-events__msg">Click New Event to create your first point</p>` : `<span></span>`}`;
   }
 
   getTemplate() {
     return this.createNoPointTemplate();
-  }
-
-  init() {
-    if (!this._points.length) {
-      this.getElement();
-    }
   }
 }
 
