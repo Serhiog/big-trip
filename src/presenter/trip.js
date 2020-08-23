@@ -1,6 +1,6 @@
 
 import TripSortView from "../view/tripSort.js";
-import TripsContainerView from "../view/tripsContainer.js";
+
 import PointView from "../view/tripPoint.js";
 import PointEditView from "../view/pointEditor.js";
 import TripPointListView from "../view/tripPointsList.js";
@@ -10,16 +10,16 @@ import { SORT_TYPES } from "../consts.js";
 export default class PointsPresenter {
   constructor(siteSiteMainContainer) {
     this._sortView = new TripSortView();
-    this._containerView = new TripsContainerView();
+
     this._siteSiteMainContainer = siteSiteMainContainer;
     this._currentSortType = 'sort-event';
-    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+
   }
 
   init(points) {
     this._points = points.slice();
     this._defaultPoints = points.slice();
-    this._renderPoints();
+    //this._renderPoints();
   }
 
 
@@ -68,11 +68,10 @@ export default class PointsPresenter {
 
       render(this._siteSiteMainContainer, this._containerView, RenderPosition.BEFOREEND);
       const tripDaysContainer = document.querySelector(`.trip-days`);
-
       let dayNumber = 1;
 
       for (let group of groups.entries()) {
-        const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
+        const tripPointListElement = new TripPointListView(group, dayNumber);
         render(tripDaysContainer, tripPointListElement, RenderPosition.BEFOREEND);
         dayNumber++;
 
@@ -104,16 +103,6 @@ export default class PointsPresenter {
       });
       document.querySelector(`.trip-sort__item--day`).innerHTML = ``;
     }
-  }
-
-  _clearPoints() {
-    this._containerView.getElement().innerHTML = ``;
-  }
-
-  _handleSortTypeChange(sortType) {
-    this._currentSortType = sortType;
-    this._clearPoints();
-    this._renderPoints();
   }
 
 }
