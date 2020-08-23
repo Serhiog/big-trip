@@ -51,7 +51,7 @@ export default class TripSortView extends Abstract {
 
   setSortTypeChangeHandler(callback) {
     this._callback.sortHandler = callback;
-    this.getElement().querySelectorAll(`.trip-sort__btn`).forEach(element => {
+    document.querySelectorAll(`.trip-sort__btn`).forEach(element => {
       element.addEventListener(`click`, this._toChangeSort);
     });
 
