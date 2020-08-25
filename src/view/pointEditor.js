@@ -2,6 +2,7 @@
 import { humanizeTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
 import { getOptions } from "../mock/point.js";
 import Abstract from "./abstract.js";
+import { remove } from "../utils/render.js";
 
 export default class PointEditView extends Abstract {
   constructor(point, points) {
@@ -194,6 +195,7 @@ export default class PointEditView extends Abstract {
     this._callback.editClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
   }
+
   removeEditClickHandler() {
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
   }

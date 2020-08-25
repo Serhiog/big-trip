@@ -4,37 +4,48 @@ import TripsContainerView from "../view/tripsContainer.js";
 import PointView from "../view/tripPoint.js";
 import PointEditView from "../view/pointEditor.js";
 import TripPointListView from "../view/tripPointsList.js";
-import { render, RenderPosition, replace } from "../utils/render.js";
+import { render, RenderPosition, replace, remove } from "../utils/render.js";
 import { SORT_TYPES } from "../consts.js";
+import Abstract from "../view/abstract.js";
 
 export default class PointsPresenter {
-  constructor(siteSiteMainContainer, points) {
+  constructor(siteSiteMainContainer, points, sitePointsListContainer) {
     this._sortView = new TripSortView();
     this._containerView = new TripsContainerView();
+    this._tripPointListView = new TripPointListView();
     this._siteSiteMainContainer = siteSiteMainContainer;
     this._currentSortType = SORT_TYPES.default;
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._points = points;
+    this._pointComponent = null;
+    this._pointEditComponent = null;
+    this._pointPresenter = {};
+    this._sitePointsListContainer = sitePointsListContainer;
   }
 
   init() {
     this._points = this._points.slice();
     this._defaultPoints = this._points.slice();
-
     this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
-    this.defaultSortedByDaysPoints()
+    this.defaultSortedByDaysPoints();
   }
 
 
   renderPoint(pointsContainer, point) {
+
+    const prevPointComponent = this._pointComponent;
+    const prevPointEditComponent = this._pointEditComponent;
     const pointComponent = new PointView(point);
     const pointEditComponent = new PointEditView(point, this._points);
+    this._pointPresenter[point.id1] = pointComponent;
+    this._pointPresenter[point.id2] = pointEditComponent;
     const replacePointToEdit = () => {
       replace(pointEditComponent, pointComponent);
       pointComponent.removePointClickHandler();
       pointEditComponent.setEditClickHandler(replaceEditToPoint)
       document.addEventListener(`keydown`, onEscKeyDown);
     };
+
     const replaceEditToPoint = () => {
       replace(pointComponent, pointEditComponent);
       pointEditComponent.removeEditClickHandler();
@@ -47,30 +58,44 @@ export default class PointsPresenter {
       }
     };
     pointComponent.setPointClickHandler(replacePointToEdit);
-    render(pointsContainer, pointComponent, RenderPosition.BEFOREEND);
+
+    if (prevPointComponent === null || prevPointEditComponent === null) {
+      render(pointsContainer, pointComponent, RenderPosition.BEFOREEND);
+      return;
+    }
+
+    if (pointsContainer.getElement().contains(prevPointComponent.getElement())) {
+      replace(pointComponent, prevPointComponent)
+    }
+    if (pointsContainer.getElement().contains(prevPointEditComponent.getElement())) {
+      replace(pointEditComponent, prevPointEditComponent)
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
   }
 
   defaultSortedByDaysPoints() {
     const groups = new Map();
-    this._defaultPoints.forEach((point) => {
-      const date = point.startDate.toISOString().split(`T`)[0];
+    this._defaultPoints.forEach((stop) => {
+      const date = stop.startDate.toISOString().split(`T`)[0];
       if (!groups.has(date)) {
-        groups.set(date, [point]);
+        groups.set(date, [stop]);
       } else {
         const items = groups.get(date);
-        items.push(point);
+        items.push(stop);
       }
     });
 
     render(this._siteSiteMainContainer, this._containerView, RenderPosition.BEFOREEND);
     let dayNumber = 1;
     for (let group of groups.entries()) {
-      const tripPointListElement = new TripPointListView(group, dayNumber).getElement();
+      const tripPointListElement = new TripPointListView(group, dayNumber)
       render(this._containerView, tripPointListElement, RenderPosition.BEFOREEND);
       dayNumber++;
       group[1].forEach(point => {
-        const pointsContainer = tripPointListElement.querySelector(`.trip-events__list`);
-        this.renderPoint(pointsContainer, point);
+        this.renderPoint(tripPointListElement.querySelector(`.trip-events__list`), point);
+        this._pointPresenter[point.id3] = tripPointListElement;
       });
     }
   }
@@ -102,8 +127,15 @@ export default class PointsPresenter {
     }
   }
 
+  destroy(presenter) {
+    remove(presenter);
+  }
+
   _clearPoints() {
-    this._containerView.getElement().innerHTML = ``;
+    Object
+      .values(this._pointPresenter)
+      .forEach((presenter) => console.log(presenter));
+    this._pointPresenter = {};
   }
 
   _handleSortTypeChange(sortType) {

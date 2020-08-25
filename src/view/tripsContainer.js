@@ -12,4 +12,9 @@ export default class TripsContainerView extends Abstract {
   getTemplate() {
     return this.createTripsContainerTemplate();
   }
+
+  deleteElement() {
+    this.getElement().remove();
+    this.removeElement();
+  }
 }

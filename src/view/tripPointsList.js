@@ -2,6 +2,30 @@
 import { date4User } from "../utils/dates.js";
 import Abstract from "./abstract.js";
 
+const innerListPointsTemplate = () => {
+  return `<ul class="trip-events__list">
+  </ul>`;
+};
+
+const createTripPointsListTemplate = (group, dayNumber) => {
+
+  const innerListPoints = innerListPointsTemplate();
+  let [date] = group;
+  let userDate = date4User(date);
+  if (group === ``) {
+    userDate = ``;
+  }
+
+  return `<li class="trip-days__item  day">
+    <div div class="day__info" >
+      <span class="day__counter">${dayNumber}</span>
+      <time class="day__date" datetime=${date}>${userDate}</time>
+      </div >
+${innerListPoints}
+  </li >
+    `;
+}
+
 export default class TripPointListView extends Abstract {
   constructor(group = ``, dayNumber = ``) {
     super();
@@ -9,26 +33,7 @@ export default class TripPointListView extends Abstract {
     this._dayNumber = dayNumber;
   }
 
-  createTripPointsListTemplate(group, dayNumber) {
-    let [date] = group;
-    let userDate = date4User(date);
-    if (group === ``) {
-      userDate = ``;
-    }
-
-    return `<li class="trip-days__item  day">
-      <div div class="day__info" >
-        <span class="day__counter">${dayNumber}</span>
-        <time class="day__date" datetime=${date}>${userDate}</time>
-        </div >
-
-      <ul class="trip-events__list">
-      </ul>
-    </li >
-      `;
-  }
-
   getTemplate() {
-    return this.createTripPointsListTemplate(this._group, this._dayNumber);
+    return createTripPointsListTemplate(this._group, this._dayNumber);
   }
 }
