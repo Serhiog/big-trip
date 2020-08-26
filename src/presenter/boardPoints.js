@@ -2,8 +2,8 @@ import { render, RenderPosition } from "../utils/render.js";
 import TripSortView from "../view/tripSort.js";
 
 export default class BoardPointsPresenter {
-  constructor(siteSiteMainContainer, points) {
-    this._siteSiteMainContainer = siteSiteMainContainer;
+  constructor(siteMainContainer, points) {
+    this._siteMainContainer = siteMainContainer;
     this._sortView = new TripSortView();
     this._points = points;
   }
@@ -14,7 +14,7 @@ export default class BoardPointsPresenter {
         this._sortView = ``;
         break;
       default:
-        render(this._siteSiteMainContainer, this._sortView, RenderPosition.BEFOREEND);
+        render(this._siteMainContainer, this._sortView, RenderPosition.BEFOREEND);
     }
   }
 

@@ -64,9 +64,7 @@ const point = (date) => {
     photos: generatePhotos(),
     startDate: time1,
     endDate: time2,
-    id1: generateId(),
-    id2: generateId(),
-    id3: generateId(),
+    id: generateId(),
   };
 };
 
