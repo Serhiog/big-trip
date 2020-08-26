@@ -2,6 +2,7 @@ import { render, RenderPosition } from "../utils/render.js";
 import TripSortView from "../view/tripSort.js";
 import { SortType } from "../consts.js";
 import PointsPresenter from "./tripOLD.js";
+import NoPoints from "../view/no-Points.js";
 
 export default class BoardPointsPresenter {
   constructor(siteMainContainer, points, groups) {
@@ -15,21 +16,22 @@ export default class BoardPointsPresenter {
   }
 
   _checkPoints() {
-    switch (this._points.length === 0) {
+    switch (!this._points.length) {
       case true:
         this._sortView = ``;
+        render(this._siteMainContainer, new NoPoints(), RenderPosition.AFTEREND);
         break;
       default:
         render(this._siteMainContainer, this._sortView, RenderPosition.AFTERBEGIN);
+        this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
     }
   }
 
   init() {
     this._checkPoints();
-    this._points = this._points.slice();
-    new PointsPresenter(this._siteMainContainer).init(this.groups);
-    this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
+    new PointsPresenter(this._siteMainContainer, this._points, this.groups).init();
   }
+
 
   _handleSortTypeChange(sortType) {
     this._currentSortType = sortType;
@@ -45,7 +47,7 @@ export default class BoardPointsPresenter {
         this._trip._sortTime(this._points, this._siteMainContainer);
         break;
       case SortType.DEFAULT:
-        this._trip._defaultSortedByDaysPoints(this.groups, this._siteMainContainer);
+        this._trip._defaultSortedByDaysPoints(this.groups, this._points, this._siteMainContainer);
         break;
     }
   }

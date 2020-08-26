@@ -1,5 +1,5 @@
 
-import PointsPresenter from "./tripOLD.js";
+
 import BoardPointsPresenter from "./boardPointsOLD.js";
 
 export default class Groups {
@@ -9,7 +9,6 @@ export default class Groups {
   }
 
   init(points) {
-    //this._points = this._points.slice();
     this._defaultPoints = points.slice();
     this._makeGroups();
   }

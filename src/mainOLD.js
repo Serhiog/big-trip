@@ -2,9 +2,9 @@
 import { generateMocks } from "./mock/point.js";
 import HeaderTripPresenter from "./presenter/header.js";
 import BoardPointsPresenter from "./presenter/boardPointsOLD.js";
-import Groups from "./presenter/groups.js";
+import Groups from "./presenter/groupsOLD.js";
 
-const COUNT_RENDER_DAYS_TRIP = 1;
+const COUNT_RENDER_DAYS_TRIP = 3;
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 
 
