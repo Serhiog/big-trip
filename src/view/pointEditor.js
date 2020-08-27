@@ -2,7 +2,6 @@
 import { humanizeTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
 import { getOptions } from "../mock/point.js";
 import Abstract from "./abstract.js";
-import { remove } from "../utils/render.js";
 
 export default class PointEditView extends Abstract {
   constructor(point, points) {
@@ -10,6 +9,7 @@ export default class PointEditView extends Abstract {
     this._point = point;
     this._points = points;
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   createTripEditTemplate(point, points) {
@@ -199,5 +199,19 @@ export default class PointEditView extends Abstract {
 
   removeEditClickHandler() {
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setfavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  removeFavoriteClickHandler() {
+    this.getElement().querySelector(`.event__favorite-btn`).removeEventListener(`click`, this._favoriteClickHandler);
   }
 }

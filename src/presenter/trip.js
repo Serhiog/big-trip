@@ -7,57 +7,59 @@ import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
 import { SortType } from "../consts.js";
-import NoPoints from "../view/no-Points.js";
+import { updateItem } from "../utils/common.js";
 
 export default class PointsPresenter {
-  constructor(siteMainContainer, points, sitePointsListContainer) {
+  constructor(siteMainContainer, points, groups) {
     this._siteMainContainer = siteMainContainer;
     this._sortView = new TripSortView();
     this._containerView = new TripsContainerView();
     this._tripPointListView = new TripPointListView();
     this._currentSortType = SortType.DEFAULT;
-    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._points = points;
     this._pointComponent = null;
     this._pointEditComponent = null;
     this._pointPresenter = {};
-    this._sitePointsListContainer = sitePointsListContainer;
+    this._groups = groups;
+    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
   }
 
-  init() {
-    this.checkPoints();
-    this._points = this._points.slice();
-    this._defaultPoints = this._points.slice();
-    this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
-    this.defaultSortedByDaysPoints();
+  init(updatedPoint) {
+    //console.log(updatedPoint);
   }
 
-  checkPoints() {
-    render(this._siteMainContainer, new NoPoints(this._points), RenderPosition.AFTEREND);
+  _initDataBind(point, points, originPoints) {
+    this._point = point;
+    this._points = points; // -сортированные точки
+    this._originPoints = originPoints; // -ориг точки
   }
 
-
-  renderPoint(pointsContainer, point) {
-
+  renderPoint(pointsContainer, point, points, originPoints) {
+    this._initDataBind(point, points, originPoints)
     const prevPointComponent = this._pointComponent;
     const prevPointEditComponent = this._pointEditComponent;
     const pointComponent = new PointView(point);
-    const pointEditComponent = new PointEditView(point, this._points);
+    const pointEditComponent = new PointEditView(point, points);
     const replacePointToEdit = () => {
       replace(pointEditComponent, pointComponent);
-      pointEditComponent.setEditClickHandler(replaceEditToPoint)
+      pointEditComponent.setEditClickHandler(replaceEditToPoint);
       document.addEventListener(`keydown`, onEscKeyDown);
+      pointEditComponent.setfavoriteClickHandler(this._handleFavoriteClick);
+      this._pointPresenter[point.id2] = pointEditComponent; // !
     };
 
     const replaceEditToPoint = () => {
       replace(pointComponent, pointEditComponent);
-      pointEditComponent.removeEditClickHandler();
+      pointEditComponent.removeEditClickHandler(replaceEditToPoint);
       document.removeEventListener(`keydown`, onEscKeyDown);
+      pointEditComponent.removeFavoriteClickHandler(this._handleFavoriteClick);
     };
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
         evt.preventDefault();
         replaceEditToPoint();
+        pointEditComponent.removeFavoriteClickHandler(this._handleFavoriteClick);
       }
     };
     pointComponent.setPointClickHandler(replacePointToEdit);
@@ -78,19 +80,10 @@ export default class PointsPresenter {
     remove(prevPointEditComponent);
   }
 
-  defaultSortedByDaysPoints() {
-    const groups = new Map();
-    this._defaultPoints.forEach((stop) => {
-      const date = stop.startDate.toISOString().split(`T`)[0];
-      if (!groups.has(date)) {
-        groups.set(date, [stop]);
-      } else {
-        const items = groups.get(date);
-        items.push(stop);
-      }
-    });
-
-    render(this._siteMainContainer, this._containerView, RenderPosition.BEFOREEND);
+  _defaultSortedByDaysPoints(container, data, groups) {
+    const originPoints = data.slice();
+    this._clearPoints();
+    render(container, this._containerView, RenderPosition.BEFOREEND);
     let dayNumber = 1;
     for (let group of groups.entries()) {
       const tripPointListElement = new TripPointListView(group, dayNumber);
@@ -99,49 +92,40 @@ export default class PointsPresenter {
       render(tripPointListElement, innerTripPointList, RenderPosition.BEFOREEND);
       dayNumber++;
       group[1].forEach(point => {
-        this.renderPoint(innerTripPointList, point);
-        this._pointPresenter[point.id] = this._containerView; //!
+        this.renderPoint(innerTripPointList, point, data, originPoints);
+        this._pointPresenter[data.id] = this._containerView;
       });
     }
   }
 
-  _sortingPoints() {
-    switch (this._currentSortType) {
-      case SortType.PRICE:
-        this._points.sort((a, b) => b.price - a.price);
-        render(this._siteMainContainer, this._containerView, RenderPosition.BEFOREEND);
-        let tripPointListElement4Price = new TripPointListView();
-        render(this._containerView, tripPointListElement4Price, RenderPosition.BEFOREEND);
-        const innerTripPointList4Price = new InnerTripPointList();
-        render(tripPointListElement4Price, innerTripPointList4Price, RenderPosition.BEFOREEND)
-        this._points.forEach((point) => {
-          this.renderPoint(innerTripPointList4Price, point);
-          this._pointPresenter[point.id] = this._containerView; //!
-        });
-        this._sortView.getElement().querySelector(`.trip-sort__item--day`).innerHTML = ``;
-        break;
-      case SortType.TIME:
-        this._points.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
-        render(this._siteMainContainer, this._containerView, RenderPosition.BEFOREEND);
-        let tripPointListElement4Time = new TripPointListView();
-        render(this._containerView, tripPointListElement4Time, RenderPosition.BEFOREEND);
-        const innerTripPointList4Time = new InnerTripPointList();
-        render(tripPointListElement4Time, innerTripPointList4Time, RenderPosition.BEFOREEND)
-        this._points.forEach((point) => {
-          this.renderPoint(innerTripPointList4Time, point);
-          this._pointPresenter[point.id] = this._containerView; //!
-        });
-        this._sortView.getElement().querySelector(`.trip-sort__item--day`).innerHTML = ``;
-        break;
-      case SortType.DEFAULT:
-        this._clearPoints();
-        this.defaultSortedByDaysPoints();
-        break;
-    }
+  _sortPrice(data, container) {
+    this._clearPoints();
+    data.sort((a, b) => b.price - a.price);
+    render(container, this._containerView, RenderPosition.BEFOREEND);
+    let tripPointListElement4Price = new TripPointListView();
+    render(this._containerView, tripPointListElement4Price, RenderPosition.BEFOREEND);
+    const innerTripPointList4Price = new InnerTripPointList();
+    render(tripPointListElement4Price, innerTripPointList4Price, RenderPosition.BEFOREEND)
+    data.forEach((point) => {
+      this.renderPoint(innerTripPointList4Price, point, data);
+      this._pointPresenter[point.id] = this._containerView;
+    });
+    this._sortView.getElement().querySelector(`.trip-sort__item--day`).innerHTML = ``;
   }
 
-  destroy(presenter) {
-    remove(presenter);
+  _sortTime(data, container) {
+    this._clearPoints();
+    data.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
+    render(container, this._containerView, RenderPosition.BEFOREEND);
+    let tripPointListElement4Time = new TripPointListView();
+    render(this._containerView, tripPointListElement4Time, RenderPosition.BEFOREEND);
+    const innerTripPointList4Time = new InnerTripPointList();
+    render(tripPointListElement4Time, innerTripPointList4Time, RenderPosition.BEFOREEND)
+    data.forEach((point) => {
+      this.renderPoint(innerTripPointList4Time, point, data);
+      this._pointPresenter[point.id] = this._containerView;
+    });
+    this._sortView.getElement().querySelector(`.trip-sort__item--day`).innerHTML = ``;
   }
 
   _clearPoints() {
@@ -151,9 +135,21 @@ export default class PointsPresenter {
     this._pointPresenter = {};
   }
 
-  _handleSortTypeChange(sortType) {
-    this._currentSortType = sortType;
-    this._clearPoints();
-    this._sortingPoints();
+
+  destroy(presenter) {
+    remove(presenter);
+  }
+
+  _handlePointChange(updatedPoint) {
+    console.log(updatedPoint);
+    this._points = updateItem(this._points, updatedPoint);
+    this._originPoints = updateItem(this._originPoints, updatedPoint);
+    //new PointsPresenter().init(updatedPoint)
+    //this._pointPresenter[updatedPoint.id2].init(updatedPoint);
+    this.init(new InnerTripPointList().getElement(), updatedPoint, this._points, this._originPoints)
+  }
+
+  _handleFavoriteClick() {
+    this._handlePointChange(Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
   }
 }

@@ -65,6 +65,8 @@ const point = (date) => {
     startDate: time1,
     endDate: time2,
     id: generateId(),
+    id2: generateId(),
+    isFavorite: false,
   };
 };
 

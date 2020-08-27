@@ -1,6 +1,6 @@
 
 
-import BoardPointsPresenter from "./boardPointsOLD.js";
+import BoardPointsPresenter from "./boardPoints.js";
 
 export default class Groups {
   constructor(siteMainContainer, points) {
@@ -24,6 +24,6 @@ export default class Groups {
         items.push(stop);
       }
     });
-    new BoardPointsPresenter(this.siteMainContainer, this.points, groups).init();
+    new BoardPointsPresenter(this.siteMainContainer, this.points, groups).init(this.points);
   }
 }
