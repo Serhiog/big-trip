@@ -7,6 +7,7 @@ import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
 import { SortType } from "../consts.js";
+import { updateItem } from "../utils/common.js";
 
 export default class PointsPresenter {
   constructor(siteMainContainer, points, groups) {
@@ -20,10 +21,13 @@ export default class PointsPresenter {
     this._pointEditComponent = null;
     this._pointPresenter = {};
     this._groups = groups;
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init() {
-   this._defaultSortedByDaysPoints(this._groups, this._points, this._siteMainContainer);
+    this._defaultSortedByDaysPoints(this._groups, this._points, this._siteMainContainer);
+    this._points = this._points.slice();
+    this._originPoints = this._points.slice();
   }
 
   renderPoint(pointsContainer, point) {
@@ -31,16 +35,19 @@ export default class PointsPresenter {
     const prevPointEditComponent = this._pointEditComponent;
     const pointComponent = new PointView(point);
     const pointEditComponent = new PointEditView(point, this._points);
+
     const replacePointToEdit = () => {
       replace(pointEditComponent, pointComponent);
       pointEditComponent.setEditClickHandler(replaceEditToPoint)
       document.addEventListener(`keydown`, onEscKeyDown);
+      pointEditComponent.setFavoriteClickHandler(this._handlePointChange);
     };
 
     const replaceEditToPoint = () => {
       replace(pointComponent, pointEditComponent);
       pointEditComponent.removeEditClickHandler();
       document.removeEventListener(`keydown`, onEscKeyDown);
+      pointEditComponent.removeFavoriteClickHandler();
     };
     const onEscKeyDown = (evt) => {
       if (evt.key === `Escape` || evt.key === `Esc`) {
@@ -48,6 +55,7 @@ export default class PointsPresenter {
         replaceEditToPoint();
       }
     };
+
     pointComponent.setPointClickHandler(replacePointToEdit);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -79,7 +87,6 @@ export default class PointsPresenter {
       group[1].forEach(place => {
         this.renderPoint(innerTripPointList, place);
         this._pointPresenter[point.id] = this._containerView; //!
-
       });
     }
   }
@@ -124,5 +131,11 @@ export default class PointsPresenter {
 
   destroy(presenter) {
     remove(presenter);
+  }
+
+  _handlePointChange(updatedPoint) {
+    this._points = updateItem(this._boardTasks, updatedPoint);
+    this._originPoints = updateItem(this._sourcedBoardTasks, updatedPoint);
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 }

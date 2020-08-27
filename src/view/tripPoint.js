@@ -88,3 +88,4 @@ export default class PointView extends Abstract {
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
   }
 }
+
