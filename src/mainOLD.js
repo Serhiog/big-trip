@@ -1,12 +1,10 @@
 
 import { generateMocks } from "./mock/point.js";
 import HeaderTripPresenter from "./presenter/header.js";
-import BoardPointsPresenter from "./presenter/boardPointsOLD.js";
 import Groups from "./presenter/groupsOLD.js";
 
-const COUNT_RENDER_DAYS_TRIP = 3;
+const COUNT_RENDER_DAYS_TRIP = 10;
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
-
 
 const siteMainContainer = document.querySelector(`.trip-events`);
 const siteHeaderMainTripContainer = document.querySelector(`.trip-main`);

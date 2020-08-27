@@ -13,8 +13,8 @@ export default class PointEditView extends Abstract {
   }
 
   createTripEditTemplate(point, points) {
-    const { type, city, price, options, startDate, endDate } = point;
 
+    const { type, city, price, options, startDate, endDate } = point;
 
     let citiesInSelectList = [];
     points.forEach((place) => {
@@ -24,6 +24,7 @@ export default class PointEditView extends Abstract {
     const userSelectCities = Array.from(new Set(citiesInSelectList));
 
     let cities = ``;
+
     userSelectCities.forEach((city) => {
       cities = cities + `<option value=${city}></option>`;
     });

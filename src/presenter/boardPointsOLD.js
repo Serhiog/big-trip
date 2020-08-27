@@ -12,7 +12,7 @@ export default class BoardPointsPresenter {
     this._currentSortType = SortType.DEFAULT;
     this._trip = new PointsPresenter();
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this.groups = groups;
+    this._groups = groups;
   }
 
   _checkPoints() {
@@ -29,7 +29,8 @@ export default class BoardPointsPresenter {
 
   init() {
     this._checkPoints();
-    new PointsPresenter(this._siteMainContainer, this._points, this.groups).init();
+    new PointsPresenter(this._siteMainContainer, this._points, this._groups).init();
+    this._sortingPoints();
   }
 
 
@@ -47,7 +48,7 @@ export default class BoardPointsPresenter {
         this._trip._sortTime(this._points, this._siteMainContainer);
         break;
       case SortType.DEFAULT:
-        this._trip._defaultSortedByDaysPoints(this.groups, this._points, this._siteMainContainer);
+        this._trip._defaultSortedByDaysPoints(this._siteMainContainer, this._points, this._groups);
         break;
     }
   }
