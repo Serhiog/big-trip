@@ -1,17 +1,20 @@
 
-import { humanizeTaskDueDate, formatedStartEndDate, createElement } from "./util.js";
+import { humanizeTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
 import { getOptions } from "../mock/point.js";
+import Abstract from "./abstract.js";
+import { remove } from "../utils/render.js";
 
-export default class PointEditView {
+export default class PointEditView extends Abstract {
   constructor(point, points) {
+    super()
     this._point = point;
     this._points = points;
-    this._element = null;
+    this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   createTripEditTemplate(point, points) {
     const { type, city, price, options, startDate, endDate } = point;
-
 
     let citiesInSelectList = [];
     points.forEach((place) => {
@@ -183,15 +186,31 @@ export default class PointEditView {
     return this.createTripEditTemplate(this._point, this._points);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
+
+  removeEditClickHandler() {
+    this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  removeFavoriteClickHandler() {
+    this.getElement().querySelector(`.event__favorite-btn`).removeEventListener(`click`, this._favoriteClickHandler);
   }
 }

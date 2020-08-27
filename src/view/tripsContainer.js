@@ -1,12 +1,11 @@
-import { createElement } from "./util.js";
 
-export default class TripsContainerView {
-  constructor() {
-    this._element = null;
-  }
+import Abstract from "./abstract.js";
+
+export default class TripsContainerView extends Abstract {
 
   createTripsContainerTemplate() {
     return `<ul class="trip-days">
+
     </ul>`;
   }
 
@@ -14,15 +13,8 @@ export default class TripsContainerView {
     return this.createTripsContainerTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  deleteElement() {
+    this.getElement().remove();
+    this.removeElement();
   }
 }

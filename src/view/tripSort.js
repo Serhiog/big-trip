@@ -1,8 +1,10 @@
-import { createElement } from "./util.js";
 
-export default class TripSortView {
+import Abstract from "./abstract.js";
+
+export default class TripSortView extends Abstract {
   constructor() {
-    this._element = null;
+    super();
+    this._toChangeSort = this._toChangeSort.bind(this);
   }
 
   createTripSortTemplate() {
@@ -42,15 +44,16 @@ export default class TripSortView {
     return this.createTripSortTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _toChangeSort(evt) {
+    evt.preventDefault();
+    this._callback.sortHandler(evt.target.getAttribute(`for`));
   }
 
-  removeElement() {
-    this._element = null;
+  setSortTypeChangeHandler(callback) {
+    this._callback.sortHandler = callback;
+    document.querySelectorAll(`.trip-sort__btn`).forEach(element => {
+      element.addEventListener(`click`, this._toChangeSort);
+    });
+
   }
 }

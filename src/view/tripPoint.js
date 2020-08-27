@@ -1,15 +1,17 @@
 
-import { humanizeTaskDueDate, msToTime, createElement } from "./util.js";
+import { humanizeTaskDueDate, msToTime } from "../utils/dates.js";
+import Abstract from "./abstract.js";
+import { remove } from "../utils/render.js";
 
-export default class PointView {
+
+export default class PointView extends Abstract {
   constructor(point) {
-
+    super();
     this._point = point;
-    this._element = null;
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   createTripPointTemplate(point) {
-
     const MAX_COUNT_OPTIONS = 3;
     let { type, city, price, options, startDate, endDate, id } = point;
 
@@ -67,19 +69,23 @@ export default class PointView {
   </li > `;
   }
 
+
   getTemplate() {
     return this.createTripPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setPointClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
+
+  removePointClickHandler() {
+    this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
   }
 }
+

@@ -1,10 +1,11 @@
 
-import { createElement } from "./util.js";
+import Abstract from "./abstract.js";
 
-export default class MajorTripCostView {
+
+export default class MajorTripCostView extends Abstract {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   createMajorTripCostTemplate(points) {
@@ -24,17 +25,5 @@ export default class MajorTripCostView {
 
   getTemplate() {
     return this.createMajorTripCostTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
