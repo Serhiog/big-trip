@@ -71,7 +71,7 @@ const point = (date) => {
 };
 
 
-export const generateMocks = (size) => {
+export const generatePoints = (size) => {
   const mocks = [];
   let date = new Date();
 

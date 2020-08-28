@@ -5,9 +5,9 @@ import PointView from "../view/tripPoint.js";
 import PointEditView from "../view/pointEditor.js";
 import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
-import {render, RenderPosition, replace, remove} from "../utils/render.js";
-import {SortType} from "../consts.js";
-import {updateItem} from "../utils/common.js";
+import { render, RenderPosition, replace, remove } from "../utils/render.js";
+import { SortType } from "../consts.js";
+import { updateItem } from "../utils/common.js";
 
 export default class PointsPresenter {
   constructor(siteMainContainer, points, groups) {

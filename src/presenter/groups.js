@@ -1,6 +1,6 @@
 
-
-import BoardPointsPresenter from "./boardPoints.js";
+import PointListPresenter from "../presenter/boardNEW.js";
+import { render, RenderPosition } from "../utils/render.js";
 
 export default class Groups {
   constructor(siteMainContainer, points) {
@@ -9,13 +9,12 @@ export default class Groups {
   }
 
   init(points) {
-    this._defaultPoints = points.slice();
-    this._makeGroups();
+    this._makeGroups(points);
   }
 
-  _makeGroups() {
+  _makeGroups(points) {
     const groups = new Map();
-    this._defaultPoints.forEach((stop) => {
+    this.points.forEach((stop) => {
       const date = stop.startDate.toISOString().split(`T`)[0];
       if (!groups.has(date)) {
         groups.set(date, [stop]);
@@ -24,6 +23,8 @@ export default class Groups {
         items.push(stop);
       }
     });
-    new BoardPointsPresenter(this.siteMainContainer, this.points, groups).init(this.points);
+
+    const boardPresenter = new PointListPresenter(this.siteMainContainer, groups);
+    boardPresenter.init(points);
   }
 }

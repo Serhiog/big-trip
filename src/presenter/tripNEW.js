@@ -1,8 +1,6 @@
 
 import TripSortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
-import PointView from "../view/tripPoint.js";
-import PointEditView from "../view/pointEditor.js";
 import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
@@ -17,16 +15,11 @@ export default class PointsPresenter {
     this._tripPointListView = new TripPointListView();
     this._currentSortType = SortType.DEFAULT;
     this._points = points;
-    this._pointComponent = null;
-    this._pointEditComponent = null;
+
     this._pointPresenter = {};
     this._groups = groups;
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-  }
-
-  init(updatedPoint) {
-    // console.log(updatedPoint);
   }
 
   _initDataBind(point, points, originPoints) {
@@ -37,10 +30,7 @@ export default class PointsPresenter {
 
   renderPoint(pointsContainer, point, points, originPoints) {
     this._initDataBind(point, points, originPoints);
-    const prevPointComponent = this._pointComponent;
-    const prevPointEditComponent = this._pointEditComponent;
-    const pointComponent = new PointView(point);
-    const pointEditComponent = new PointEditView(point, points);
+
     const replacePointToEdit = () => {
       replace(pointEditComponent, pointComponent);
       pointEditComponent.setEditClickHandler(replaceEditToPoint);
