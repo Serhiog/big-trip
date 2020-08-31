@@ -1,11 +1,12 @@
 
 import { humanizeTaskDueDate, msToTime } from "../utils/dates.js";
 import Abstract from "./abstract.js";
+import { remove } from "../utils/render.js";
 
 
 export default class PointView extends Abstract {
   constructor(point) {
-    super()
+    super();
     this._point = point;
     this._editClickHandler = this._editClickHandler.bind(this);
   }

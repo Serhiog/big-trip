@@ -1,22 +1,14 @@
-import { render, RenderPosition } from "./utils/render.js";
-import { generateMocks } from "./mock/point.js";
-import NoPoints from "./view/no-Points.js";
-import HeaderTripPresenter from "./presenter/header.js";
-import BoardPointsPresenter from "./presenter/boardPoints.js";
-import PointsPresenter from "./presenter/trip.js";
 
-const COUNT_RENDER_DAYS_TRIP = 10;
+import { generateMocks } from "./mock/point.js";
+import HeaderTripPresenter from "./presenter/header.js";
+import TripPresenter from "./presenter/trip.js";
+
+const COUNT_RENDER_DAYS_TRIP = 5;
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 
-const siteSiteMainContainer = document.querySelector(`.trip-events`);
+const siteMainContainer = document.querySelector(`.trip-events`);
+const siteHeaderMainTripContainer = document.querySelector(`.trip-main`);
+const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-main__trip-controls`);
 
-render(siteSiteMainContainer, new NoPoints(points), RenderPosition.AFTEREND);
-
-const HeaderPresenter = new HeaderTripPresenter(points);
-HeaderPresenter.init();
-
-const TripBoardPresenter = new BoardPointsPresenter(siteSiteMainContainer, points);
-TripBoardPresenter.init();
-
-const TripPresenter = new PointsPresenter(siteSiteMainContainer, points);
-TripPresenter.init();
+new HeaderTripPresenter(points, siteHeaderMainTripContainer, siteHeaderFilterTrip).init();
+new TripPresenter(siteMainContainer, points).init();

@@ -2,29 +2,34 @@
 import { humanizeTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
 import { getOptions } from "../mock/point.js";
 import Abstract from "./abstract.js";
+import { remove } from "../utils/render.js";
 
 export default class PointEditView extends Abstract {
-  constructor(point, points) {
+  constructor(point) {
     super()
     this._point = point;
-    this._points = points;
+    // this._points = points;
     this._editClickHandler = this._editClickHandler.bind(this);
+    this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
-  createTripEditTemplate(point, points) {
-    const { type, city, price, options, startDate, endDate } = point;
-
-
+  createTripEditTemplate(point) {
+    const { type, city, price, options, photos, discription, startDate, endDate } = point;
     let citiesInSelectList = [];
-    points.forEach((place) => {
-      citiesInSelectList.push(place.city);
-    });
+    // points.forEach((place) => {
+    //   citiesInSelectList.push(place.city);
+    // });
 
     const userSelectCities = Array.from(new Set(citiesInSelectList));
 
     let cities = ``;
     userSelectCities.forEach((city) => {
       cities = cities + `<option value=${city}></option>`;
+    });
+
+    let photo = ``
+    photos.forEach(photoElement => {
+      photo = photo + `<img class="event__photo" src="${photoElement}" alt="Event photo"></img>`;
     });
 
     const formatedStartDate = formatedStartEndDate(startDate) + humanizeTaskDueDate(startDate);
@@ -177,8 +182,27 @@ export default class PointEditView extends Abstract {
   ${optionTemplate}
       </div>
     </section>
+    <section class="event__section  event__section--destination">
+                <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+                <p class="event__destination-description">${discription}</p>
+
+                <div class="event__photos-container">
+                  <div class="event__photos-tape">
+                     ${photo}
+
+                  </div>
+                </div>
+              </section>
   </section>
   </form>`;
+  }
+
+  reset(point) {
+    this.updateData(PointEditView.parseTaskToData(point));
+  }
+
+  static parseTaskToData(point) {
+    return Object.assign({}, point, { isFavorite: point.isFavorite !== null });
   }
 
   getTemplate() {
@@ -194,7 +218,22 @@ export default class PointEditView extends Abstract {
     this._callback.editClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
   }
+
   removeEditClickHandler() {
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
+
+  _favoriteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
+  }
+
+  setfavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  removeFavoriteClickHandler() {
+    this.getElement().querySelector(`.event__favorite-btn`).removeEventListener(`click`, this._favoriteClickHandler);
   }
 }
