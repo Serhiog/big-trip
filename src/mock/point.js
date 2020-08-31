@@ -65,13 +65,12 @@ const point = (date) => {
     startDate: time1,
     endDate: time2,
     id: generateId(),
-    id2: generateId(),
-    isFavorite: false,
+    isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
 
 
-export const generatePoints = (size) => {
+export const generateMocks = (size) => {
   const mocks = [];
   let date = new Date();
 

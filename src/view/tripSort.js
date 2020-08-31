@@ -45,7 +45,7 @@ export default class TripSortView extends Abstract {
   }
 
   _toChangeSort(evt) {
-    evt.preventDefault();
+    // evt.preventDefault();
     this._callback.sortHandler(evt.target.getAttribute(`for`));
   }
 
