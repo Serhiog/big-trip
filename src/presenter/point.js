@@ -20,6 +20,7 @@ export default class PointPresenter {
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
+    this._toSelectTypes = this._toSelectTypes.bind(this);
   }
 
   init(point) {
@@ -34,6 +35,8 @@ export default class PointPresenter {
     this._pointEditComponent = new PointEditView(point);
 
     this._pointEditComponent.setfavoriteClickHandler(this._handleFavoriteClick);
+    this._pointEditComponent.setEditClickHandler(this._replaceEditToPoint);
+    this._pointEditComponent.setTypesHandler(this._toSelectTypes);
     this._pointComponent.setPointClickHandler(this._replacePointToEdit);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
@@ -54,8 +57,6 @@ export default class PointPresenter {
 
   _replacePointToEdit() {
     replace(this._pointEditComponent, this._pointComponent);
-    this._pointComponent.removePointClickHandler();
-    this._pointEditComponent.setEditClickHandler(this._replaceEditToPoint);
     document.addEventListener(`keydown`, this._onEscKeyDown);
     this._changeMode();
     this._mode = Mode.EDITING;
@@ -63,10 +64,8 @@ export default class PointPresenter {
 
   _replaceEditToPoint() {
     replace(this._pointComponent, this._pointEditComponent);
-    this._pointEditComponent.removeEditClickHandler();
-    this._pointComponent.setPointClickHandler(this._replacePointToEdit);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-    
+
     this._mode = Mode.DEFAULT;
   }
 
@@ -89,5 +88,52 @@ export default class PointPresenter {
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._point, { isFavorite: !this._point.isFavorite })); }
+    this._changeData(Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
+  }
+
+  _toSelectTypes(evt) {
+    this._changeData(Object.assign({}, this._point, { type: evt.target.previousElementSibling.value }));
+
+    switch (evt.target.previousElementSibling.value) {
+      case `taxi`:
+      case `bus`:
+      case `train`:
+        this._changeData(Object.assign({}, this._point, {
+          options: [{
+            title: `Switch to comfort`,
+            price: 100
+          }, {
+            title: `Choose seats`,
+            price: 5
+          }]
+        }));
+        break;
+      case `ship`:
+      case `transport`:
+      case `drive`:
+        this._changeData(Object.assign({}, this._point, {
+          options: [{
+            title: `Travel by train`,
+            price: 40
+          }, {
+            title: `Add meal`,
+            price: 15
+          }, {
+            title: `Add luggage`,
+            price: 30
+          }]
+        }));
+        break;
+      case `flight`:
+      case `check-in`:
+      case `sightseeing`:
+      case `restaurant`:
+        this._changeData(Object.assign({}, this._point, {
+          options: [{ title: `Add meal`, price: 15 }]
+        }));
+        break;
+      default:
+        break;
+    }
+  }
 }

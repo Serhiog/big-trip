@@ -73,10 +73,11 @@ export default class TripPresenter {
     return groups;
   }
 
-  _handlePointChange(updatedPoint) {
+  _handlePointChange(updatedPoint, dayNumber) {
+
     this._pointsList = updateItem(this._points, updatedPoint);
     this._defaultPoints = updateItem(this._defaultPoints, updatedPoint);
-    this._groupPresenter[updatedPoint.id + 1].getPointPresenter(updatedPoint);
+    this._groupPresenter[dayNumber].getPointPresenter(updatedPoint);
   }
 
   _handleModeChange() {

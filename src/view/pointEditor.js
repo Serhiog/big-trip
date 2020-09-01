@@ -1,25 +1,21 @@
 
 import { humanizeTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
-import { getOptions } from "../mock/point.js";
-import Abstract from "./abstract.js";
+import { getOptions, sortedOptiosByType } from "../mock/point.js";
+import SmartView from "./smart.js";
 import { remove } from "../utils/render.js";
 
-export default class PointEditView extends Abstract {
+export default class PointEditView extends SmartView {
   constructor(point) {
     super()
     this._point = point;
-    // this._points = points;
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
+    this._typesClickHandler = this._typesClickHandler.bind(this)
   }
 
   createTripEditTemplate(point) {
-    const { type, city, price, options, photos, discription, startDate, endDate } = point;
+    const { type, city, photos, discription, startDate, endDate } = point;
     let citiesInSelectList = [];
-    // points.forEach((place) => {
-    //   citiesInSelectList.push(place.city);
-    // });
-
     const userSelectCities = Array.from(new Set(citiesInSelectList));
 
     let cities = ``;
@@ -36,20 +32,50 @@ export default class PointEditView extends Abstract {
     const formatedEndDate = formatedStartEndDate(endDate) + humanizeTaskDueDate(endDate);
 
     let optionTemplate = ``;
-    const fixedOptions = getOptions().fixedOptions;
 
     let checked = ``;
 
-    for (let i = 0; i < fixedOptions.length; i++) {
+    let optionName;
+    let optionPrice;
+    const fixedOptions = [];
 
-      let optionName = fixedOptions[i][0];
-      let optionPrice = fixedOptions[i][1];
-      if (fixedOptions[i] = options[i] && options[i] !== null) {
-        checked = `checked`;
-      } else {
-        checked = ``;
-      }
+    point.options.forEach(offer => {
+      fixedOptions.push(offer)
+    });
 
+    let result = Object.values(fixedOptions).map(f => Object.values(f))
+
+
+
+    switch (type) {
+      case `Taxi`:
+        break;
+      case `Bus`:
+        break;
+      case `Train`:
+        break;
+      case `Ship`:
+        break;
+      case `Transport`:
+        break;
+      case `Drive`:
+        break;
+      case `Flight`:
+        break;
+      case `Check-in`:
+        break;
+      case `Sightseeing`:
+        break;
+      case `Restaurant`:
+        break;
+      default:
+        break;
+    }
+
+    fixedOptions.slice(0, fixedOptions.length).forEach((option) => {
+
+      optionName = option.title;
+      optionPrice = option.price;
       optionTemplate += `
       <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage"="" ${checked}>
@@ -59,8 +85,7 @@ export default class PointEditView extends Abstract {
       €&nbsp;<span class="event__offer-price">${optionPrice}</span>
       </label>
       </div>
-      `;
-    }
+      `  })
 
     return `<form class="event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -155,13 +180,13 @@ export default class PointEditView extends Abstract {
         <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${`price`}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Delete</button>
 
-    <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked="">
+    <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${point.isFavorite ? `checked` : ``}>
     <label class="event__favorite-btn" for="event-favorite-1">
       <span class="visually-hidden">Add to favorite</span>
       <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -235,5 +260,21 @@ export default class PointEditView extends Abstract {
 
   removeFavoriteClickHandler() {
     this.getElement().querySelector(`.event__favorite-btn`).removeEventListener(`click`, this._favoriteClickHandler);
+  }
+
+  restoreHandlers() {
+    this.setEditClickHandler(this._callback.editClick);
+  }
+
+  _typesClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.typesClick(evt);
+  }
+
+  setTypesHandler(callback) {
+    this._callback.typesClick = callback;
+    this.getElement().querySelectorAll(`.event__type-label`).forEach(type => {
+      type.addEventListener(`click`, this._typesClickHandler);
+    });
   }
 }

@@ -13,7 +13,7 @@ export default class PointView extends Abstract {
 
   createTripPointTemplate(point) {
     const MAX_COUNT_OPTIONS = 3;
-    let { type, city, price, options, startDate, endDate, id } = point;
+    let { type, city, startDate, endDate, id } = point;
 
     let durMiliseconds = endDate.getTime() - startDate.getTime();
     let duration = msToTime(durMiliseconds);
@@ -24,13 +24,25 @@ export default class PointView extends Abstract {
     let optionsHtml = ``;
 
     let totalPrice = 0;
-    options.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
-      totalPrice += option[1];
+
+    const fixedOptions = [];
+    let optionName;
+    let optionPrice;
+
+    point.options.forEach(offer => {
+      fixedOptions.push(offer)
+    });
+
+
+    fixedOptions.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
+      optionName = option.title;
+      optionPrice = option.price;
+      totalPrice += option.price;
       optionsHtml += `
           <li class="event__offer">
-                <span class="event__offer-title">${option[0]}</span>
+                <span class="event__offer-title">${optionName}</span>
                  + €&nbsp;
-                 <span class="event__offer-price">${option[1]}</span>
+                 <span class="event__offer-price">${optionPrice}</span>
             </li >
       `;
     });
@@ -54,7 +66,7 @@ export default class PointView extends Abstract {
 
 
         <p class="event__price">
-            € <span class="event__price-value">${price}</span>
+            € <span class="event__price-value">${optionPrice}</span>
         </p>
 
   <h4 class="visually-hidden">Offers:</h4>
