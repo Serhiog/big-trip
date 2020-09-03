@@ -89,7 +89,7 @@ export default class TripPresenter {
   _sortingPoints() {
     switch (this._currentSortType) {
       case SortType.PRICE:
-        this._points.sort((a, b) => b.price - a.price);
+        this._points.price.sort((a, b) => b.price - a.price);
         break;
       case SortType.TIME:
         this._points.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));

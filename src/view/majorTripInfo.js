@@ -27,7 +27,9 @@ export default class MajorTripRouteView extends Abstract {
     } else {
 
       let routeCities = сities.join(` — `);
+
       if (сities.length >= MAX_CITIES_LIST) {
+        routeCities = ( ` ... —` + routeCities.split(`—`)[MAX_CITIES_LIST]);
       }
 
       const userDate = date4User(points[0].startDate);

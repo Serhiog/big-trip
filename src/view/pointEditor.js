@@ -23,7 +23,6 @@ export default class PointEditView extends SmartView {
     const { type, city, destination: { pictures, description }, startDate, endDate, options } = point;
 
 
-    console.log(point);
     let cities = ``;
     CITIES.forEach(city => {
       cities += `<option value=${city}></option>`;
@@ -42,7 +41,7 @@ export default class PointEditView extends SmartView {
     let optionTemplate = ``;
 
     const fixedOptions = allOffers[type[0].toUpperCase() + type.substring(1)].offers;
-
+    let totalOffersPrice = 0;
 
     fixedOptions.slice(0, fixedOptions.length).forEach((offer) => {
       let checked = ``;
@@ -52,8 +51,10 @@ export default class PointEditView extends SmartView {
       options.forEach((option) => {
         if (option.title === offerName) {
           checked = `checked`;
+          totalOffersPrice += offer.price;
         }
       });
+
 
       optionTemplate += `
       <div class="event__offer-selector">
@@ -159,7 +160,7 @@ export default class PointEditView extends SmartView {
         <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${`price`}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${totalOffersPrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>

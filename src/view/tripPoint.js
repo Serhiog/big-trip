@@ -23,20 +23,26 @@ export default class PointView extends Abstract {
 
     let optionsHtml = ``;
 
-    let totalPrice = 0;
-
     const fixedOptions = [];
     let optionName;
-    let optionPrice;
+    let optionPrice = 0;
     point.options.forEach(offer => {
       fixedOptions.push(offer)
     });
 
+    let totalOfferPrice = 0;
+    fixedOptions.forEach((option) => {
+      totalOfferPrice += option.price;
+    })
+
+
 
     fixedOptions.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
       optionName = option.title;
+
       optionPrice = option.price;
-      totalPrice += option.price;
+
+
       optionsHtml += `
           <li class="event__offer">
                 <span class="event__offer-title">${optionName}</span>
@@ -65,7 +71,7 @@ export default class PointView extends Abstract {
 
 
         <p class="event__price">
-            € <span class="event__price-value">${optionPrice}</span>
+            € <span class="event__price-value">${totalOfferPrice}</span>
         </p>
 
   <h4 class="visually-hidden">Offers:</h4>
