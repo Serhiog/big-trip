@@ -8,19 +8,20 @@ const Mode = {
 };
 
 export default class PointPresenter {
-  constructor(container, changeMode, changeData) {
+  constructor(container, changeMode, changeData, points) {
     this._container = container;
     this._changeData = changeData;
     this._pointComponent = null;
     this._pointEditComponent = null;
     this._changeMode = changeMode;
     this._mode = Mode.DEFAULT;
-
+    this._points = points;
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
+    // this._setSelectCities = this._setSelectCities.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    this._toSelectTypes = this._toSelectTypes.bind(this);
+    // this._toSelectTypes = this._toSelectTypes.bind(this);
   }
 
   init(point) {
@@ -36,8 +37,8 @@ export default class PointPresenter {
 
     this._pointEditComponent.setfavoriteClickHandler(this._handleFavoriteClick);
     this._pointEditComponent.setEditClickHandler(this._replaceEditToPoint);
-    this._pointEditComponent.setTypesHandler(this._toSelectTypes);
     this._pointComponent.setPointClickHandler(this._replacePointToEdit);
+    //this._pointEditComponent.setCitiesHandler(this._setSelectCities);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(pointsContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -91,49 +92,7 @@ export default class PointPresenter {
     this._changeData(Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
   }
 
-  _toSelectTypes(evt) {
-    this._changeData(Object.assign({}, this._point, { type: evt.target.previousElementSibling.value }));
-
-    switch (evt.target.previousElementSibling.value) {
-      case `taxi`:
-      case `bus`:
-      case `train`:
-        this._changeData(Object.assign({}, this._point, {
-          options: [{
-            title: `Switch to comfort`,
-            price: 100
-          }, {
-            title: `Choose seats`,
-            price: 5
-          }]
-        }));
-        break;
-      case `ship`:
-      case `transport`:
-      case `drive`:
-        this._changeData(Object.assign({}, this._point, {
-          options: [{
-            title: `Travel by train`,
-            price: 40
-          }, {
-            title: `Add meal`,
-            price: 15
-          }, {
-            title: `Add luggage`,
-            price: 30
-          }]
-        }));
-        break;
-      case `flight`:
-      case `check-in`:
-      case `sightseeing`:
-      case `restaurant`:
-        this._changeData(Object.assign({}, this._point, {
-          options: [{ title: `Add meal`, price: 15 }]
-        }));
-        break;
-      default:
-        break;
-    }
-  }
+  // _setSelectCities() {
+  //   console.log(`i loh`);
+  // }
 }

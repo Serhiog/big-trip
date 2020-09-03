@@ -1,31 +1,39 @@
 
 import { humanizeTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
-import { getOptions, sortedOptiosByType } from "../mock/point.js";
+import { getOptions, sortedOptiosByType, allOffers, allDestinations } from "../mock/point.js";
 import SmartView from "./smart.js";
 import { remove } from "../utils/render.js";
+import { CITIES } from "../consts.js";
 
 export default class PointEditView extends SmartView {
   constructor(point) {
-    super()
-    this._point = point;
+    super();
+    this._data = Object.assign({}, point);
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
-    this._typesClickHandler = this._typesClickHandler.bind(this)
+    this._typesClickHandler = this._typesClickHandler.bind(this);
+    this._citiesClickHandler = this._citiesClickHandler.bind(this);
+    this.setTypesHandler();
+    this.setCitiesHandler();
   }
 
   createTripEditTemplate(point) {
-    const { type, city, photos, discription, startDate, endDate } = point;
-    let citiesInSelectList = [];
-    const userSelectCities = Array.from(new Set(citiesInSelectList));
 
+
+    const { type, city, destination: { pictures, description }, startDate, endDate, options } = point;
+
+
+    console.log(point);
     let cities = ``;
-    userSelectCities.forEach((city) => {
-      cities = cities + `<option value=${city}></option>`;
+    CITIES.forEach(city => {
+      cities += `<option value=${city}></option>`;
     });
 
-    let photo = ``
-    photos.forEach(photoElement => {
-      photo = photo + `<img class="event__photo" src="${photoElement}" alt="Event photo"></img>`;
+
+    let photo = ``;
+
+    pictures.forEach(photoElement => {
+      photo = photo + `<img class="event__photo" src="${photoElement.src}" alt="${photoElement.description}"></img>`;
     });
 
     const formatedStartDate = formatedStartEndDate(startDate) + humanizeTaskDueDate(startDate);
@@ -33,56 +41,27 @@ export default class PointEditView extends SmartView {
 
     let optionTemplate = ``;
 
-    let checked = ``;
-
-    let optionName;
-    let optionPrice;
-    const fixedOptions = [];
-
-    point.options.forEach(offer => {
-      fixedOptions.push(offer)
-    });
-
-    let result = Object.values(fixedOptions).map(f => Object.values(f))
+    const fixedOptions = allOffers[type[0].toUpperCase() + type.substring(1)].offers;
 
 
+    fixedOptions.slice(0, fixedOptions.length).forEach((offer) => {
+      let checked = ``;
+      const offerName = offer.title;
+      const offerPrice = offer.price;
 
-    switch (type) {
-      case `Taxi`:
-        break;
-      case `Bus`:
-        break;
-      case `Train`:
-        break;
-      case `Ship`:
-        break;
-      case `Transport`:
-        break;
-      case `Drive`:
-        break;
-      case `Flight`:
-        break;
-      case `Check-in`:
-        break;
-      case `Sightseeing`:
-        break;
-      case `Restaurant`:
-        break;
-      default:
-        break;
-    }
+      options.forEach((option) => {
+        if (option.title === offerName) {
+          checked = `checked`;
+        }
+      });
 
-    fixedOptions.slice(0, fixedOptions.length).forEach((option) => {
-
-      optionName = option.title;
-      optionPrice = option.price;
       optionTemplate += `
       <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage"="" ${checked}>
       <label class="event__offer-label" for="event-offer-luggage-1">
-      <span class="event__offer-title">${optionName}</span>
+      <span class="event__offer-title">${offerName}</span>
       +
-      €&nbsp;<span class="event__offer-price">${optionPrice}</span>
+      €&nbsp;<span class="event__offer-price">${offerPrice}</span>
       </label>
       </div>
       `  })
@@ -163,7 +142,7 @@ export default class PointEditView extends SmartView {
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
       <datalist id="destination-list-1">
-  // ${cities}
+      ${cities}
       </datalist>
     </div>
 
@@ -209,7 +188,7 @@ export default class PointEditView extends SmartView {
     </section>
     <section class="event__section  event__section--destination">
                 <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                <p class="event__destination-description">${discription}</p>
+                <p class="event__destination-description">${description}</p>
 
                 <div class="event__photos-container">
                   <div class="event__photos-tape">
@@ -231,7 +210,7 @@ export default class PointEditView extends SmartView {
   }
 
   getTemplate() {
-    return this.createTripEditTemplate(this._point, this._points);
+    return this.createTripEditTemplate(this._data, this._points);
   }
 
   _editClickHandler(evt) {
@@ -264,17 +243,35 @@ export default class PointEditView extends SmartView {
 
   restoreHandlers() {
     this.setEditClickHandler(this._callback.editClick);
+    this.setTypesHandler();
+    this.setCitiesHandler();
   }
 
   _typesClickHandler(evt) {
     evt.preventDefault();
-    this._callback.typesClick(evt);
+    const type = evt.target.previousElementSibling.value;
+    this.updateData({
+      type
+    })
   }
 
-  setTypesHandler(callback) {
-    this._callback.typesClick = callback;
+  setTypesHandler() {
     this.getElement().querySelectorAll(`.event__type-label`).forEach(type => {
       type.addEventListener(`click`, this._typesClickHandler);
     });
   }
+
+  _citiesClickHandler(evt) {
+    evt.preventDefault();
+    const description = evt.target.value;
+
+    this.updateData({
+      destination: allDestinations[description],
+    });
+  }
+
+  setCitiesHandler() {
+    this.getElement().querySelector(`#event-destination-1`).addEventListener(`change`, this._citiesClickHandler);
+  }
 }
+

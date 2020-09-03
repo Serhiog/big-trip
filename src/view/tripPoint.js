@@ -28,7 +28,6 @@ export default class PointView extends Abstract {
     const fixedOptions = [];
     let optionName;
     let optionPrice;
-
     point.options.forEach(offer => {
       fixedOptions.push(offer)
     });

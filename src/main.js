@@ -3,7 +3,7 @@ import { generateMocks } from "./mock/point.js";
 import HeaderTripPresenter from "./presenter/header.js";
 import TripPresenter from "./presenter/trip.js";
 
-const COUNT_RENDER_DAYS_TRIP = 3;
+const COUNT_RENDER_DAYS_TRIP = 5;
 const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 
 const siteMainContainer = document.querySelector(`.trip-events`);

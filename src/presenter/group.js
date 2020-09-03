@@ -21,7 +21,7 @@ export default class GroupPresenter {
     render(this._tripPointListElement, this._innerTripPointList, RenderPosition.BEFOREEND);
 
     points.forEach((point) => {
-      this._pointPresenter[point.id] = new PointPresenter(this._innerTripPointList, this._modeChange, this._handlePointChange);
+      this._pointPresenter[point.id] = new PointPresenter(this._innerTripPointList, this._modeChange, this._handlePointChange, points);
       this._pointPresenter[point.id].init(point, this._innerTripPointList);
     });
   }

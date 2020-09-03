@@ -5,3 +5,4 @@ export const SortType = {
   TIME: `sort-time`,
   PRICE: `sort-price`,
 };
+
