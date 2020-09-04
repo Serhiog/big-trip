@@ -4,32 +4,34 @@ import TripsContainerView from "../view/tripsContainer.js";
 import GroupPresenter from './group.js';
 import { render, RenderPosition } from "../utils/render.js";
 import { SortType } from "../consts.js";
-import { updateItem } from "../utils/common.js";
+// import { updateItem } from "../utils/common.js";
 import NoPoints from "../view/no-Points.js";
 
 export default class TripPresenter {
-  constructor(siteMainContainer, points, sitePointsListContainer, pointsModel) {
+  constructor(siteMainContainer, pointsModel) {
     this._siteMainContainer = siteMainContainer;
     this._sortView = new TripSortView();
     this._containerView = new TripsContainerView();
     this._currentSortType = SortType.DEFAULT;
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
-    this._points = points;
+    // this._points = points;
     this._groupPresenter = {};
-    this._sitePointsListContainer = sitePointsListContainer;
-    this._handlePointChange = this._handlePointChange.bind(this);
+    // this._sitePointsListContainer = sitePointsListContainer;
+    // this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointsModel = pointsModel;
+    this._pointsModel.addObserver(this._handleModelEvent);
   }
 
   init() {
-    this._points = this._points.slice();
-    this._defaultPoints = this._points.slice();
-
-    if (!this._points.length) {
-      render(this._siteMainContainer, new NoPoints(), RenderPosition.AFTEREND);
-      return;
-    }
+    // this._points = this._points.slice();
+    // this._defaultPoints = this._points.slice();
+    // if (!this._points.length) {
+    // render(this._siteMainContainer, new NoPoints(), RenderPosition.AFTEREND);
+    // return;
+    // }
 
     render(this._siteMainContainer, this._sortView, RenderPosition.BEFOREEND);
     this._sortView.setSortTypeChangeHandler(this._handleSortTypeChange);
@@ -39,6 +41,12 @@ export default class TripPresenter {
   }
 
   _getPoints() {
+    switch (this._currentSortType) {
+      case SortType.PRICE:
+        return this._pointsModel.getPoints().slice().sort((a, b) => b.price - a.price);
+      case SortType.TIME:
+        return this._pointsModel.getPoints().slice().sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
+    }
     return this._pointsModel.getPoints();
   }
 
@@ -53,7 +61,7 @@ export default class TripPresenter {
 
   _renderGroup(points, dayNumber) {
     const showDate = this._currentSortType === SortType.DEFAULT;
-    this._groupPresenter[dayNumber] = new GroupPresenter(this._containerView, this._handlePointChange, this._handleModeChange);
+    this._groupPresenter[dayNumber] = new GroupPresenter(this._containerView, this._handleViewAction, this._handleModeChange);
     this._groupPresenter[dayNumber].init(points, dayNumber, showDate);
   }
 
@@ -61,7 +69,7 @@ export default class TripPresenter {
     const groups = new Map();
 
     if (this._currentSortType === SortType.DEFAULT) {
-      this._defaultPoints.forEach((stop) => {
+      this._getPoints().forEach((stop) => { //! Здесь поменял исходный массив this._defaultPoints
         const date = stop.startDate.toISOString().split(`T`)[0];
         if (!groups.has(date)) {
           groups.set(date, [stop]);
@@ -71,18 +79,26 @@ export default class TripPresenter {
         }
       });
     } else {
-      this._points.forEach((point, index) => {
+      this._getPoints().forEach((point, index) => { //! Здесь поменял исходный массив this._points
         groups.set(index, [point]);
       });
     }
     return groups;
   }
 
-  _handlePointChange(updatedPoint, dayNumber) {
+  // _handlePointChange(updatedPoint, dayNumber) {
 
-    this._pointsList = updateItem(this._points, updatedPoint);
-    this._defaultPoints = updateItem(this._defaultPoints, updatedPoint);
-    this._groupPresenter[dayNumber].getPointPresenter(updatedPoint);
+  //   // this._pointsList = updateItem(this._points, updatedPoint);
+  //   // this._defaultPoints = updateItem(this._defaultPoints, updatedPoint);
+  //   this._groupPresenter[dayNumber].getPointPresenter(updatedPoint);
+  // }
+
+  _handleViewAction(actionType, updateType, update) {
+    console.log(actionType, updateType, update);
+  }
+
+  _handleModelEvent(updateType, data) {
+    console.log(updateType, data);
   }
 
   _handleModeChange() {
@@ -91,16 +107,16 @@ export default class TripPresenter {
       .forEach((presenter) => presenter.resetView());
   }
 
-  _sortingPoints() {
-    switch (this._currentSortType) {
-      case SortType.PRICE:
-        this._points.price.sort((a, b) => b.price - a.price);
-        break;
-      case SortType.TIME:
-        this._points.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
-        break;
-    }
-  }
+  // _sortingPoints() {
+  //   switch (this._currentSortType) {
+  //     case SortType.PRICE:
+  //       this._points.price.sort((a, b) => b.price - a.price);
+  //       break;
+  //     case SortType.TIME:
+  //       this._points.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
+  //       break;
+  //   }
+  // }
 
   _clearPoints() {
     Object
@@ -116,7 +132,8 @@ export default class TripPresenter {
 
     this._currentSortType = sortType;
     this._clearPoints();
-    this._sortingPoints();
+    // this._sortingPoints();
+    this._currentSortType = sortType;
     this._renderGroups();
   }
 }

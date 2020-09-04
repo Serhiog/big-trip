@@ -1,6 +1,7 @@
 import PointView from "../view/tripPoint.js";
 import PointEditView from "../view/pointEditor.js";
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
+import { UserAction, UpdateType } from "../consts.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -89,10 +90,6 @@ export default class PointPresenter {
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
+    this._changeData(UserAction.UPDATE_TASK, UpdateType.MINOR, Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
   }
-
-  // _setSelectCities() {
-  //   console.log(`i loh`);
-  // }
 }

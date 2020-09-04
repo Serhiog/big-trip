@@ -15,4 +15,4 @@ const pointsModel = new PointsModel();
 pointsModel.setPoints(points);
 
 new HeaderTripPresenter(points, siteHeaderMainTripContainer, siteHeaderFilterTrip).init();
-new TripPresenter(siteMainContainer, points, pointsModel).init();
+new TripPresenter(siteMainContainer, pointsModel).init();
