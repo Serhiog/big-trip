@@ -8,7 +8,7 @@ import { updateItem } from "../utils/common.js";
 import NoPoints from "../view/no-Points.js";
 
 export default class TripPresenter {
-  constructor(siteMainContainer, points, sitePointsListContainer) {
+  constructor(siteMainContainer, points, sitePointsListContainer, pointsModel) {
     this._siteMainContainer = siteMainContainer;
     this._sortView = new TripSortView();
     this._containerView = new TripsContainerView();
@@ -19,6 +19,7 @@ export default class TripPresenter {
     this._groupPresenter = {};
     this._sitePointsListContainer = sitePointsListContainer;
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._pointsModel = pointsModel;
   }
 
   init() {
@@ -35,6 +36,10 @@ export default class TripPresenter {
 
     render(this._siteMainContainer, this._containerView, RenderPosition.BEFOREEND);
     this._renderGroups();
+  }
+
+  _getPoints() {
+    return this._pointsModel.getPoints();
   }
 
   _renderGroups() {
