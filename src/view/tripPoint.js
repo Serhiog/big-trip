@@ -1,5 +1,5 @@
 
-import { humanizeTaskDueDate, msToTime } from "../utils/dates.js";
+import { formatTaskDueDate, msToTime } from "../utils/dates.js";
 import Abstract from "./abstract.js";
 import { remove } from "../utils/render.js";
 
@@ -18,8 +18,8 @@ export default class PointView extends Abstract {
     let durMiliseconds = endDate.getTime() - startDate.getTime();
     let duration = msToTime(durMiliseconds);
 
-    const t1 = humanizeTaskDueDate(startDate);
-    const t2 = humanizeTaskDueDate(endDate);
+    const t1 = formatTaskDueDate(startDate);
+    const t2 = formatTaskDueDate(endDate);
 
     let optionsHtml = ``;
 

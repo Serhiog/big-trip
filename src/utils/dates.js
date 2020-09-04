@@ -1,5 +1,15 @@
-export const humanizeTaskDueDate = (date) => {
-  return date.toISOString().split(`T`)[1].slice(0, 5);
+import moment from "moment";
+
+// export const humanizeOLDTaskDueDate = (date) => {
+//   return date.toISOString().split(`T`)[1].slice(0, 5);
+// };
+
+export const formatTaskDueDate = (dueDate) => {
+  if (!(dueDate instanceof Date)) {
+    return ``;
+  }
+
+  return moment(dueDate).format(`D MMMM`);
 };
 
 
