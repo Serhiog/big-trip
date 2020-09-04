@@ -14,7 +14,7 @@ export default class Points extends Observer {
     return this._points;
   }
 
-  updatePoints(updateType, update) {
+  updatePoint(updateType, update) {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {
@@ -30,16 +30,16 @@ export default class Points extends Observer {
     this._notify(updateType, update);
   }
 
-  addTask(updateType, update) {
+  addPoint(updateType, update) {
     this._points = [
-      update,
-      ...this._points
+      ...this._points,
+      update
     ];
 
     this._notify(updateType, update);
   }
 
-  deleteTask(updateType, update) {
+  deletePoint(updateType, update) {
     const index = this._points.findIndex((point) => point.id === update.id);
 
     if (index === -1) {

@@ -324,5 +324,15 @@ export default class PointEditView extends SmartView {
   setCitiesHandler() {
     this.getElement().querySelector(`#event-destination-1`).addEventListener(`change`, this._citiesClickHandler);
   }
+
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.deleteClick(PointEditView.parseTaskToData(this._data));
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteClick = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
 }
 

@@ -2,9 +2,10 @@
 import Abstract from "./abstract.js";
 
 export default class TripSortView extends Abstract {
-  constructor() {
+  constructor(currentSortType) {
     super();
     this._toChangeSort = this._toChangeSort.bind(this);
+    this._currentSortType = currentSortType;
   }
 
   createTripSortTemplate() {
@@ -45,7 +46,7 @@ export default class TripSortView extends Abstract {
   }
 
   _toChangeSort(evt) {
-    // evt.preventDefault();
+    evt.preventDefault();
     this._callback.sortHandler(evt.target.getAttribute(`for`));
   }
 

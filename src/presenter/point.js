@@ -40,6 +40,9 @@ export default class PointPresenter {
     this._pointEditComponent.setEditClickHandler(this._replaceEditToPoint);
     this._pointComponent.setPointClickHandler(this._replacePointToEdit);
     //this._pointEditComponent.setCitiesHandler(this._setSelectCities);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
+    this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(pointsContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -90,6 +93,18 @@ export default class PointPresenter {
   }
 
   _handleFavoriteClick() {
-    this._changeData(UserAction.UPDATE_TASK, UpdateType.MINOR, Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
+    this._changeData(UserAction.UPDATE_POINT, UpdateType.MINOR, Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
+  }
+
+  _handleFormSubmit(update) {
+
+    // const isMinorUpdate = !isDatesEqual(this._task.dueDate, update.dueDate) || isTaskRepeating(this._task.repeating) !== isTaskRepeating(update.repeating);
+
+    // this._changeData(UserAction.UPDATE_TASK, isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH, update);
+    // this._replaceFormToCard();
+  }
+
+  _handleDeleteClick(point) {
+    this._changeData(UserAction.DELETE_POINT, UpdateType.MINOR, point);
   }
 }
