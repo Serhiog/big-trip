@@ -117,7 +117,7 @@ export default class TripPresenter {
   //   this._groupPresenter[dayNumber].getPointPresenter(updatedPoint);
   // }
 
-  _handleViewAction(actionType, updateType, update) {
+  _handleViewAction(update, actionType, updateType) { // CHANGE DATA
     switch (actionType) {
       case UserAction.UPDATE_POINT:
         this._pointsModel.updatePoint(updateType, update);

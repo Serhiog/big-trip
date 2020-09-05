@@ -20,7 +20,6 @@ export default class PointPresenter {
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
-    // this._setSelectCities = this._setSelectCities.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
     // this._toSelectTypes = this._toSelectTypes.bind(this);
   }
@@ -39,7 +38,7 @@ export default class PointPresenter {
     this._pointEditComponent.setfavoriteClickHandler(this._handleFavoriteClick);
     this._pointEditComponent.setEditClickHandler(this._replaceEditToPoint);
     this._pointComponent.setPointClickHandler(this._replacePointToEdit);
-    //this._pointEditComponent.setCitiesHandler(this._setSelectCities);
+    this._pointEditComponent.setCitiesHandler();
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
@@ -70,7 +69,6 @@ export default class PointPresenter {
   _replaceEditToPoint() {
     replace(this._pointComponent, this._pointEditComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
-
     this._mode = Mode.DEFAULT;
   }
 
@@ -93,8 +91,9 @@ export default class PointPresenter {
   }
 
   _handleFavoriteClick() {
-    this._changeData(UserAction.UPDATE_POINT, UpdateType.MINOR, Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }));
+    this._changeData(Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }), UserAction.UPDATE_POINT, UpdateType.MINOR);
   }
+
 
   _handleFormSubmit(update) {
 
@@ -105,6 +104,6 @@ export default class PointPresenter {
   }
 
   _handleDeleteClick(point) {
-    this._changeData(UserAction.DELETE_POINT, UpdateType.MINOR, point);
+    this._changeData(point, UserAction.DELETE_POINT, UpdateType.MINOR);
   }
 }

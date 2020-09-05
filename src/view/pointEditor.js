@@ -6,18 +6,22 @@ import { remove } from "../utils/render.js";
 import { CITIES } from "../consts.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import { UserAction, UpdateType } from "../consts.js";
 
 
 export default class PointEditView extends SmartView {
   constructor(point) {
     super();
-    this._data = Object.assign({}, point);
-    this._editClickHandler = this._editClickHandler.bind(this);
+    this._data = PointEditView.parsePointToData(point);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._typesClickHandler = this._typesClickHandler.bind(this);
     this._citiesClickHandler = this._citiesClickHandler.bind(this);
     this._tripStartDateChangeHandler = this._tripStartDateChangeHandler.bind(this);
     this._tripEndDateChangeHandler = this._tripEndDateChangeHandler.bind(this);
+    this.setDeleteClickHandler = this.setDeleteClickHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._editClickHandler = this._editClickHandler.bind(this);
+    this.setEditClickHandler = this.setEditClickHandler.bind(this);
     this.setTypesHandler();
     this.setCitiesHandler();
     this._startDatePicker = null;
@@ -78,7 +82,6 @@ export default class PointEditView extends SmartView {
 
 
     let photo = ``;
-
     pictures.forEach(photoElement => {
       photo = photo + `<img class="event__photo" src="${photoElement.src}" alt="${photoElement.description}"></img>`;
     });
@@ -251,11 +254,11 @@ export default class PointEditView extends SmartView {
   }
 
   reset(point) {
-    this.updateData(PointEditView.parseTaskToData(point));
+    this.updateData(PointEditView.parsePointToData(point));
   }
 
-  static parseTaskToData(point) {
-    return Object.assign({}, point, { isFavorite: point.isFavorite !== null });
+  static parsePointToData(point) {
+    return Object.assign({}, point, {});
   }
 
   getTemplate() {
@@ -290,16 +293,9 @@ export default class PointEditView extends SmartView {
     this.getElement().querySelector(`.event__favorite-btn`).removeEventListener(`click`, this._favoriteClickHandler);
   }
 
-  restoreHandlers() {
-    this.setEditClickHandler(this._callback.editClick);
-    this.setTypesHandler();
-    this.setCitiesHandler();
-    this._setStartDatePicker();
-    this._setEndDatePicker();
-  }
-
   _typesClickHandler(evt) {
     evt.preventDefault();
+
     const type = evt.target.previousElementSibling.value;
     this.updateData({
       type
@@ -314,10 +310,10 @@ export default class PointEditView extends SmartView {
 
   _citiesClickHandler(evt) {
     evt.preventDefault();
-    const description = evt.target.value;
-
+    const city = evt.target.value;
     this.updateData({
-      destination: allDestinations[description],
+      destination: allDestinations[city],
+      city
     });
   }
 
@@ -327,12 +323,22 @@ export default class PointEditView extends SmartView {
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick(PointEditView.parseTaskToData(this._data));
+    this._callback.deleteClick(PointEditView.parsePointToData(this._data));
   }
 
   setDeleteClickHandler(callback) {
     this._callback.deleteClick = callback;
     this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
+  }
+
+  restoreHandlers() {
+    this.setTypesHandler();
+    this.setCitiesHandler();
+    this._setStartDatePicker();
+    this._setEndDatePicker();
+    this.setDeleteClickHandler();
+    this.setEditClickHandler();
+    this.setfavoriteClickHandler();
   }
 }
 

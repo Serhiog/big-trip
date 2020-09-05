@@ -2,7 +2,7 @@
 import { formatTaskDueDate, msToTime } from "../utils/dates.js";
 import Abstract from "./abstract.js";
 import { remove } from "../utils/render.js";
-
+import SmartView from "./smart.js";
 
 export default class PointView extends Abstract {
   constructor(point) {
@@ -103,5 +103,9 @@ export default class PointView extends Abstract {
 
   removePointClickHandler() {
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
+
+  restoreHandlers() {
+    this.setPointClickHandler();
   }
 }

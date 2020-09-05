@@ -22,12 +22,12 @@ export default class GroupPresenter {
 
     points.forEach((point) => {
       this._pointPresenter[point.id] = new PointPresenter(this._innerTripPointList, this._modeChange, this._handlePointChange, points);
-      this._pointPresenter[point.id].init(point, this._innerTripPointList);
+      this._pointPresenter[point.id].init(point);
     });
   }
 
-  _handlePointChange(updatedPoint) {
-    this._changeData(updatedPoint, this.dayNumber);
+  _handlePointChange(updatedPoint, userAction, updateType) {
+    this._changeData(updatedPoint, userAction, updateType);
   }
 
   getPointPresenter(point) {

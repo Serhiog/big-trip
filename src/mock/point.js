@@ -43,8 +43,8 @@ export const allDestinations = {
     "name": "Berlin",
     "pictures": [
       {
-        "src": generatePhotos(),
-        "description": getDiscription(),
+        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+        "description": "Berlin parliament building",
       }
     ]
   },
@@ -53,8 +53,8 @@ export const allDestinations = {
     "name": "Paris",
     "pictures": [
       {
-        "src": generatePhotos(),
-        "description": getDiscription(),
+        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+        "description": "Paris parliament building",
       }
     ]
   },
@@ -63,8 +63,8 @@ export const allDestinations = {
     "name": "Tallin",
     "pictures": [
       {
-        "src": generatePhotos(),
-        "description": getDiscription(),
+        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+        "description": "Tallin parliament building",
       }
     ]
   },
@@ -73,8 +73,8 @@ export const allDestinations = {
     "name": "Belfast",
     "pictures": [
       {
-        "src": generatePhotos(),
-        "description": getDiscription(),
+        "src": `http://picsum.photos/248/152?r=${Math.random()}`,
+        "description": "Belfast parliament building",
       }
     ]
   }
@@ -126,6 +126,7 @@ const point = (date) => {
     options: getOffers(type),
     destination: allDestinations[city],
     startDate: time1,
+    price: getRandomInteger(25, 150),
     endDate: time2,
     id: generateId(),
     isFavorite: Boolean(getRandomInteger(0, 1))
