@@ -4,13 +4,16 @@ import InnerTripPointList from "../view/innerPointsList.js";
 import PointPresenter from './point.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
 
+
 export default class GroupPresenter {
-  constructor(container, changeData, modeChange) {
+  constructor(container, changeData, modeChange, points) {
     this._container = container;
     this._pointPresenter = {};
     this._modeChange = modeChange;
     this._changeData = changeData;
     this._handlePointChange = this._handlePointChange.bind(this);
+    this.points = points;
+    this.pointsLength = points.length;
   }
 
   init(points, dayNumber, showDate) {

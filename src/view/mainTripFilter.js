@@ -3,6 +3,11 @@ import Abstract from "./abstract.js";
 
 export default class TripFilterView extends Abstract {
 
+  constructor() {
+    super();
+    this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+  }
+
   createMainTripFilterTemplate() {
     return `<form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
@@ -26,5 +31,17 @@ export default class TripFilterView extends Abstract {
 
   getTemplate() {
     return this.createMainTripFilterTemplate()
+  }
+
+  _filterTypeChangeHandler(evt) {
+    evt.preventDefault();
+    this._callback.filterTypeChange(evt.target.value);
+  }
+
+  setFilterTypeChangeHandler(callback) {
+    this._callback.filterTypeChange = callback;
+    this.getElement().querySelectorAll(`.trip-filters__filter-input`).forEach(filter => {
+      filter.addEventListener(`click`, this._filterTypeChangeHandler);
+    });
   }
 }

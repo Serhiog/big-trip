@@ -22,6 +22,8 @@ export default class PointEditView extends SmartView {
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this.setEditClickHandler = this.setEditClickHandler.bind(this);
+    this._formSubmitPoint = this._formSubmitPoint.bind(this);
+    this._formSetPrice = this._formSetPrice.bind(this);
     this.setTypesHandler();
     this.setCitiesHandler();
     this._startDatePicker = null;
@@ -211,7 +213,7 @@ export default class PointEditView extends SmartView {
         <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${totalOffersPrice}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.price}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -261,6 +263,14 @@ export default class PointEditView extends SmartView {
     return Object.assign({}, point, {});
   }
 
+  static parseDataToPoint(point) {
+    return Object.assign({}, point, {});
+  }
+
+  // static(point) {
+  //   return Object.assign({}, point, {});
+  // }
+
   getTemplate() {
     return this.createTripEditTemplate(this._data, this._points);
   }
@@ -295,7 +305,6 @@ export default class PointEditView extends SmartView {
 
   _typesClickHandler(evt) {
     evt.preventDefault();
-
     const type = evt.target.previousElementSibling.value;
     this.updateData({
       type
@@ -323,7 +332,7 @@ export default class PointEditView extends SmartView {
 
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
-    this._callback.deleteClick(PointEditView.parsePointToData(this._data));
+    this._callback.deleteClick(PointEditView.parseDataToPoint(this._data));
   }
 
   setDeleteClickHandler(callback) {
@@ -331,14 +340,39 @@ export default class PointEditView extends SmartView {
     this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._formDeleteClickHandler);
   }
 
+  _formSubmitPoint(evt) {
+    evt.preventDefault();
+    this._callback.submitPoint(PointEditView.parseDataToPoint(this._data));
+  }
+
+  submitPoint(callback) {
+    this._callback.submitPoint = callback;
+    this.getElement().querySelector(`.event__save-btn`).addEventListener(`click`, this._formSubmitPoint);
+  }
+
+  _formSetPrice(evt) {
+    evt.preventDefault();
+    const userPrice = evt.target.value;
+    this.updateData({
+      price: userPrice
+    });
+  }
+
+  setPrice(callback) {
+    this._callback.setPrice = callback;
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`change`, this._formSetPrice);
+  }
+
   restoreHandlers() {
     this.setTypesHandler();
     this.setCitiesHandler();
     this._setStartDatePicker();
     this._setEndDatePicker();
-    this.setDeleteClickHandler();
-    this.setEditClickHandler();
-    this.setfavoriteClickHandler();
+    this.setDeleteClickHandler(this._callback.deleteClick);
+    this.setEditClickHandler(this._callback.editClick);
+    this.setfavoriteClickHandler(this._callback.favoriteClick);
+    this.submitPoint(this._callback.submitPoint);
+    this.setPrice(this._formSetPrice);
   }
 }
 

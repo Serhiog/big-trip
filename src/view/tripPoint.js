@@ -71,7 +71,7 @@ export default class PointView extends Abstract {
 
 
         <p class="event__price">
-            € <span class="event__price-value">${totalOfferPrice}</span>
+            € <span class="event__price-value">${point.price}</span>
         </p>
 
   <h4 class="visually-hidden">Offers:</h4>

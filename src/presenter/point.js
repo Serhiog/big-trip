@@ -21,7 +21,6 @@ export default class PointPresenter {
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
-    // this._toSelectTypes = this._toSelectTypes.bind(this);
   }
 
   init(point) {
@@ -34,14 +33,15 @@ export default class PointPresenter {
     const prevPointEditComponent = this._pointEditComponent;
     this._pointComponent = new PointView(point);
     this._pointEditComponent = new PointEditView(point);
-
     this._pointEditComponent.setfavoriteClickHandler(this._handleFavoriteClick);
     this._pointEditComponent.setEditClickHandler(this._replaceEditToPoint);
     this._pointComponent.setPointClickHandler(this._replacePointToEdit);
     this._pointEditComponent.setCitiesHandler();
+    this._handleFormSubmit = this._handleFormSubmit.bind(this);
+    this._pointEditComponent.submitPoint(this._handleFormSubmit);
+    this._pointEditComponent.setPrice(this._handleSetPrice);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
-    this._handleFormSubmit = this._handleFormSubmit.bind(this);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
       render(pointsContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -95,12 +95,8 @@ export default class PointPresenter {
   }
 
 
-  _handleFormSubmit(update) {
-
-    // const isMinorUpdate = !isDatesEqual(this._task.dueDate, update.dueDate) || isTaskRepeating(this._task.repeating) !== isTaskRepeating(update.repeating);
-
-    // this._changeData(UserAction.UPDATE_TASK, isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH, update);
-    // this._replaceFormToCard();
+  _handleFormSubmit(point) {
+    this._changeData(point, UserAction.UPDATE_POINT, UpdateType.MINOR);
   }
 
   _handleDeleteClick(point) {
