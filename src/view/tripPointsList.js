@@ -6,11 +6,11 @@ const createTripPointsListTemplate = (date, dayNumber, showDate) => {
   let userDate = showDate ? date4User(date) : ``;
 
   return `<li class="trip-days__item  day">
-      <div div class="day__info">
-        <span class="day__counter">${showDate ? dayNumber : ``}</span>
-        <time class="day__date" datetime=${date}>${userDate}</time>
-      </div>
-    </li>
+            <div div class="day__info">
+              <span class="day__counter">${showDate ? dayNumber : ``}</span>
+              <time class="day__date" datetime=${date}>${userDate}</time>
+            </div>
+          </li>
   `;
 };
 

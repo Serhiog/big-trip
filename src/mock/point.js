@@ -1,7 +1,7 @@
 
 import { TYPES, CITIES } from "../consts.js";
 
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));

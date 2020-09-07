@@ -7,6 +7,8 @@ import { CITIES } from "../consts.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import { UserAction, UpdateType } from "../consts.js";
+import he from "he";
+
 
 
 export default class PointEditView extends SmartView {
@@ -30,6 +32,7 @@ export default class PointEditView extends SmartView {
     this._endtDatePicker = null;
     this._setStartDatePicker();
     this._setEndDatePicker();
+    this.setPrice();
   }
 
   _setStartDatePicker() {
@@ -74,8 +77,7 @@ export default class PointEditView extends SmartView {
 
   createTripEditTemplate(point) {
 
-    const { type, city, destination: { pictures, description }, startDate, endDate, options } = point;
-
+    const { type, city, destination: { pictures, description }, price, startDate, endDate, options } = point;
 
     let cities = ``;
     CITIES.forEach(city => {
@@ -194,7 +196,7 @@ export default class PointEditView extends SmartView {
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type.toLowerCase()} to
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(city)}" list="destination-list-1">
       <datalist id="destination-list-1">
       ${cities}
       </datalist>
@@ -213,7 +215,7 @@ export default class PointEditView extends SmartView {
         <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.price}">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -272,7 +274,7 @@ export default class PointEditView extends SmartView {
   // }
 
   getTemplate() {
-    return this.createTripEditTemplate(this._data, this._points);
+    return this.createTripEditTemplate(this._data);
   }
 
   _editClickHandler(evt) {
@@ -358,8 +360,7 @@ export default class PointEditView extends SmartView {
     });
   }
 
-  setPrice(callback) {
-    this._callback.setPrice = callback;
+  setPrice() {
     this.getElement().querySelector(`.event__input--price`).addEventListener(`change`, this._formSetPrice);
   }
 

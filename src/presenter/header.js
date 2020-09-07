@@ -1,9 +1,9 @@
 import MajorTripRouteView from "../view/majorTripInfo.js";
 import MajorTripCostView from "../view/majorTripCost.js";
-import TripListToggleView from "../view/toggleViewListTrip.js";
+// import TripListToggleView from "../view/toggleViewListTrip.js";
 import TripFilterView from "../view/mainTripFilter.js";
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
-import { FilterType, UpdateType } from "../consts.js";
+import { FilterType, UpdateType} from "../consts.js";
 import { filter } from "../utils/filter.js";
 
 export default class HeaderPresenter {
@@ -26,12 +26,13 @@ export default class HeaderPresenter {
     render(this._siteHeaderMainTripContainer, new MajorTripRouteView(this._points), RenderPosition.AFTERBEGIN);
     const siteMajorInfoTrip = this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
     render(siteMajorInfoTrip, new MajorTripCostView(this._points), RenderPosition.BEFOREEND);
-    render(this._siteHeaderFilterTrip, new TripListToggleView(), RenderPosition.AFTEREND);
+    // render(this._siteHeaderFilterTrip, new TripListToggleView(), RenderPosition.AFTEREND);
+    this.initStartFilter()
+  }
 
-
+  initStartFilter() {
     this._currentFilter = this._filterModel.getFilter();
     const filters = this._getFilters();
-    console.log(filters);
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new TripFilterView(filters, this._currentFilter);
@@ -47,11 +48,10 @@ export default class HeaderPresenter {
   }
 
   _handleModelEvent() {
-    this.init();
+    this.initStartFilter();
   }
 
   _handleFilterTypeChange(filterType) {
-    console.log(filterType);
     if (this._currentFilter === filterType) {
       return;
     }
@@ -80,4 +80,5 @@ export default class HeaderPresenter {
       }
     ];
   }
+
 }

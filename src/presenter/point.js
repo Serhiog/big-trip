@@ -39,7 +39,6 @@ export default class PointPresenter {
     this._pointEditComponent.setCitiesHandler();
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._pointEditComponent.submitPoint(this._handleFormSubmit);
-    this._pointEditComponent.setPrice(this._handleSetPrice);
     this._handleDeleteClick = this._handleDeleteClick.bind(this);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 

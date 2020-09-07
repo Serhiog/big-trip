@@ -3,9 +3,10 @@ import SortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
 import GroupPresenter from './group.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
-import { SortType, UpdateType, UserAction } from "../consts.js";
+import { SortType, UpdateType, UserAction, FilterType } from "../consts.js";
 import NoPoints from "../view/no-Points.js";
-import {filter} from "../utils/filter.js";
+import { filter } from "../utils/filter.js";
+import PointNewPresenter from "./point-new.js";
 
 export default class TripPresenter {
   constructor(siteMainContainer, pointsModel, filterModel) {
@@ -18,15 +19,35 @@ export default class TripPresenter {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointsModel = pointsModel;
-    this._pointsModel.addObserver(this._handleModelEvent);
+    // this._pointsModel.addObserver(this._handleModelEvent);
     this._sortComponent = null;
     this._filterModel = filterModel;
-    this._filterModel.addObserver(this._handleModelEvent);
+    // this._filterModel.addObserver(this._handleModelEvent);
+    this._pointNewPresenter = new PointNewPresenter(this._containerView, this._handleViewAction);
   }
 
   init() {
     render(this._siteMainContainer, this._containerView, RenderPosition.BEFOREEND);
+    this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
     this._renderGroups();
+  }
+
+  destroy() {
+    this._clearTrip({ resetSortType: true });
+
+    remove(this._pointListComponent);
+    remove(this._tripComponent);
+
+    this._pointsModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
+  }
+
+
+  createPoint(callback) {
+    // this._currentSortType = SortType.DEFAULT;
+    // this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._pointNewPresenter.init(this._pointsModel, callback);
   }
 
   _renderNoPoints() {
@@ -37,6 +58,8 @@ export default class TripPresenter {
   _getPoints() {
     const filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
+
+
     const filtredPoints = filter[filterType](points);
 
     switch (this._currentSortType) {
@@ -81,7 +104,7 @@ export default class TripPresenter {
     const groups = new Map();
     const points = this._getPoints();
 
-    if (this._currentSortType === SortType.DEFAULT) {
+    if (this._currentSortType === SortType.EVERYTHING) {
       points.forEach((stop) => {
         const date = stop.startDate.toISOString().split(`T`)[0];
         if (!groups.has(date)) {
@@ -130,12 +153,14 @@ export default class TripPresenter {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._groupPresenter)
       .forEach((presenter) => presenter.resetView());
   }
 
   _clearTrip() {
+    this._pointNewPresenter.destroy();
     Object
       .values(this._groupPresenter)
       .forEach((presenter) => presenter.destroy());
