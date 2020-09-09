@@ -1,33 +1,72 @@
 import MajorTripRouteView from "../view/majorTripInfo.js";
 import MajorTripCostView from "../view/majorTripCost.js";
-// import TripListToggleView from "../view/toggleViewListTrip.js";
+import TripListToggleView from "../view/toggleViewListTrip.js";
 import TripFilterView from "../view/mainTripFilter.js";
+import NewEventBtnTemplate from "../view/newEventBtn.js";
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
-import { FilterType, UpdateType} from "../consts.js";
+import { FilterType, UpdateType, MenuItem } from "../consts.js";
 import { filter } from "../utils/filter.js";
 
 export default class HeaderPresenter {
-  constructor(points, siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel) {
+  constructor(points, siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter) {
     this._points = points;
     this._siteHeaderMainTripContainer = siteHeaderMainTripContainer;
     this._siteHeaderFilterTrip = siteHeaderFilterTrip;
     this._filterModel = filterModel;
     this._pointsModel = pointsModel;
-
     this._currentFilter = null;
     this._filterComponent = null;
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+    this._siteMenuComponent = new TripListToggleView();
+    this._newEventBtn = new NewEventBtnTemplate();
+    this._handleSiteMenuClick = this._handleSiteMenuClick.bind(this)
+    this._tripPresenter = tripPresenter;
   }
 
   init() {
     render(this._siteHeaderMainTripContainer, new MajorTripRouteView(this._points), RenderPosition.AFTERBEGIN);
     const siteMajorInfoTrip = this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
     render(siteMajorInfoTrip, new MajorTripCostView(this._points), RenderPosition.BEFOREEND);
-    // render(this._siteHeaderFilterTrip, new TripListToggleView(), RenderPosition.AFTEREND);
-    this.initStartFilter()
+  }
+
+  initStats() {
+    render(this._siteHeaderFilterTrip, this._siteMenuComponent, RenderPosition.AFTERBEGIN); // - table stats
+    render(this._siteHeaderMainTripContainer, this._newEventBtn, RenderPosition.BEFOREEND); // - кнопка
+    this._handlePointNewFormClose();
+    this._handleSiteMenuClick();
+  }
+
+  _handlePointNewFormClose() {
+    // this._siteMenuComponent.getElement().querySelector(`[id=${MenuItem.TABLE}]`).disabled = false;
+    // this._siteMenuComponent.setMenuItem(MenuItem.TABLE);
+    // this._newEventBtn.getElement().querySelector(`[id=${MenuItem.ADD_NEW_EVENT}]`).disabled = false;
+    // this._newEventBtn.setClickBtn(MenuItem.ADD_NEW_EVENT);
+  }
+
+  _handleSiteMenuClick(menuItem) {
+    switch (menuItem) {
+      case MenuItem.ADD_NEW_EVENT:
+        this._tripPresenter.destroy();
+        this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+        this._tripPresenter.init();
+        this._tripPresenter.createPoint(this._handlePointNewFormClose);
+        // this._siteMenuComponent.getElement().querySelector(`[value=${MenuItem.ADD_NEW_EVENT}]`).disabled = true;
+        break;
+      case MenuItem.TABLE:
+        this._tripPresenter.destroy();
+        this._tripPresenter.init();
+
+        break;
+      case MenuItem.STATISTICS:
+        this._tripPresenter.destroy();
+        break;
+    }
+
+    this._siteMenuComponent.setMenuClickHandler(this._handleSiteMenuClick);
+    this._newEventBtn.setNewEventBtnClickHandler(this._handleSiteMenuClick);
   }
 
   initStartFilter() {
@@ -39,7 +78,7 @@ export default class HeaderPresenter {
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._siteHeaderMainTripContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      render(this._siteHeaderFilterTrip, this._filterComponent, RenderPosition.BEFOREEND); // everything future past
       return;
     }
 
@@ -52,6 +91,8 @@ export default class HeaderPresenter {
   }
 
   _handleFilterTypeChange(filterType) {
+
+    this._currentFilter = this._filterModel.getFilter();
     if (this._currentFilter === filterType) {
       return;
     }
@@ -61,7 +102,6 @@ export default class HeaderPresenter {
 
   _getFilters() {
     const points = this._pointsModel.getPoints();
-
     return [
       {
         type: FilterType.EVERYTHING,
@@ -80,5 +120,4 @@ export default class HeaderPresenter {
       }
     ];
   }
-
 }

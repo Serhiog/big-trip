@@ -15,16 +15,16 @@ export default class TripListToggleView extends Abstract {
 
   setMenuClickHandler(callback) {
     this._callback.menuClick = callback;
-    document.querySelectorAll(`.trip-tabs__btn`).forEach(element => {
+    this.getElement().querySelectorAll(`.trip-tabs__btn`).forEach(element => {
       element.addEventListener(`click`, this._menuClickHandler);
     });
   }
 
   setMenuItem(menuItem) {
-    const item = this.getElement().querySelector(`[value=${menuItem}]`);
-
+    const item = this.getElement().querySelector(`[id=${menuItem}]`);
     if (item !== null) {
-      item.checked = true;
+      // item.checked = true;
+      item.setAttribute(`checked`, ``)
     }
   }
 

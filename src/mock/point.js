@@ -136,7 +136,9 @@ const point = (date) => {
 
 export const generateMocks = (size) => {
   const mocks = [];
+
   let date = new Date();
+  date.setDate(date.getDate() - 2);  
 
   for (let i = 0; i < size; i++) {
     const p = point(date);

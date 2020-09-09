@@ -24,6 +24,7 @@ export default class TripPresenter {
     this._filterModel = filterModel;
     // this._filterModel.addObserver(this._handleModelEvent);
     this._pointNewPresenter = new PointNewPresenter(this._containerView, this._handleViewAction);
+    this._filter = filter;
   }
 
   init() {
@@ -36,8 +37,8 @@ export default class TripPresenter {
   destroy() {
     this._clearTrip({ resetSortType: true });
 
-    remove(this._pointListComponent);
-    remove(this._tripComponent);
+    // remove(this._pointListComponent);
+    // remove(this._tripComponent);
 
     this._pointsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
@@ -58,15 +59,16 @@ export default class TripPresenter {
   _getPoints() {
     const filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
+    const filtredPoints = this._filter[filterType](points);
 
-
-    const filtredPoints = filter[filterType](points);
-
+    const pointsCopy = this._pointsModel.getPoints().slice();
     switch (this._currentSortType) {
       case SortType.PRICE:
-        return this._pointsModel.getPoints().slice().sort((a, b) => b.price - a.price);
+        return pointsCopy.sort((a, b) => b.price - a.price);
       case SortType.TIME:
-        return this._pointsModel.getPoints().slice().sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
+        return pointsCopy.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
+      case SortType.DEFAULT:
+        return pointsCopy.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
     }
     return filtredPoints;
   }
@@ -104,7 +106,7 @@ export default class TripPresenter {
     const groups = new Map();
     const points = this._getPoints();
 
-    if (this._currentSortType === SortType.EVERYTHING) {
+    if (this._currentSortType === SortType.DEFAULT) {
       points.forEach((stop) => {
         const date = stop.startDate.toISOString().split(`T`)[0];
         if (!groups.has(date)) {

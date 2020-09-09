@@ -77,18 +77,33 @@ export default class PointEditView extends SmartView {
 
   createTripEditTemplate(point) {
 
-    const { type, city, destination: { pictures, description }, price, startDate, endDate, options } = point;
+    const { type, city, price, startDate, endDate, options } = point;
+
+
 
     let cities = ``;
     CITIES.forEach(city => {
       cities += `<option value=${city}></option>`;
     });
 
-
-    let photo = ``;
-    pictures.forEach(photoElement => {
-      photo = photo + `<img class="event__photo" src="${photoElement.src}" alt="${photoElement.description}"></img>`;
-    });
+    let aboutPoint = ``;
+    if (point.destination === undefined) {
+      aboutPoint = ``;
+    } else {
+      const { destination: { pictures, description } } = point;
+      pictures.forEach(photoElement => {
+        aboutPoint = `<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description">${description}</p>
+      <div class="event__photos-container">
+        <div class="event__photos-tape">
+        <img class="event__photo" src="${photoElement.src}" alt="${photoElement.description}"></img>
+        </div>
+      </div>
+       </section>
+      </section >`
+      });
+    }
 
     const formatedStartDate = formatedStartEndDate(startDate) + formatTaskDueDate(startDate);
     const formatedEndDate = formatedStartEndDate(endDate) + formatTaskDueDate(endDate);
@@ -242,18 +257,7 @@ export default class PointEditView extends SmartView {
   ${optionTemplate}
       </div>
     </section>
-    <section class="event__section  event__section--destination">
-                <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-                <p class="event__destination-description">${description}</p>
-
-                <div class="event__photos-container">
-                  <div class="event__photos-tape">
-                     ${photo}
-
-                  </div>
-                </div>
-              </section>
-  </section>
+    ${aboutPoint}
   </form>`;
   }
 
@@ -357,7 +361,7 @@ export default class PointEditView extends SmartView {
     const userPrice = evt.target.value;
     this.updateData({
       price: userPrice
-    });
+    }, true);
   }
 
   setPrice() {
