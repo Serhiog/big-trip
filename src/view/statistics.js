@@ -1,96 +1,263 @@
-import flatpickr from "flatpickr";
-import SmartView from "./smart.js";
-// import {getCurrentDate} from "../utils/task.js";
+// import flatpickr from "flatpickr";
+// import Chart from "chart.js";
+// import ChartDataLabels from 'chartjs-plugin-datalabels';
+// import SmartView from "./smart.js";
+// // import { getCurrentDate } from "../utils/task.js";
+// import { countCompletedTaskInDateRange } from "../utils/statistics.js";
 
-const createStatisticsTemplate = () => {
-  const completedTaskCount = 0; // Нужно посчитать количество завершенных задач за период
+// const moneyCtx = document.querySelector(`.statistics__item statistics__item--money`);
+// const transportCtx = document.querySelector(`.statistics__item statistics__item--transport`);
+// const timeSpendCtx = document.querySelector(`.statistics__item statistics__item--time-spend`);
 
-  return `<section class="statistics">
-  <h2 class="visually-hidden">Trip statistics</h2>
+// // Рассчитаем высоту канваса в зависимости от того, сколько данных в него будет передаваться
+// const BAR_HEIGHT = 55;
+// moneyCtx.height = BAR_HEIGHT * 6;
+// transportCtx.height = BAR_HEIGHT * 4;
+// timeSpendCtx.height = BAR_HEIGHT * 4;
 
-  <div class="statistics__item statistics__item--money">
-    <canvas class="statistics__chart  statistics__chart--money" width="900"></canvas>
-  </div>
+// const renderTransportChart = (colorsCtx, points) => {
+//   const transportChart = new Chart(transportCtx, {
+//     plugins: [ChartDataLabels],
+//     type: `horizontalBar`,
+//     data: {
+//       labels: [`???? DRIVE`, `???? RIDE`, `✈️ FLY`, `????️ SAIL`],
+//       datasets: [{
+//         data: [4, 3, 2, 1],
+//         backgroundColor: `#ffffff`,
+//         hoverBackgroundColor: `#ffffff`,
+//         anchor: `start`
+//       }]
+//     },
+//     options: {
+//       plugins: {
+//         datalabels: {
+//           font: {
+//             size: 13
+//           },
+//           color: `#000000`,
+//           anchor: 'end',
+//           align: 'start',
+//           formatter: (val) => `${val}x`
+//         }
+//       },
+//       title: {
+//         display: true,
+//         text: `TRANSPORT`,
+//         fontColor: `#000000`,
+//         fontSize: 23,
+//         position: `left`
+//       },
+//       scales: {
+//         yAxes: [{
+//           ticks: {
+//             fontColor: `#000000`,
+//             padding: 5,
+//             fontSize: 13,
+//           },
+//           gridLines: {
+//             display: false,
+//             drawBorder: false
+//           },
+//           barThickness: 44,
+//         }],
+//         xAxes: [{
+//           ticks: {
+//             display: false,
+//             beginAtZero: true,
+//           },
+//           gridLines: {
+//             display: false,
+//             drawBorder: false
+//           },
+//           minBarLength: 50
+//         }],
+//       },
+//       legend: {
+//         display: false
+//       },
+//       tooltips: {
+//         enabled: false,
+//       }
+//     }
+//   });
+// };
 
-  <div class="statistics__item statistics__item--transport">
-    <canvas class="statistics__chart  statistics__chart--transport" width="900"></canvas>
-  </div>
+// const renderDaysChart = (daysCtx, points, startDate, endDate) => {
+//   // Функция для отрисовки графика по датам
+// };
 
-  <div class="statistics__item statistics__item--time-spend">
-    <canvas class="statistics__chart  statistics__chart--time" width="900"></canvas>
-  </div>
-</section>`;
-};
+// const renderMoneyChart = (daysCtx, points, startDate, endDate) => {
+//   const moneyChart = new Chart(moneyCtx, {
+//     plugins: [ChartDataLabels],
+//     type: `horizontalBar`,
+//     data: {
+//       labels: [`✈️ FLY`, `???? STAY`, `???? DRIVE`, `????️ LOOK`, `???? EAT`, `???? RIDE`],
+//       datasets: [{
+//         data: [400, 300, 200, 160, 150, 100],
+//         backgroundColor: `#ffffff`,
+//         hoverBackgroundColor: `#ffffff`,
+//         anchor: `start`
+//       }]
+//     },
+//     options: {
+//       plugins: {
+//         datalabels: {
+//           font: {
+//             size: 13
+//           },
+//           color: `#000000`,
+//           anchor: 'end',
+//           align: 'start',
+//           formatter: (val) => `€ ${val}`
+//         }
+//       },
+//       title: {
+//         display: true,
+//         text: `MONEY`,
+//         fontColor: `#000000`,
+//         fontSize: 23,
+//         position: `left`
+//       },
+//       scales: {
+//         yAxes: [{
+//           ticks: {
+//             fontColor: `#000000`,
+//             padding: 5,
+//             fontSize: 13,
+//           },
+//           gridLines: {
+//             display: false,
+//             drawBorder: false
+//           },
+//           barThickness: 44,
+//         }],
+//         xAxes: [{
+//           ticks: {
+//             display: false,
+//             beginAtZero: true,
+//           },
+//           gridLines: {
+//             display: false,
+//             drawBorder: false
+//           },
+//           minBarLength: 50
+//         }],
+//       },
+//       legend: {
+//         display: false
+//       },
+//       tooltips: {
+//         enabled: false,
+//       }
+//     }
+//   });
+// };
 
-export default class Statistics extends SmartView {
-  constructor(tasks) {
-    super();
+// const createStatisticsTemplate = (data) => {
+//   const { points, startDate, endDate } = data;
+//   // const completedTaskCount = countCompletedTaskInDateRange(points, startDate, endDate);
 
-    this._data = {
-      tasks,
-      // По условиям техзадания по умолчанию интервал - неделя от текущей даты
-      dateFrom: (() => {
-        const daysToFullWeek = 6;
-        const date = getCurrentDate();
-        date.setDate(date.getDate() - daysToFullWeek);
-        return date;
-      })(),
-      dateTo: getCurrentDate()
-    };
+//   return `<section class="statistics">
+//   <h2>Trip statistics</h2>
 
-    this._dateChangeHandler = this._dateChangeHandler.bind(this);
+//   <div class="statistics__item statistics__item--money">
+//     <canvas class="statistics__chart  statistics__chart--money" width="900"></canvas>
+//   </div>
 
-    this._setCharts();
-    this._setDatepicker();
-  }
+//   <div class="statistics__item statistics__item--transport">
+//     <canvas class="statistics__chart  statistics__chart--transport" width="900"></canvas>
+//   </div>
 
-  removeElement() {
-    super.removeElement();
+//   <div class="statistics__item statistics__item--time-spend">
+//     <canvas class="statistics__chart  statistics__chart--time" width="900"></canvas>
+//   </div>
+// </section>`;
+// };
 
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
-    }
-  }
+// export default class Statistics extends SmartView {
+//   constructor(points) {
+//     super();
 
-  getTemplate() {
-    return createStatisticsTemplate(this._data);
-  }
+//     this._data = {
+//       points,
+//       // По условиям техзадания по умолчанию интервал - неделя от текущей даты
+//       startDate: (() => {
+//         const date = `1`
+//         return date;
+//       })(),
+//       endDate: `2`
+//     };
 
-  restoreHandlers() {
-    this._setCharts();
-    this._setDatepicker();
-  }
+//     this._colorsCart = null;
+//     this._daysChart = null;
 
-  _dateChangeHandler([dateFrom, dateTo]) {
-    if (!dateFrom || !dateTo) {
-      return;
-    }
+//     this._dateChangeHandler = this._dateChangeHandler.bind(this);
 
-    this.updateData({
-      dateFrom,
-      dateTo
-    });
-  }
+//     this._setCharts();
+//     this._setDatepicker();
+//   }
 
-  _setDatepicker() {
-    if (this._datepicker) {
-      this._datepicker.destroy();
-      this._datepicker = null;
-    }
+//   removeElement() {
+//     super.removeElement();
 
-    this._datepicker = flatpickr(
-      this.getElement().querySelector(`.statistic__period-input`),
-      {
-        mode: `range`,
-        dateFormat: `j F`,
-        defaultDate: [this._data.dateFrom, this._data.dateTo],
-        onChange: this._dateChangeHandler
-      }
-    );
-  }
+//     if (this._colorsCart !== null || this._daysChart !== null) {
+//       this._colorsCart = null;
+//       this._daysChart = null;
+//     }
 
-  _setCharts() {
-    // Нужно отрисовать два графика
-  }
-}
+//     if (this._datepicker) {
+//       this._datepicker.destroy();
+//       this._datepicker = null;
+//     }
+//   }
+
+//   getTemplate() {
+//     return createStatisticsTemplate(this._data);
+//   }
+
+//   restoreHandlers() {
+//     this._setCharts();
+//     this._setDatepicker();
+//   }
+
+//   _dateChangeHandler([startDate, endDate]) {
+//     if (!startDate || !endDate) {
+//       return;
+//     }
+
+//     this.updateData({
+//       startDate,
+//       endDate
+//     });
+//   }
+
+//   _setDatepicker() {
+//     if (this._datepicker) {
+//       this._datepicker.destroy();
+//       this._datepicker = null;
+//     }
+
+//     // this._datepicker = flatpickr(
+//     //   this.getElement().querySelector(`.statistic__period - input`),
+//     //   {
+//     //     mode: `range`,
+//     //     dateFormat: `j F`,
+//     //     defaultDate: [this._data.startDate, this._data.endDate],
+//     //     onChange: this._dateChangeHandler
+//     //   }
+//     // );
+//   }
+
+//   _setCharts() {
+//     // if (this._colorsCart !== null || this._daysChart !== null) {
+//     //   this._colorsCart = null;
+//     //   this._daysChart = null;
+//     // }
+//     const { points, startDate, endDate } = this._data;
+//     // const colorsCtx = this.getElement().querySelector(`.statistic__colors`);
+//     const daysCtx = this.getElement().querySelector(`.statistics__chart--time`);
+
+//     // this._colorsCart = renderColorsChart(colorsCtx, points);
+//     this._daysChart = renderDaysChart(daysCtx, points, startDate, endDate);
+//   }
+// }

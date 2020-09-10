@@ -3,15 +3,18 @@ import Abstract from "./abstract.js";
 
 export default class TripFilterView extends Abstract {
 
-  constructor() {
+  constructor(filters, currentFilter) {
     super();
+    this._filters = filters;
+    this._currentFilter = currentFilter;
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
+    this.setCheckedAttribute();
   }
 
   createMainTripFilterTemplate() {
     return `<form class="trip-filters" action="#" method="get">
     <div class="trip-filters__filter">
-      <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything" checked="">
+      <input id="filter-everything" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="everything">
       <label class="trip-filters__filter-label" for="filter-everything">Everything</label>
     </div>
 
@@ -42,6 +45,14 @@ export default class TripFilterView extends Abstract {
     this._callback.filterTypeChange = callback;
     this.getElement().querySelectorAll(`.trip-filters__filter-input`).forEach(filter => {
       filter.addEventListener(`click`, this._filterTypeChangeHandler);
+    });
+  }
+
+  setCheckedAttribute() {
+    this.getElement().querySelectorAll(`.trip-filters__filter-input`).forEach(element => {
+      if (element.value === this._currentFilter) {
+        element.setAttribute(`checked`, ``)
+      }
     });
   }
 }

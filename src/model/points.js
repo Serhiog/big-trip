@@ -53,4 +53,53 @@ export default class Points extends Observer {
 
     this._notify(updateType);
   }
+
+  static adaptToClient(point) {
+    const adaptedPoint = Object.assign(
+      {},
+      point,
+      {
+        endDate: point.date_to,
+        startDate: point.date_from,
+        options: point.offers,
+        price: point.base_price,
+        type: point.type[0].toUpperCase() + point.type.slice(1),
+        isFavorite: point.is_favorite,
+        id: +point.id,
+      }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.offers;
+    delete adaptedPoint.base_price;
+    // delete adaptedPoint.type;
+    delete adaptedPoint.is_favorite;
+
+    return adaptedPoint;
+  }
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+      {},
+      point,
+      {
+        "date_to": point.endDate,
+        "date_from": point.startDate,
+        "offers": point.options,
+        "base_price": point.price,
+        "type": point.type,
+        "is_favorite": point.isFavorite,
+      }
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedPoint.dueDate;
+    delete adaptedPoint.isArchive;
+    delete adaptedPoint.isFavorite;
+    delete adaptedPoint.repeating;
+
+    return adaptedPoint;
+  }
 }

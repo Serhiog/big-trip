@@ -36,9 +36,7 @@ export default class TripPresenter {
 
   destroy() {
     this._clearTrip({ resetSortType: true });
-
-    // remove(this._pointListComponent);
-    // remove(this._tripComponent);
+    remove(this._containerView);
 
     this._pointsModel.removeObserver(this._handleModelEvent);
     this._filterModel.removeObserver(this._handleModelEvent);
@@ -61,16 +59,14 @@ export default class TripPresenter {
     const points = this._pointsModel.getPoints();
     const filtredPoints = this._filter[filterType](points);
 
-    const pointsCopy = this._pointsModel.getPoints().slice();
     switch (this._currentSortType) {
       case SortType.PRICE:
-        return pointsCopy.sort((a, b) => b.price - a.price);
+        return filtredPoints.sort((a, b) => b.price - a.price);
       case SortType.TIME:
-        return pointsCopy.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
+        return filtredPoints.sort((a, b) => (b.endDate.getTime() - b.startDate.getTime()) - (a.endDate.getTime() - a.startDate.getTime()));
       case SortType.DEFAULT:
-        return pointsCopy.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+        return filtredPoints.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
     }
-    return filtredPoints;
   }
 
   _renderGroups() {

@@ -10,9 +10,17 @@ import { UserAction, UpdateType } from "../consts.js";
 import he from "he";
 
 
+const BLANK_POINT = {
+  type: `Flight`,
+  city: `Chamonix`,
+  price: `0`,
+  startDate: new Date(),
+  endDate: new Date(),
+  options: getOptions().options
+};
 
 export default class PointEditView extends SmartView {
-  constructor(point) {
+  constructor(point = BLANK_POINT) {
     super();
     this._data = PointEditView.parsePointToData(point);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
