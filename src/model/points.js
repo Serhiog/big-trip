@@ -6,8 +6,9 @@ export default class Points extends Observer {
     this._points = [];
   }
 
-  setPoints(points) {
+  setPoints(updateType, points) {
     this._points = points.slice();
+    this._notify(updateType);
   }
 
   getPoints() {
@@ -59,8 +60,8 @@ export default class Points extends Observer {
       {},
       point,
       {
-        endDate: point.date_to,
-        startDate: point.date_from,
+        endDate: new Date(point.date_to),
+        startDate: new Date(point.date_from),
         options: point.offers,
         price: point.base_price,
         type: point.type[0].toUpperCase() + point.type.slice(1),
@@ -85,8 +86,8 @@ export default class Points extends Observer {
       {},
       point,
       {
-        "date_to": point.endDate,
-        "date_from": point.startDate,
+        "date_to": point.endDate.toString(),
+        "date_from": point.startDate.toString(),
         "offers": point.options,
         "base_price": point.price,
         "type": point.type,
@@ -95,10 +96,12 @@ export default class Points extends Observer {
     );
 
     // Ненужные ключи мы удаляем
-    delete adaptedPoint.dueDate;
-    delete adaptedPoint.isArchive;
+    delete adaptedPoint.endDate;
+    delete adaptedPoint.startDate;
+    delete adaptedPoint.options;
+    delete adaptedPoint.price;
+    delete adaptedPoint.type;
     delete adaptedPoint.isFavorite;
-    delete adaptedPoint.repeating;
 
     return adaptedPoint;
   }

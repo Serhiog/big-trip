@@ -1,5 +1,5 @@
 import PointEditView from "../view/pointEditor.js";
-import { generateId } from "../mock/point.js";
+// import { generateId } from "../utils/common.js";
 import { remove, render, RenderPosition } from "../utils/render.js";
 import { UserAction, UpdateType } from "../consts.js";
 import TripPointListView from "../view/tripPointsList.js";
@@ -50,9 +50,20 @@ export default class PointNew {
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
   }
 
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    this._taskEditComponent.shake(resetFormState);
+  }
+
   _handleFormSubmit(point) {
-    this._changeData(UserAction.ADD_POINT, UpdateType.MINOR, Object.assign({ id: generateId() }, point));
-    this.destroy();
+    this._changeData(UserAction.ADD_POINT, UpdateType.MINOR, point);
   }
 
   _handleDeleteClick() {
@@ -64,5 +75,12 @@ export default class PointNew {
       evt.preventDefault();
       this.destroy();
     }
+  }
+
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true
+    });
   }
 }

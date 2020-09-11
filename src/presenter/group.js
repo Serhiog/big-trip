@@ -1,7 +1,7 @@
 
 import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
-import PointPresenter from './point.js';
+import PointPresenter, { State as PointPresenterViewState } from './point.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
 
 

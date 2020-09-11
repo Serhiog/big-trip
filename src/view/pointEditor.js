@@ -12,8 +12,8 @@ import he from "he";
 
 const BLANK_POINT = {
   type: `Flight`,
-  city: `Chamonix`,
-  price: `0`,
+  city: ``,
+  price: ``,
   startDate: new Date(),
   endDate: new Date(),
   options: getOptions().options
@@ -133,10 +133,10 @@ export default class PointEditView extends SmartView {
         }
       });
 
-
+      let offerId = 0;
       optionTemplate += `
       <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage"="" ${checked}>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offerId += offerId}" type="checkbox" name="event-offer-luggage"="" ${checked}>
       <label class="event__offer-label" for="event-offer-luggage-1">
       <span class="event__offer-title">${offerName}</span>
       +
