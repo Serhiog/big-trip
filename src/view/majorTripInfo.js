@@ -13,7 +13,7 @@ export default class MajorTripRouteView extends Abstract {
   createMajorTripInfoTemplate(points) {
     let сities = [];
     points.forEach((place) => {
-      сities.push(place.city);
+      сities.push(place.destination.name);
     });
 
     if (points.length === 0) {

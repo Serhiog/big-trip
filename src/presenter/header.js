@@ -8,8 +8,8 @@ import { FilterType, UpdateType, MenuItem } from "../consts.js";
 import { filter } from "../utils/filter.js";
 
 export default class HeaderPresenter {
-  constructor(points, siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter) {
-    this._points = points;
+  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter) {
+
     this._siteHeaderMainTripContainer = siteHeaderMainTripContainer;
     this._siteHeaderFilterTrip = siteHeaderFilterTrip;
     this._filterModel = filterModel;
@@ -20,23 +20,41 @@ export default class HeaderPresenter {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    this._siteMenuComponent = new TripListToggleView();
-    this._newEventBtn = new NewEventBtnTemplate();
     this._handleSiteMenuClick = this._handleSiteMenuClick.bind(this)
     this._tripPresenter = tripPresenter;
+    this._prevMajorTripRouteViewComponent = null;
+    this._prevMajorTripCostViewComponent = null;
+    this._prevSiteMenuComponent = null;
+    this._prevNewEventBtnComponent = null;
   }
 
   init() {
-    render(this._siteHeaderMainTripContainer, new MajorTripRouteView(this._points), RenderPosition.AFTERBEGIN);
-    const siteMajorInfoTrip = this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
-    render(siteMajorInfoTrip, new MajorTripCostView(this._points), RenderPosition.BEFOREEND);
+    const majorTripRouteView = this._prevMajorTripRouteViewComponent;
+    this._prevMajorTripRouteViewComponent = new MajorTripRouteView(this._pointsModel.getPoints());
+    const majorTripCostView = this._prevMajorTripCostViewComponent;
+    this._prevMajorTripCostViewComponent = new MajorTripCostView(this._pointsModel.getPoints());
+
+    if (majorTripRouteView === null || majorTripCostView === null) {
+      render(this._siteHeaderMainTripContainer, this._prevMajorTripRouteViewComponent, RenderPosition.AFTERBEGIN);
+      const siteMajorInfoTrip = this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
+      render(siteMajorInfoTrip, this._prevMajorTripCostViewComponent, RenderPosition.BEFOREEND);
+    }
+    this.initStats();
   }
 
   initStats() {
-    render(this._siteHeaderFilterTrip, this._siteMenuComponent, RenderPosition.AFTERBEGIN); // - table stats
-    render(this._siteHeaderMainTripContainer, this._newEventBtn, RenderPosition.BEFOREEND); // - кнопка
-    this._handlePointNewFormClose();
-    this._handleSiteMenuClick();
+    const MenuComponent = this._prevSiteMenuComponent;
+    const NewBtnComponent = this._prevNewEventBtnComponent;
+    this._prevSiteMenuComponent = new TripListToggleView();
+    this._prevNewEventBtnComponent = new NewEventBtnTemplate();
+
+    if (MenuComponent === null || NewBtnComponent === null) {
+      render(this._siteHeaderFilterTrip, this._prevSiteMenuComponent, RenderPosition.AFTERBEGIN); // - table stats
+      render(this._siteHeaderMainTripContainer, this._prevNewEventBtnComponent, RenderPosition.BEFOREEND); // - кнопка
+      this._handlePointNewFormClose();
+      this._handleSiteMenuClick();
+    }
+    this.initStartFilter();
   }
 
   _handlePointNewFormClose() {
@@ -65,8 +83,8 @@ export default class HeaderPresenter {
         break;
     }
 
-    this._siteMenuComponent.setMenuClickHandler(this._handleSiteMenuClick);
-    this._newEventBtn.setNewEventBtnClickHandler(this._handleSiteMenuClick);
+    this._prevSiteMenuComponent.setMenuClickHandler(this._handleSiteMenuClick);
+    this._prevNewEventBtnComponent.setNewEventBtnClickHandler(this._handleSiteMenuClick);
   }
 
   initStartFilter() {
@@ -87,7 +105,7 @@ export default class HeaderPresenter {
   }
 
   _handleModelEvent() {
-    this.initStartFilter();
+    this.init();
   }
 
   _handleFilterTypeChange(filterType) {

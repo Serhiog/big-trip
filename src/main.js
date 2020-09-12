@@ -26,16 +26,15 @@ const filterModel = new FilterModel();
 const pointsModel = new PointsModel();
 // pointsModel.setPoints(points);
 
-// const headerPresenter = new HeaderTripPresenter(pointsModel, siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter);
 api.getPoints().then((points) => {
   pointsModel.setPoints(UpdateType.INIT, points);
-}).catch(() => {
+}).catch((error) => {
   pointsModel.setPoints(UpdateType.INIT, []);
 });
 
 const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api);
+const headerPresenter = new HeaderTripPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter);
+
 // render(siteMainContainer, new StatisticsView(pointsModel), RenderPosition.AFTEREND);
 tripPresenter.init();
 // headerPresenter.init();
-// headerPresenter.initStats();
-// headerPresenter.initStartFilter();

@@ -1,7 +1,7 @@
 
 import SortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
-import GroupPresenter { State as PointPresenterViewState } from './group.js';
+import GroupPresenter, { State as PointPresenterViewState } from './group.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
 import { SortType, UpdateType, UserAction, FilterType } from "../consts.js";
 import NoPoints from "../view/no-Points.js";
@@ -29,6 +29,7 @@ export default class TripPresenter {
     this._isLoading = true;
     this._loadingComponent = new LoadingView();
     this._api = api;
+    this._prevNoPointsComponent = null;
   }
 
   init() {
@@ -54,7 +55,11 @@ export default class TripPresenter {
   }
 
   _renderNoPoints() {
-    render(this._siteMainContainer, new NoPoints(), RenderPosition.BEFOREEND);
+    const noPointsComponent = this._prevNoPointsComponent;
+    this._prevNoPointsComponent = new NoPoints();
+    if (noPointsComponent === null) {
+      render(this._siteMainContainer, this._prevNoPointsComponent, RenderPosition.BEFOREEND);
+    }
   }
 
 
@@ -131,7 +136,10 @@ export default class TripPresenter {
   _handleViewAction(update, actionType, updateType) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._groupPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
+        console.log(this._groupPresenter);
+        console.log(update);
+
+        this._groupPresenter[1].setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
             this._pointsModel.updatePoint(updateType, response);
@@ -145,15 +153,15 @@ export default class TripPresenter {
         this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         })
-        .catch(() => {
-          this._pointNewPresenter.setAborting();
-        });
+          .catch(() => {
+            this._pointNewPresenter.setAborting();
+          });
         break;
       case UserAction.DELETE_POINT:
         this._groupPresenter[update.id].setViewState(PointPresenterViewState.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
-        })  .catch(() => {
+        }).catch(() => {
           this._groupPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
         });
         break;
@@ -201,7 +209,8 @@ export default class TripPresenter {
 
     remove(this._sortComponent);
     remove(this._loadingComponent);
-    // remove(this._noPointComponent);
+    remove(this._prevNoPointsComponent);
+    this._prevNoPointsComponent = null;
   }
 
   _handleSortTypeChange(sortType) {

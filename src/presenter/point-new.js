@@ -59,7 +59,7 @@ export default class PointNew {
       });
     };
 
-    this._taskEditComponent.shake(resetFormState);
+    this._pointEditComponent.shake(resetFormState);
   }
 
   _handleFormSubmit(point) {

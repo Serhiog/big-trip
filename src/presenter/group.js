@@ -1,9 +1,14 @@
 
 import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
-import PointPresenter, { State as PointPresenterViewState } from './point.js';
+import PointPresenter from './point.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
 
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`
+};
 
 export default class GroupPresenter {
   constructor(container, changeData, modeChange, points) {
@@ -51,4 +56,36 @@ export default class GroupPresenter {
       .values(this._pointPresenter)
       .forEach((presenter) => presenter.resetView());
   }
+
+  setViewState(state) {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._pointEditComponent.updateData({
+          // isDisabled: true,
+          // isSaving: true
+          isFavorite: true
+        });
+        break;
+      case State.DELETING:
+        this._pointEditComponent.updateData({
+          // isDisabled: true,
+          // isDeleting: true
+        });
+        break;
+      case State.ABORTING:
+        this._pointComponent.shake(resetFormState);
+        this._pointEditComponent.shake(resetFormState);
+        break;
+    }
+
+  }
+
 }

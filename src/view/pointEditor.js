@@ -88,7 +88,6 @@ export default class PointEditView extends SmartView {
     const { type, city, price, startDate, endDate, options } = point;
 
 
-
     let cities = ``;
     CITIES.forEach(city => {
       cities += `<option value=${city}></option>`;
@@ -121,29 +120,32 @@ export default class PointEditView extends SmartView {
     const fixedOptions = allOffers[type[0].toUpperCase() + type.substring(1)].offers;
     let totalOffersPrice = 0;
 
-    fixedOptions.slice(0, fixedOptions.length).forEach((offer) => {
+    // fixedOptions.slice(0, fixedOptions.length).forEach((offer) => {
+    //   let checked = ``;
+    //   const offerName = offer.title;
+    //   const offerPrice = offer.price;
+    let offerId = 0;
+    options.forEach((option) => {
+
+      offerId += 1;
       let checked = ``;
-      const offerName = offer.title;
-      const offerPrice = offer.price;
+      // if (offerName === option.title) {
+      //   checked = `checked`;
+      //   totalOffersPrice += offer.price;
+      // }
 
-      options.forEach((option) => {
-        if (option.title === offerName) {
-          checked = `checked`;
-          totalOffersPrice += offer.price;
-        }
-      });
-
-      let offerId = 0;
       optionTemplate += `
-      <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offerId += offerId}" type="checkbox" name="event-offer-luggage"="" ${checked}>
-      <label class="event__offer-label" for="event-offer-luggage-1">
-      <span class="event__offer-title">${offerName}</span>
-      +
-      €&nbsp;<span class="event__offer-price">${offerPrice}</span>
-      </label>
-      </div>
-      `  })
+        <div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offerId}" type="checkbox" name="event-offer-luggage-${offerId}" ${checked}>
+        <label class="event__offer-label" for="event-offer-luggage-${offerId}">
+        <span class="event__offer-title">${option.title}</span>
+        +
+        €&nbsp;<span class="event__offer-price">${option.price}</span>
+        </label>
+        </div>
+        `;
+    });
+    // });
 
     return `<form class="event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -219,7 +221,7 @@ export default class PointEditView extends SmartView {
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type.toLowerCase()} to
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(city)}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(point.destination.name)}" list="destination-list-1">
       <datalist id="destination-list-1">
       ${cities}
       </datalist>
