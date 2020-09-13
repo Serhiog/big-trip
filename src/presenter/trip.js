@@ -136,10 +136,16 @@ export default class TripPresenter {
   _handleViewAction(update, actionType, updateType) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        console.log(this._groupPresenter);
-        console.log(update);
 
-        this._groupPresenter.setViewState(PointPresenterViewState.SAVING);
+        Object.keys(this._groupPresenter).forEach(function (key) {
+          let currentGroup = this[key]
+          this[key].points.forEach(element => {
+            if (update.id === element.id) {
+              currentGroup.setViewState(PointPresenterViewState.SAVING);
+            }
+          });
+        }, this._groupPresenter);
+        // this._groupPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
             this._pointsModel[update.id].updatePoint(updateType, response);
