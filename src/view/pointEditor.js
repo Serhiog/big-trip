@@ -22,6 +22,7 @@ const BLANK_POINT = {
 export default class PointEditView extends SmartView {
   constructor(point = BLANK_POINT) {
     super();
+    console.log(point);
     this._data = PointEditView.parsePointToData(point);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._typesClickHandler = this._typesClickHandler.bind(this);

@@ -1,9 +1,9 @@
 
 import SortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
-import GroupPresenter, { State as PointPresenterViewState } from './group.js';
+import GroupPresenter from './group.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
-import { SortType, UpdateType, UserAction, FilterType } from "../consts.js";
+import { SortType, UpdateType, UserAction, FilterType, State } from "../consts.js";
 import NoPoints from "../view/no-Points.js";
 import { filter } from "../utils/filter.js";
 import PointNewPresenter from "./point-new.js";
@@ -133,25 +133,18 @@ export default class TripPresenter {
     return groups;
   }
 
-  _handleViewAction(update, actionType, updateType) {
+   // добавил dayNumber, чтобы находить нужную группу
+  _handleViewAction(update, actionType, updateType, dayNumber) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-
-        Object.keys(this._groupPresenter).forEach(function (key) {
-          let currentGroup = this[key]
-          this[key].points.forEach(element => {
-            if (update.id === element.id) {
-              currentGroup.setViewState(PointPresenterViewState.SAVING);
-            }
-          });
-        }, this._groupPresenter);
-        // this._groupPresenter[update.id].setViewState(PointPresenterViewState.SAVING);
+        console.log(update);
+        this._groupPresenter[dayNumber].setViewState(update, State.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
-            this._pointsModel[update.id].updatePoint(updateType, response);
+            this._pointsModel.updatePoint(updateType, response);
           })
-          .catch(() => {
-            this._groupPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
+          .catch((error) => {
+            this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
           });
         break;
       case UserAction.ADD_POINT:
@@ -164,11 +157,11 @@ export default class TripPresenter {
           });
         break;
       case UserAction.DELETE_POINT:
-        this._groupPresenter[update.id].setViewState(PointPresenterViewState.DELETING);
+        this._groupPresenter[dayNumber].setViewState(update, State.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
         }).catch(() => {
-          this._groupPresenter[update.id].setViewState(PointPresenterViewState.ABORTING);
+          this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
         });
         break;
     }

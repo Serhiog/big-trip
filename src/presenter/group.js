@@ -4,11 +4,6 @@ import InnerTripPointList from "../view/innerPointsList.js";
 import PointPresenter from './point.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
 
-export const State = {
-  SAVING: `SAVING`,
-  DELETING: `DELETING`,
-  ABORTING: `ABORTING`
-};
 
 export default class GroupPresenter {
   constructor(container, changeData, modeChange, points) {
@@ -35,7 +30,9 @@ export default class GroupPresenter {
   }
 
   _handlePointChange(updatedPoint, userAction, updateType) {
-    this._changeData(updatedPoint, userAction, updateType);
+    // this._changeData это _handleViewAction из trip.js
+    // передаю dayNumber чтобы в _handleViewAction можно было найти нужый груп презентер
+    this._changeData(updatedPoint, userAction, updateType, this.dayNumber);
   }
 
   getPointPresenter(point) {
@@ -57,35 +54,9 @@ export default class GroupPresenter {
       .forEach((presenter) => presenter.resetView());
   }
 
-  setViewState(state) {
-    const resetFormState = () => {
-      this._pointEditComponent.updateData({
-        isDisabled: false,
-        isSaving: false,
-        isDeleting: false
-      });
-    };
-
-    switch (state) {
-      case State.SAVING:
-        this._pointEditComponent.updateData({
-          // isDisabled: true,
-          // isSaving: true
-          isFavorite: true
-        });
-        break;
-      case State.DELETING:
-        this._pointEditComponent.updateData({
-          // isDisabled: true,
-          // isDeleting: true
-        });
-        break;
-      case State.ABORTING:
-        this._pointComponent.shake(resetFormState);
-        this._pointEditComponent.shake(resetFormState);
-        break;
-    }
-
+  // груп презентер находит презентер нужной точки и вывзывает у него setViewState
+  setViewState(point, state) {
+    this._pointPresenter[point.id].setViewState(state);
   }
 
 }

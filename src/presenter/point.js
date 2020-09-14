@@ -1,7 +1,7 @@
 import PointView from "../view/tripPoint.js";
 import PointEditView from "../view/pointEditor.js";
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
-import { UserAction, UpdateType } from "../consts.js";
+import { UserAction, UpdateType, State } from "../consts.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -84,6 +84,38 @@ export default class PointPresenter {
       evt.preventDefault();
       this._replaceEditToPoint();
     }
+  }
+
+  // вернул setViewState обратно, т.к. оно рабоатет с _pointEditComponent
+  setViewState(state) {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false
+      });
+    };
+
+    switch (state) {
+      case State.SAVING:
+        this._pointEditComponent.updateData({
+          // isDisabled: true,
+          // isSaving: true
+          isFavorite: true
+        });
+        break;
+      case State.DELETING:
+        this._pointEditComponent.updateData({
+          // isDisabled: true,
+          // isDeleting: true
+        });
+        break;
+      case State.ABORTING:
+        this._pointComponent.shake(resetFormState);
+        this._pointEditComponent.shake(resetFormState);
+        break;
+    }
+
   }
 
   destroy() {

@@ -86,11 +86,15 @@ export default class Points extends Observer {
       {},
       point,
       {
+        // id — д.б. строкой
+        "id": String(point.id),
         "date_to": point.endDate.toString(),
         "date_from": point.startDate.toString(),
         "offers": point.options,
-        "base_price": point.price,
-        "type": point.type,
+        // сервер ждет число
+        "base_price": parseInt(point.price, 10),
+        // type должен начинаться со строчной буквы
+        "type": point.type.toLowerCase(),
         "is_favorite": point.isFavorite,
       }
     );
@@ -100,7 +104,8 @@ export default class Points extends Observer {
     delete adaptedPoint.startDate;
     delete adaptedPoint.options;
     delete adaptedPoint.price;
-    delete adaptedPoint.type;
+    // Удаляешь нужный ключ
+    // delete adaptedPoint.type;
     delete adaptedPoint.isFavorite;
 
     return adaptedPoint;
