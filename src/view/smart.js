@@ -13,7 +13,6 @@ export default class Smart extends Abstract {
     if (!update) {
       return;
     }
-
     this._data = Object.assign({}, this._data, update);
 
     if (justDataUpdating) {
@@ -29,7 +28,6 @@ export default class Smart extends Abstract {
     this.removeElement();
 
     const newElement = this.getElement();
-
     parent.replaceChild(newElement, prevElement);
     prevElement = null;
     this.restoreHandlers();

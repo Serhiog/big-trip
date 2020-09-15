@@ -63,7 +63,7 @@ export default class Points extends Observer {
         endDate: new Date(point.date_to),
         startDate: new Date(point.date_from),
         options: point.offers,
-        price: point.base_price,
+        price: +point.base_price,
         type: point.type[0].toUpperCase() + point.type.slice(1),
         isFavorite: point.is_favorite,
         id: +point.id,

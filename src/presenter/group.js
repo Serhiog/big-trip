@@ -6,7 +6,7 @@ import { render, RenderPosition, remove } from "../utils/render.js";
 
 
 export default class GroupPresenter {
-  constructor(container, changeData, modeChange, points) {
+  constructor(container, changeData, modeChange, points, offers) {
     this._container = container;
     this._pointPresenter = {};
     this._modeChange = modeChange;
@@ -14,6 +14,7 @@ export default class GroupPresenter {
     this._handlePointChange = this._handlePointChange.bind(this);
     this.points = points;
     this.pointsLength = points.length;
+    this._offers = offers;
   }
 
   init(points, dayNumber, showDate) {
@@ -24,7 +25,7 @@ export default class GroupPresenter {
     render(this._tripPointListElement, this._innerTripPointList, RenderPosition.BEFOREEND);
 
     points.forEach((point) => {
-      this._pointPresenter[point.id] = new PointPresenter(this._innerTripPointList, this._modeChange, this._handlePointChange, points);
+      this._pointPresenter[point.id] = new PointPresenter(this._innerTripPointList, this._modeChange, this._handlePointChange, points, this._offers);
       this._pointPresenter[point.id].init(point);
     });
   }

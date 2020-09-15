@@ -1,6 +1,6 @@
 
 import { formatTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
-import { getOptions, sortedOptiosByType, allOffers, allDestinations } from "../mock/point.js";
+import { allDestinations } from "../mock/point.js";
 import SmartView from "./smart.js";
 import { remove } from "../utils/render.js";
 import { CITIES } from "../consts.js";
@@ -9,30 +9,24 @@ import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import { UserAction, UpdateType } from "../consts.js";
 import he from "he";
 
-
-const BLANK_POINT = {
-  type: `Flight`,
-  city: ``,
-  price: ``,
-  startDate: new Date(),
-  endDate: new Date(),
-  options: getOptions().options
-};
-
 export default class PointEditView extends SmartView {
-  constructor(point = BLANK_POINT) {
+  constructor(point, offers) {
     super();
-    console.log(point);
+    this._point = point;
+    this._offers = offers;
     this._data = PointEditView.parsePointToData(point);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._typesClickHandler = this._typesClickHandler.bind(this);
     this._citiesClickHandler = this._citiesClickHandler.bind(this);
+    this._offersClickHandler = this._offersClickHandler.bind(this);
     this._tripStartDateChangeHandler = this._tripStartDateChangeHandler.bind(this);
     this._tripEndDateChangeHandler = this._tripEndDateChangeHandler.bind(this);
     this.setDeleteClickHandler = this.setDeleteClickHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
     this._editClickHandler = this._editClickHandler.bind(this);
     this.setEditClickHandler = this.setEditClickHandler.bind(this);
+    this.setOffersHandler = this.setOffersHandler.bind(this);
+    this.setTypesHandler = this.setTypesHandler.bind(this);
     this._formSubmitPoint = this._formSubmitPoint.bind(this);
     this._formSetPrice = this._formSetPrice.bind(this);
     this.setTypesHandler();
@@ -42,6 +36,7 @@ export default class PointEditView extends SmartView {
     this._setStartDatePicker();
     this._setEndDatePicker();
     this.setPrice();
+    this.setOffersHandler();
   }
 
   _setStartDatePicker() {
@@ -86,8 +81,8 @@ export default class PointEditView extends SmartView {
 
   createTripEditTemplate(point) {
 
-    const { type, city, price, startDate, endDate, options } = point;
-
+    const { type, city, price, startDate, endDate, options, destination } = point;
+    const destinationName = destination == null ? `` : destination.name;
 
     let cities = ``;
     CITIES.forEach(city => {
@@ -118,27 +113,41 @@ export default class PointEditView extends SmartView {
 
     let optionTemplate = ``;
 
-    const fixedOptions = allOffers[type[0].toUpperCase() + type.substring(1)].offers;
+    const fixedOptions = this._offers.find((offer) => {
+      return offer.type === type.toLowerCase();
+    }).offers;
     let totalOffersPrice = 0;
 
-    // fixedOptions.slice(0, fixedOptions.length).forEach((offer) => {
-    //   let checked = ``;
-    //   const offerName = offer.title;
-    //   const offerPrice = offer.price;
-    let offerId = 0;
-    options.forEach((option) => {
+    console.log(point.type);
 
+
+
+    // if (point.type === evt.target.sub) { }
+    // evt.target.previousElementSibling
+
+    // point.options.forEach(element => {
+    //   // if (element.title === option.title) {
+    //   //   checked = `checked`;
+    //   // }
+    //   console.log(point);
+    //   console.log(element);
+    // });
+    let offerId = 0;
+
+
+    fixedOptions.forEach((option) => {
       offerId += 1;
       let checked = ``;
-      // if (offerName === option.title) {
-      //   checked = `checked`;
-      //   totalOffersPrice += offer.price;
-      // }
 
+      point.options.forEach(element => {
+        if (element.title === option.title) {
+          checked = `checked`;
+        }
+      });
       optionTemplate += `
         <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-${offerId}" type="checkbox" name="event-offer-luggage-${offerId}" ${checked}>
-        <label class="event__offer-label" for="event-offer-luggage-${offerId}">
+        <input class="event__offer-checkbox  visually-hidden" id="${option.title}" type="checkbox" name="${option.title}" data-price="${option.price}" ${checked}>
+        <label class="event__offer-label" for="${option.title}">
         <span class="event__offer-title">${option.title}</span>
         +
         €&nbsp;<span class="event__offer-price">${option.price}</span>
@@ -146,7 +155,6 @@ export default class PointEditView extends SmartView {
         </div>
         `;
     });
-    // });
 
     return `<form class="event  event--edit" action="#" method="post">
   <header class="event__header">
@@ -163,37 +171,37 @@ export default class PointEditView extends SmartView {
 
           <div class="event__type-item">
             <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
+            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1" ${``}>Taxi</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
+            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1" ${`checked`}>Bus</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-            <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
+            <label class="event__type-label  event__type-label--train" for="event-type-train-1" ${`checked`}>Train</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
+            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1" ${`checked`}>Ship</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-            <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
+            <label class="event__type-label  event__type-label--transport" for="event-type-transport-1" ${`checked`}>Transport</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
+            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1" ${`checked`}>Drive</label>
           </div>
 
           <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked="">
-            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
+            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
+            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1" ${`checked`}>Flight</label>
           </div>
         </fieldset>
 
@@ -202,17 +210,17 @@ export default class PointEditView extends SmartView {
 
           <div class="event__type-item">
             <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
+            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1" ${`checked`}>Check-in</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
+            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1" ${`checked`}>Sightseeing</label>
           </div>
 
           <div class="event__type-item">
             <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
+            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1" ${`checked`}>Restaurant</label>
           </div>
         </fieldset>
       </div>
@@ -222,7 +230,7 @@ export default class PointEditView extends SmartView {
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type.toLowerCase()} to
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(point.destination.name)}" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destinationName)}" list="destination-list-1">
       <datalist id="destination-list-1">
       ${cities}
       </datalist>
@@ -321,17 +329,40 @@ export default class PointEditView extends SmartView {
   }
 
   _typesClickHandler(evt) {
-    evt.preventDefault();
+    // evt.preventDefault();
     const type = evt.target.previousElementSibling.value;
+    evt.target.previousElementSibling.setAttribute(`checked`, ``);
     this.updateData({
       type
-    })
+    });
   }
 
   setTypesHandler() {
     this.getElement().querySelectorAll(`.event__type-label`).forEach(type => {
       type.addEventListener(`click`, this._typesClickHandler);
     });
+  }
+
+  _offersClickHandler(evt) {
+    // evt.preventDefault();
+    // evt.target.setAttribute(`checked`, ``);
+    const offers = [];
+    const checkedOffers = this.getElement().querySelectorAll(`.event__offer-checkbox:checked`)
+    checkedOffers.forEach(element => {
+      const optionsPoint = {
+        title: element.getAttribute(`id`),
+        price: +element.getAttribute(`data-price`),
+      };
+      offers.push(optionsPoint);
+      this.updateData({ options: offers });
+    });
+  }
+
+  setOffersHandler() {
+    this.getElement().querySelectorAll(`.event__offer-checkbox`).forEach(offer => {
+      offer.addEventListener(`click`, this._offersClickHandler);
+    });
+
   }
 
   _citiesClickHandler(evt) {
@@ -380,7 +411,6 @@ export default class PointEditView extends SmartView {
   }
 
   restoreHandlers() {
-    this.setTypesHandler();
     this.setCitiesHandler();
     this._setStartDatePicker();
     this._setEndDatePicker();
@@ -389,6 +419,8 @@ export default class PointEditView extends SmartView {
     this.setfavoriteClickHandler(this._callback.favoriteClick);
     this.submitPoint(this._callback.submitPoint);
     this.setPrice(this._formSetPrice);
+    this.setOffersHandler(this._offersClickHandler);
+    this.setTypesHandler(this._typesClickHandler);
   }
 }
 

@@ -5,8 +5,18 @@ import { UserAction, UpdateType } from "../consts.js";
 import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
 
+const BLANK_POINT = {
+  type: `Flight`,
+  city: ``,
+  price: ``,
+  startDate: new Date(),
+  endDate: new Date(),
+  options: [],
+  isFavorite: false
+};
+
 export default class PointNew {
-  constructor(pointListContainer, changeData) {
+  constructor(pointListContainer, changeData, offers) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
     this._pointEditComponent = null;
@@ -15,6 +25,7 @@ export default class PointNew {
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
     this.tripPointListView = new TripPointListView();
     this.innerTripPointList = new InnerTripPointList();
+    this._offers = offers;
   }
 
   init(point, callback) {
@@ -27,7 +38,7 @@ export default class PointNew {
       this._destroyCallback();
     }
 
-    this._pointEditComponent = new PointEditView();
+    this._pointEditComponent = new PointEditView(BLANK_POINT, this._offers);
     this._pointEditComponent.submitPoint(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._destroyCallback = null;
@@ -63,7 +74,7 @@ export default class PointNew {
   }
 
   _handleFormSubmit(point) {
-    this._changeData(UserAction.ADD_POINT, UpdateType.MINOR, point);
+    this._changeData(point, UserAction.ADD_POINT, UpdateType.MINOR);
   }
 
   _handleDeleteClick() {

@@ -10,7 +10,7 @@ import PointNewPresenter from "./point-new.js";
 import LoadingView from "../view/loading.js";
 
 export default class TripPresenter {
-  constructor(siteMainContainer, pointsModel, filterModel, api) {
+  constructor(siteMainContainer, pointsModel, filterModel, api, offers) {
     this._siteMainContainer = siteMainContainer;
     this._containerView = new TripsContainerView();
     this._currentSortType = SortType.DEFAULT;
@@ -23,8 +23,9 @@ export default class TripPresenter {
     // this._pointsModel.addObserver(this._handleModelEvent);
     this._sortComponent = null;
     this._filterModel = filterModel;
+    this._offers = offers;
     // this._filterModel.addObserver(this._handleModelEvent);
-    this._pointNewPresenter = new PointNewPresenter(this._containerView, this._handleViewAction);
+    this._pointNewPresenter = new PointNewPresenter(this._containerView, this._handleViewAction, this._offers);
     this._filter = filter;
     this._isLoading = true;
     this._loadingComponent = new LoadingView();
@@ -106,7 +107,7 @@ export default class TripPresenter {
 
   _renderGroup(points, dayNumber) {
     const showDate = this._currentSortType === SortType.DEFAULT;
-    this._groupPresenter[dayNumber] = new GroupPresenter(this._containerView, this._handleViewAction, this._handleModeChange, points);
+    this._groupPresenter[dayNumber] = new GroupPresenter(this._containerView, this._handleViewAction, this._handleModeChange, points, this._offers);
     this._groupPresenter[dayNumber].init(points, dayNumber, showDate);
   }
 
@@ -137,7 +138,6 @@ export default class TripPresenter {
   _handleViewAction(update, actionType, updateType, dayNumber) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        console.log(update);
         this._groupPresenter[dayNumber].setViewState(update, State.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
@@ -152,7 +152,7 @@ export default class TripPresenter {
         this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         })
-          .catch(() => {
+          .catch((error) => {
             this._pointNewPresenter.setAborting();
           });
         break;
