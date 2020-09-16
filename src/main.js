@@ -32,11 +32,16 @@ api.getOffers().then((offers) => {
   }).catch((error) => {
     pointsModel.setPoints(UpdateType.INIT, []);
   });
+  api.getDestinations().then((destinations) => {
+    pointsModel.setPoints(UpdateType.INIT, destinations);
 
-  const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api, offers);
-  const headerPresenter = new HeaderTripPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter);
+    const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api, offers, destinations);
+    const headerPresenter = new HeaderTripPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter);
 
-  tripPresenter.init();
+    tripPresenter.init();
+  }).catch((error) => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+  });
 })
 
 // render(siteMainContainer, new StatisticsView(pointsModel), RenderPosition.AFTEREND);

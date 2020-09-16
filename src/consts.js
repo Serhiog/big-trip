@@ -1,4 +1,5 @@
-export const TYPES = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
+export const TYPES = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`];
+export const EXTRA_TYPES = [`check-in`, `sightseeing`, `restaurant`];
 export const CITIES = [`Berlin`, `Paris`, `Tallin`, `Belfast`];
 export const SortType = {
   DEFAULT: `sort-event`,

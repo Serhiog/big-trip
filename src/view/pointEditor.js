@@ -6,14 +6,15 @@ import { remove } from "../utils/render.js";
 import { CITIES } from "../consts.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import { UserAction, UpdateType } from "../consts.js";
+import { UserAction, UpdateType, TYPES, EXTRA_TYPES } from "../consts.js";
 import he from "he";
 
 export default class PointEditView extends SmartView {
-  constructor(point, offers) {
+  constructor(point, offers, destinations) {
     super();
     this._point = point;
     this._offers = offers;
+    // this._destinations = destinations;
     this._data = PointEditView.parsePointToData(point);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._typesClickHandler = this._typesClickHandler.bind(this);
@@ -82,30 +83,112 @@ export default class PointEditView extends SmartView {
   createTripEditTemplate(point) {
 
     const { type, city, price, startDate, endDate, options, destination } = point;
-    const destinationName = destination == null ? `` : destination.name;
 
-    let cities = ``;
-    CITIES.forEach(city => {
-      cities += `<option value=${city}></option>`;
-    });
+
+    // console.log(this._destinations);
+    // let destinationName = ``;
+    // if (this._destinations == null) {
+    //   destinationName = ``;
+    // } else {
+    //   this._destinations.forEach(place => {
+    //     destinationName = place.name;
+    //   });
+    // }
+
+    // let cities = ``;
+    // if (this._destinations === undefined) {
+    //   cities = ``;
+    // } else {
+    //   this._destinations.forEach(city => {
+    //     cities += `<option value=${city.name}></option>`;
+    //   });
+
+    // }
+    // let destinationName = ``;
+    // let cities = ``;
+    // console.log(this._destinations);
+    // let citiesList = ``;
+    // if (this._destinations === undefined) {
+    //   citiesList = ``;
+    // } else {
+    //   this._destinations.forEach(element => {
+    //     citiesList = `<div class="event__field-group  event__field-group--destination">
+    //     <label class="event__label  event__type-output" for="event-destination-1">
+    //       ${this._destinations.name} to
+    //      </label>
+    //      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(element.name)}" list="destination-list-1">
+    //      <datalist id="destination-list-1">
+    //         ${element.name}
+    //      </datalist>
+    //    </div>`;
+    //   });
+    // }
+
+    let citiesList = ``;
+    let cityName = ``
+    if (this._destinations === undefined) {
+      this._destinations = ``;
+      citiesList = ``;
+    } else {
+      this._destinations.forEach(place => {
+        cityName += `<option value=${place.name}></option>`;
+      });
+    }
+    citiesList = `<div class="event__field-group  event__field-group--destination">
+    <label class="event__label  event__type-output" for="event-destination-1">
+    ${this._data.type} to
+    </label>
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.destination.name}" list="destination-list-1">
+    <datalist id="destination-list-1">
+    ${cityName}
+    </datalist>
+  </div>`;
+
+
+
+    // let cities = ``;
+    // CITIES.forEach(city => {
+    //   cities += `<option value=${city}></option>`;
+    // });
+
+    // let aboutPoint = ``;
+    // if (this._destinations === undefined) {
+    //   aboutPoint = ``;
+    // } else {
+    //   this._destinations.forEach(place => {
+    //     place.pictures.forEach(pic => {
+    //       aboutPoint = `<section class="event__section  event__section--destination">
+    //   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    //   <p class="event__destination-description">${place.description}</p>
+    //   <div class="event__photos-container">
+    //     <div class="event__photos-tape">
+    //     <img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>
+    //     </div>
+    //   </div>
+    //    </section>
+    //   </section >`
+    //     });
+    //   });
+    // }
 
     let aboutPoint = ``;
-    if (point.destination === undefined) {
+    if (this._data === undefined) {
       aboutPoint = ``;
     } else {
-      const { destination: { pictures, description } } = point;
-      pictures.forEach(photoElement => {
-        aboutPoint = `<section class="event__section  event__section--destination">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${description}</p>
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-        <img class="event__photo" src="${photoElement.src}" alt="${photoElement.description}"></img>
-        </div>
-      </div>
-       </section>
-      </section >`
+      let placePhoto = ``;
+      this._data.destination.pictures.forEach(place => {
+        placePhoto += `<img class="event__photo" src="${place.src}" alt="${place.description}">`;
       });
+      aboutPoint = `<section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${this._data.destination.description}.</p>
+
+    <div class="event__photos-container">
+      <div class="event__photos-tape">
+        ${placePhoto}
+      </div>
+    </div>
+  </section>`;
     }
 
     const formatedStartDate = formatedStartEndDate(startDate) + formatTaskDueDate(startDate);
@@ -116,27 +199,8 @@ export default class PointEditView extends SmartView {
     const fixedOptions = this._offers.find((offer) => {
       return offer.type === type.toLowerCase();
     }).offers;
-    let totalOffersPrice = 0;
-
-    console.log(point.type);
-
-
-
-    // if (point.type === evt.target.sub) { }
-    // evt.target.previousElementSibling
-
-    // point.options.forEach(element => {
-    //   // if (element.title === option.title) {
-    //   //   checked = `checked`;
-    //   // }
-    //   console.log(point);
-    //   console.log(element);
-    // });
-    let offerId = 0;
-
 
     fixedOptions.forEach((option) => {
-      offerId += 1;
       let checked = ``;
 
       point.options.forEach(element => {
@@ -156,126 +220,95 @@ export default class PointEditView extends SmartView {
         `;
     });
 
+    let types = ``;
+
+    const currentType = this._data.type;
+
+    TYPES.forEach(element => {
+      let checked = ``;
+      if (currentType === element) {
+        checked = `checked`;
+      }
+      types += `<div class="event__type-item">
+                  <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
+                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element}</label>
+               </div>`;
+    });
+
+    let extraTypes = ``;
+    EXTRA_TYPES.forEach(element => {
+      let checked = ``;
+      if (currentType === element) {
+        checked = `checked`;
+      }
+      extraTypes += `<div class="event__type-item">
+                  <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
+                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element.toLowerCase()}</label>
+               </div>`;
+    });
+
     return `<form class="event  event--edit" action="#" method="post">
-  <header class="event__header">
-    <div class="event__type-wrapper">
-      <label class="event__type  event__type-btn" for="event-type-toggle-1">
-        <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+          <header class="event__header">
+            <div class="event__type-wrapper">
+              <label class="event__type  event__type-btn" for="event-type-toggle-1">
+                <span class="visually-hidden">Choose event type</span>
+                <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
       </label>
-      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
-      <div class="event__type-list">
-        <fieldset class="event__type-group">
-          <legend class="visually-hidden">Transfer</legend>
+                  <div class="event__type-list">
+                    <fieldset class="event__type-group">
+                      <legend class="visually-hidden">Transfer</legend>
+                      ${types}
+                    </fieldset>
+                    ${extraTypes}
+                    <fieldset class="event__type-group">
+                      <legend class="visually-hidden">Activity</legend>
 
-          <div class="event__type-item">
-            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1" ${``}>Taxi</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1" ${`checked`}>Bus</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-            <label class="event__type-label  event__type-label--train" for="event-type-train-1" ${`checked`}>Train</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1" ${`checked`}>Ship</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-            <label class="event__type-label  event__type-label--transport" for="event-type-transport-1" ${`checked`}>Transport</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1" ${`checked`}>Drive</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
-            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1" ${`checked`}>Flight</label>
-          </div>
-        </fieldset>
-
-        <fieldset class="event__type-group">
-          <legend class="visually-hidden">Activity</legend>
-
-          <div class="event__type-item">
-            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1" ${`checked`}>Check-in</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1" ${`checked`}>Sightseeing</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1" ${`checked`}>Restaurant</label>
-          </div>
-        </fieldset>
-      </div>
+                    </fieldset>
+                  </div>
+    </div>
+${citiesList}
+                  <div class="event__field-group  event__field-group--time">
+                    <label class="visually-hidden" for="event-start-time-1">
+                      From
+      </label>
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${formatedStartDate}>—<label class="visually-hidden" for="event-end-time-1">To</label>
+                      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${formatedEndDate}>
     </div>
 
-    <div class="event__field-group  event__field-group--destination">
-      <label class="event__label  event__type-output" for="event-destination-1">
-        ${type.toLowerCase()} to
-      </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(destinationName)}" list="destination-list-1">
-      <datalist id="destination-list-1">
-      ${cities}
-      </datalist>
-    </div>
-
-    <div class="event__field-group  event__field-group--time">
-      <label class="visually-hidden" for="event-start-time-1">
-        From
-      </label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${formatedStartDate}>—<label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${formatedEndDate}>
-    </div>
-
-    <div class="event__field-group  event__field-group--price">
-      <label class="event__label" for="event-price-1">
-        <span class="visually-hidden">Price</span>
+                      <div class="event__field-group  event__field-group--price">
+                        <label class="event__label" for="event-price-1">
+                          <span class="visually-hidden">Price</span>
         €
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
     </div>
 
-    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Delete</button>
+                        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                        <button class="event__reset-btn" type="reset">Delete</button>
 
-    <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${point.isFavorite ? `checked` : ``}>
-    <label class="event__favorite-btn" for="event-favorite-1">
-      <span class="visually-hidden">Add to favorite</span>
-      <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-        <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
-      </svg>
-    </label>
+                        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${point.isFavorite ? `checked` : ``}>
+                          <label class="event__favorite-btn" for="event-favorite-1">
+                            <span class="visually-hidden">Add to favorite</span>
+                            <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+                              <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
+                            </svg>
+                          </label>
 
-    <button class="event__rollup-btn" type="button">
-      <span class="visually-hidden">Open event</span>
-    </button>
+                          <button class="event__rollup-btn" type="button">
+                            <span class="visually-hidden">Open event</span>
+                          </button>
   </header>
 
-  <section class="event__details">
-    <section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+                        <section class="event__details">
+                          <section class="event__section  event__section--offers">
+                            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-      <div class="event__available-offers">
-  ${optionTemplate}
-      </div>
-    </section>
+                            <div class="event__available-offers">
+                              ${optionTemplate}
+                            </div>
+                          </section>
     ${aboutPoint}
   </form>`;
   }

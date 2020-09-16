@@ -10,7 +10,7 @@ import PointNewPresenter from "./point-new.js";
 import LoadingView from "../view/loading.js";
 
 export default class TripPresenter {
-  constructor(siteMainContainer, pointsModel, filterModel, api, offers) {
+  constructor(siteMainContainer, pointsModel, filterModel, api, offers, destinations) {
     this._siteMainContainer = siteMainContainer;
     this._containerView = new TripsContainerView();
     this._currentSortType = SortType.DEFAULT;
@@ -31,6 +31,7 @@ export default class TripPresenter {
     this._loadingComponent = new LoadingView();
     this._api = api;
     this._prevNoPointsComponent = null;
+    this._destinations = destinations;
   }
 
   init() {
@@ -107,7 +108,7 @@ export default class TripPresenter {
 
   _renderGroup(points, dayNumber) {
     const showDate = this._currentSortType === SortType.DEFAULT;
-    this._groupPresenter[dayNumber] = new GroupPresenter(this._containerView, this._handleViewAction, this._handleModeChange, points, this._offers);
+    this._groupPresenter[dayNumber] = new GroupPresenter(this._containerView, this._handleViewAction, this._handleModeChange, points, this._offers, this._destinations);
     this._groupPresenter[dayNumber].init(points, dayNumber, showDate);
   }
 
@@ -134,7 +135,7 @@ export default class TripPresenter {
     return groups;
   }
 
-   // добавил dayNumber, чтобы находить нужную группу
+  // добавил dayNumber, чтобы находить нужную группу
   _handleViewAction(update, actionType, updateType, dayNumber) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
