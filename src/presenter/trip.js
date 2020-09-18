@@ -25,13 +25,13 @@ export default class TripPresenter {
     this._filterModel = filterModel;
     this._offers = offers;
     // this._filterModel.addObserver(this._handleModelEvent);
-    this._pointNewPresenter = new PointNewPresenter(this._containerView, this._handleViewAction, this._offers);
+    this._destinations = destinations;
+    this._pointNewPresenter = new PointNewPresenter(this._containerView, this._handleViewAction, this._offers, this._destinations);
     this._filter = filter;
     this._isLoading = true;
     this._loadingComponent = new LoadingView();
     this._api = api;
     this._prevNoPointsComponent = null;
-    this._destinations = destinations;
   }
 
   init() {
@@ -139,12 +139,14 @@ export default class TripPresenter {
   _handleViewAction(update, actionType, updateType, dayNumber) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._groupPresenter[dayNumber].setViewState(update, State.SAVING);
+        this._groupPresenter[dayNumber].setViewState(update, State.SAVING, `Saving`);
         this._api.updatePoint(update)
           .then((response) => {
+            // this._groupPresenter.setSaveBtnName(`Save`);
             this._pointsModel.updatePoint(updateType, response);
           })
           .catch((error) => {
+            // this._groupPresenter.setSaveBtnName(`Save`);
             this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
           });
         break;

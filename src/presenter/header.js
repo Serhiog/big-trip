@@ -3,15 +3,17 @@ import MajorTripCostView from "../view/majorTripCost.js";
 import TripListToggleView from "../view/toggleViewListTrip.js";
 import TripFilterView from "../view/mainTripFilter.js";
 import NewEventBtnTemplate from "../view/newEventBtn.js";
+import StatisticsView from '../view/statistics';
 import { render, RenderPosition, replace, remove } from "../utils/render.js";
 import { FilterType, UpdateType, MenuItem } from "../consts.js";
 import { filter } from "../utils/filter.js";
 
 export default class HeaderPresenter {
-  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, filterModel, pointsModel, tripPresenter) {
+  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
 
     this._siteHeaderMainTripContainer = siteHeaderMainTripContainer;
     this._siteHeaderFilterTrip = siteHeaderFilterTrip;
+    this._siteMainContainer = siteMainContainer;
     this._filterModel = filterModel;
     this._pointsModel = pointsModel;
     this._currentFilter = null;
@@ -26,6 +28,7 @@ export default class HeaderPresenter {
     this._prevMajorTripCostViewComponent = null;
     this._prevSiteMenuComponent = null;
     this._prevNewEventBtnComponent = null;
+    this._statisticsComponent = null;
   }
 
   init() {
@@ -65,6 +68,7 @@ export default class HeaderPresenter {
   }
 
   _handleSiteMenuClick(menuItem) {
+
     switch (menuItem) {
       case MenuItem.ADD_NEW_EVENT:
         this._tripPresenter.destroy();
@@ -74,12 +78,15 @@ export default class HeaderPresenter {
         // this._siteMenuComponent.getElement().querySelector(`[value=${MenuItem.ADD_NEW_EVENT}]`).disabled = true;
         break;
       case MenuItem.TABLE:
+        remove(this._statisticsComponent);
         this._tripPresenter.destroy();
         this._tripPresenter.init();
 
         break;
       case MenuItem.STATISTICS:
         this._tripPresenter.destroy();
+        this._statisticsComponent = new StatisticsView();
+        render(this._siteMainContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
         break;
     }
 

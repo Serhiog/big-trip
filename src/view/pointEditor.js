@@ -1,6 +1,6 @@
 
 import { formatTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
-import { allDestinations } from "../mock/point.js";
+// import { allDestinations } from "../mock/point.js";
 import SmartView from "./smart.js";
 import { remove } from "../utils/render.js";
 import { CITIES } from "../consts.js";
@@ -14,7 +14,7 @@ export default class PointEditView extends SmartView {
     super();
     this._point = point;
     this._offers = offers;
-    // this._destinations = destinations;
+    this._destinations = destinations;
     this._data = PointEditView.parsePointToData(point);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._typesClickHandler = this._typesClickHandler.bind(this);
@@ -83,96 +83,28 @@ export default class PointEditView extends SmartView {
   createTripEditTemplate(point) {
 
     const { type, city, price, startDate, endDate, options, destination } = point;
-
-
-    // console.log(this._destinations);
-    // let destinationName = ``;
-    // if (this._destinations == null) {
-    //   destinationName = ``;
-    // } else {
-    //   this._destinations.forEach(place => {
-    //     destinationName = place.name;
-    //   });
-    // }
-
-    // let cities = ``;
-    // if (this._destinations === undefined) {
-    //   cities = ``;
-    // } else {
-    //   this._destinations.forEach(city => {
-    //     cities += `<option value=${city.name}></option>`;
-    //   });
-
-    // }
-    // let destinationName = ``;
-    // let cities = ``;
-    // console.log(this._destinations);
-    // let citiesList = ``;
-    // if (this._destinations === undefined) {
-    //   citiesList = ``;
-    // } else {
-    //   this._destinations.forEach(element => {
-    //     citiesList = `<div class="event__field-group  event__field-group--destination">
-    //     <label class="event__label  event__type-output" for="event-destination-1">
-    //       ${this._destinations.name} to
-    //      </label>
-    //      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${he.encode(element.name)}" list="destination-list-1">
-    //      <datalist id="destination-list-1">
-    //         ${element.name}
-    //      </datalist>
-    //    </div>`;
-    //   });
-    // }
-
     let citiesList = ``;
-    let cityName = ``
-    if (this._destinations === undefined) {
-      this._destinations = ``;
-      citiesList = ``;
+    let cityName = ``;
+    if (this._destinations == null) {
+      cityName = ``;
     } else {
       this._destinations.forEach(place => {
         cityName += `<option value=${place.name}></option>`;
       });
     }
+
     citiesList = `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
     ${this._data.type} to
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.destination.name}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.city}" list="destination-list-1">
     <datalist id="destination-list-1">
     ${cityName}
     </datalist>
   </div>`;
 
-
-
-    // let cities = ``;
-    // CITIES.forEach(city => {
-    //   cities += `<option value=${city}></option>`;
-    // });
-
-    // let aboutPoint = ``;
-    // if (this._destinations === undefined) {
-    //   aboutPoint = ``;
-    // } else {
-    //   this._destinations.forEach(place => {
-    //     place.pictures.forEach(pic => {
-    //       aboutPoint = `<section class="event__section  event__section--destination">
-    //   <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    //   <p class="event__destination-description">${place.description}</p>
-    //   <div class="event__photos-container">
-    //     <div class="event__photos-tape">
-    //     <img class="event__photo" src="${pic.src}" alt="${pic.description}"></img>
-    //     </div>
-    //   </div>
-    //    </section>
-    //   </section >`
-    //     });
-    //   });
-    // }
-
     let aboutPoint = ``;
-    if (this._data === undefined) {
+    if (this._data == null) {
       aboutPoint = ``;
     } else {
       let placePhoto = ``;
@@ -180,8 +112,8 @@ export default class PointEditView extends SmartView {
         placePhoto += `<img class="event__photo" src="${place.src}" alt="${place.description}">`;
       });
       aboutPoint = `<section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-    <p class="event__destination-description">${this._data.destination.description}.</p>
+    <h3 class="event__section-title  event__section-title--destination">${this._data.city === `` ? `` : `Destination`}</h3>
+    <p class="event__destination-description">${this._data.destination.description}</p>
 
     <div class="event__photos-container">
       <div class="event__photos-tape">
@@ -246,6 +178,7 @@ export default class PointEditView extends SmartView {
                   <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element.toLowerCase()}</label>
                </div>`;
     });
+
 
     return `<form class="event  event--edit" action="#" method="post">
           <header class="event__header">
@@ -400,10 +333,17 @@ ${citiesList}
 
   _citiesClickHandler(evt) {
     evt.preventDefault();
-    const city = evt.target.value;
+    if (!evt.target.value) {
+      return;
+    }
+    let city = evt.target.value;
+    const selectedCity = this._destinations.filter(function (e) {
+      return e.name === city;
+    });
+
     this.updateData({
-      destination: allDestinations[city],
-      city
+      city,
+      destination: selectedCity[0],
     });
   }
 
@@ -441,6 +381,10 @@ ${citiesList}
 
   setPrice() {
     this.getElement().querySelector(`.event__input--price`).addEventListener(`change`, this._formSetPrice);
+  }
+
+  changeNameSaveBtn(newName) {
+    this.getElement().querySelector(`.event__save-btn`).textContent = newName;
   }
 
   restoreHandlers() {

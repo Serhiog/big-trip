@@ -8,15 +8,20 @@ import InnerTripPointList from "../view/innerPointsList.js";
 const BLANK_POINT = {
   type: `Flight`,
   city: ``,
-  price: ``,
+  price: +``,
   startDate: new Date(),
   endDate: new Date(),
   options: [],
-  isFavorite: false
+  isFavorite: false,
+  destination: {
+    name: ` `,
+    pictures: [],
+    description: ` `
+  }
 };
 
 export default class PointNew {
-  constructor(pointListContainer, changeData, offers) {
+  constructor(pointListContainer, changeData, offers, destinations) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
     this._pointEditComponent = null;
@@ -26,6 +31,7 @@ export default class PointNew {
     this.tripPointListView = new TripPointListView();
     this.innerTripPointList = new InnerTripPointList();
     this._offers = offers;
+    this._destinations = destinations;
   }
 
   init(point, callback) {
@@ -38,7 +44,7 @@ export default class PointNew {
       this._destroyCallback();
     }
 
-    this._pointEditComponent = new PointEditView(BLANK_POINT, this._offers);
+    this._pointEditComponent = new PointEditView(BLANK_POINT, this._offers, this._destinations);
     this._pointEditComponent.submitPoint(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
     this._destroyCallback = null;

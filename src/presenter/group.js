@@ -57,8 +57,12 @@ export default class GroupPresenter {
   }
 
   // груп презентер находит презентер нужной точки и вывзывает у него setViewState
-  setViewState(point, state) {
-    this._pointPresenter[point.id].setViewState(state);
+  setViewState(point, state, newBtnSaveName) {
+    this._pointPresenter[point.id].setViewState(state, newBtnSaveName);
+  }
+
+  setSaveBtnName(newBtnName) {
+    return newBtnName;
   }
 
 }
