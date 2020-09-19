@@ -2,19 +2,33 @@
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Abstract from "./abstract.js";
+import {
+  countCompletedTaskInDateRange,
+  makeItemsUniq,
+  countPointsByType,
+  countPointsByPrice,
+  colorToHex,
+  countTasksInDateRange,
+  parseChartDate,
+  getDatesInRange
+} from "../utils/statistic.js";
 
-// // Рассчитаем высоту канваса в зависимости от того, сколько данных в него будет передаваться
 const BAR_HEIGHT = 55;
 
 const renderTransportChart = (transportCtx, points) => {
-  transportCtx.height = BAR_HEIGHT * 4;
+
+  const pointTypes = points.map((point) => point.type.toUpperCase());
+  const uniqTypes = makeItemsUniq(pointTypes);
+  const pointByTypeCount = uniqTypes.map((point) => countPointsByType(points, point))
+
+  transportCtx.height = BAR_HEIGHT * uniqTypes.length - 1;
   const transportChart = new Chart(transportCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`???? DRIVE`, `🚌 RIDE`, `✈️ FLY`, `????️ SAIL`],
+      labels: uniqTypes,
       datasets: [{
-        data: [4, 3, 2, 1],
+        data: pointByTypeCount,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -27,8 +41,8 @@ const renderTransportChart = (transportCtx, points) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `${val}x`
         }
       },
@@ -75,21 +89,26 @@ const renderTransportChart = (transportCtx, points) => {
 };
 
 const renderMoneyChart = (moneyCtx, points) => {
-  // points ---> groups
-  /*
-  const groups = {
-    fly: 400,
-    stay: 300
-  }
-  Object.key(groups) -> labels
-  Object.values(groups) -> data
-  */
-  // moneyCtx.height = BAR_HEIGHT * labels.length;
+  const pointPrices = points.map((point) => point.price); // - все цены
+  console.log(points);
+  console.log(`все цены: ` + pointPrices);
+  const pointTypes = points.map((point) => point.type.toUpperCase()); // все типы
+  console.log(`все типы: ` + pointTypes);
+  const uniqTypes = makeItemsUniq(pointTypes); // уникальные типы
+  console.log(`уникальные типы: ` + uniqTypes);
+
+  const pointByPriceSum = uniqTypes.map((point) => countPointsByPrice(points, point));
+  // console.log(pointByPriceSum);
+  pointByPriceSum.forEach(element => {
+    console.log(element);
+  });
+
+  moneyCtx.height = BAR_HEIGHT * pointByPriceSum.length - 1;
   const moneyChart = new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`✈️ FLY`, `???? STAY`, `???? DRIVE`, `????️ LOOK`, `???? EAT`, `???? RIDE`],
+      labels: uniqTypes,
       datasets: [{
         data: [400, 300, 200, 160, 150, 100],
         backgroundColor: `#ffffff`,
@@ -238,28 +257,23 @@ const createStatisticsTemplate = () => {
 };
 
 export default class Statistics extends Abstract {
-  constructor(pointsModel) {
+  constructor(points) {
     super();
-    this._pointsModel = pointsModel;
-    this._renderCharts();
+    this._renderCharts(points);
   }
 
   getTemplate() {
-
     return createStatisticsTemplate();
   }
 
-  _renderCharts() {
-    const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
+  _renderCharts(points) {
     const transportCtx = this.getElement().querySelector(`.statistics__chart--transport`);
+    const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
     const timeSpendCtx = this.getElement().querySelector(`.statistics__chart--time`);
 
-
-
-
-    // this._pointsModel.getPoints()
-    renderMoneyChart(moneyCtx, );
-    renderTransportChart(transportCtx);
-    renderTimeChart(timeSpendCtx);
+    renderTransportChart(transportCtx, points);
+    renderMoneyChart(moneyCtx, points);
+    renderTimeChart(timeSpendCtx, points);
   }
+
 }

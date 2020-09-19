@@ -88,7 +88,6 @@ export default class PointPresenter {
     }
   }
 
-  // вернул setViewState обратно, т.к. оно рабоатет с _pointEditComponent
   setViewState(state, newBtnSaveName) {
     const resetFormState = () => {
       this._pointEditComponent.updateData({
@@ -103,7 +102,7 @@ export default class PointPresenter {
         this._pointEditComponent.updateData({
           // isDisabled: true,
           // isSaving: true
-          isFavorite: true
+          // isFavorite: true
         });
         this._pointEditComponent.changeNameSaveBtn(newBtnSaveName)
         break;

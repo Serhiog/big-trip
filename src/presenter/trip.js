@@ -8,6 +8,8 @@ import NoPoints from "../view/no-Points.js";
 import { filter } from "../utils/filter.js";
 import PointNewPresenter from "./point-new.js";
 import LoadingView from "../view/loading.js";
+import HeaderPresenter from "./header.js";
+import StatisticsView from "../view/statistics.js";
 
 export default class TripPresenter {
   constructor(siteMainContainer, pointsModel, filterModel, api, offers, destinations) {
@@ -32,6 +34,8 @@ export default class TripPresenter {
     this._loadingComponent = new LoadingView();
     this._api = api;
     this._prevNoPointsComponent = null;
+    this.sortedByDefaultPoints = [];
+    this.statistic = null;
   }
 
   init() {
@@ -90,6 +94,7 @@ export default class TripPresenter {
     for (let [key, points] of groups.entries()) {
       this._renderGroup(points, dayNumber);
       dayNumber++;
+      this.sortedByDefaultPoints.push(points);
     }
   }
 
@@ -142,11 +147,9 @@ export default class TripPresenter {
         this._groupPresenter[dayNumber].setViewState(update, State.SAVING, `Saving`);
         this._api.updatePoint(update)
           .then((response) => {
-            // this._groupPresenter.setSaveBtnName(`Save`);
             this._pointsModel.updatePoint(updateType, response);
           })
           .catch((error) => {
-            // this._groupPresenter.setSaveBtnName(`Save`);
             this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
           });
         break;
@@ -221,4 +224,10 @@ export default class TripPresenter {
     this._renderGroups();
   }
 
+  initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
+    const headerPresenter = new HeaderPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter, this.sortedByDefaultPoints);
+  }
+
+  initStats() {
+  }
 }

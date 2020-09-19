@@ -92,10 +92,11 @@ export default class PointEditView extends SmartView {
         cityName += `<option value=${place.name}></option>`;
       });
     }
+    const typeTrip = this._data.type[0].toUpperCase() + this._data.type.substring(1)
 
     citiesList = `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
-    ${this._data.type} to
+    ${typeTrip} to
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.city}" list="destination-list-1">
     <datalist id="destination-list-1">
@@ -163,7 +164,7 @@ export default class PointEditView extends SmartView {
       }
       types += `<div class="event__type-item">
                   <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
-                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element}</label>
+                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element[0].toUpperCase() + element.substring(1)}</label>
                </div>`;
     });
 
@@ -175,7 +176,7 @@ export default class PointEditView extends SmartView {
       }
       extraTypes += `<div class="event__type-item">
                   <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
-                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element.toLowerCase()}</label>
+                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element[0].toUpperCase() + element.substring(1)}</label>
                </div>`;
     });
 
@@ -194,10 +195,10 @@ export default class PointEditView extends SmartView {
                       <legend class="visually-hidden">Transfer</legend>
                       ${types}
                     </fieldset>
-                    ${extraTypes}
+
                     <fieldset class="event__type-group">
                       <legend class="visually-hidden">Activity</legend>
-
+                      ${extraTypes}
                     </fieldset>
                   </div>
     </div>

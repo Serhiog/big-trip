@@ -4,7 +4,6 @@ import InnerTripPointList from "../view/innerPointsList.js";
 import PointPresenter from './point.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
 
-
 export default class GroupPresenter {
   constructor(container, changeData, modeChange, points, offers, destinations) {
     this._container = container;

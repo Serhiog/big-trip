@@ -9,8 +9,7 @@ import { FilterType, UpdateType, MenuItem } from "../consts.js";
 import { filter } from "../utils/filter.js";
 
 export default class HeaderPresenter {
-  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
-
+  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter, sortedByDefaultPoints) {
     this._siteHeaderMainTripContainer = siteHeaderMainTripContainer;
     this._siteHeaderFilterTrip = siteHeaderFilterTrip;
     this._siteMainContainer = siteMainContainer;
@@ -29,11 +28,12 @@ export default class HeaderPresenter {
     this._prevSiteMenuComponent = null;
     this._prevNewEventBtnComponent = null;
     this._statisticsComponent = null;
+    this.sortedByDefaultPoints = sortedByDefaultPoints;
   }
 
   init() {
     const majorTripRouteView = this._prevMajorTripRouteViewComponent;
-    this._prevMajorTripRouteViewComponent = new MajorTripRouteView(this._pointsModel.getPoints());
+    this._prevMajorTripRouteViewComponent = new MajorTripRouteView(this._pointsModel.getPoints(), this.sortedByDefaultPoints);
     const majorTripCostView = this._prevMajorTripCostViewComponent;
     this._prevMajorTripCostViewComponent = new MajorTripCostView(this._pointsModel.getPoints());
 
@@ -60,13 +60,6 @@ export default class HeaderPresenter {
     this.initStartFilter();
   }
 
-  _handlePointNewFormClose() {
-    // this._siteMenuComponent.getElement().querySelector(`[id=${MenuItem.TABLE}]`).disabled = false;
-    // this._siteMenuComponent.setMenuItem(MenuItem.TABLE);
-    // this._newEventBtn.getElement().querySelector(`[id=${MenuItem.ADD_NEW_EVENT}]`).disabled = false;
-    // this._newEventBtn.setClickBtn(MenuItem.ADD_NEW_EVENT);
-  }
-
   _handleSiteMenuClick(menuItem) {
 
     switch (menuItem) {
@@ -84,14 +77,24 @@ export default class HeaderPresenter {
 
         break;
       case MenuItem.STATISTICS:
+        if (this._statisticsComponent !== null) {
+          remove(this._statisticsComponent);
+        }
         this._tripPresenter.destroy();
-        this._statisticsComponent = new StatisticsView();
+        this._statisticsComponent = new StatisticsView(this._pointsModel.getPoints());
         render(this._siteMainContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
         break;
     }
 
     this._prevSiteMenuComponent.setMenuClickHandler(this._handleSiteMenuClick);
     this._prevNewEventBtnComponent.setNewEventBtnClickHandler(this._handleSiteMenuClick);
+  }
+
+  _handlePointNewFormClose() {
+    // this._siteMenuComponent.getElement().querySelector(`[id=${MenuItem.TABLE}]`).disabled = false;
+    // this._siteMenuComponent.setMenuItem(MenuItem.TABLE);
+    // this._newEventBtn.getElement().querySelector(`[id=${MenuItem.ADD_NEW_EVENT}]`).disabled = false;
+    // this._newEventBtn.setClickBtn(MenuItem.ADD_NEW_EVENT);
   }
 
   initStartFilter() {

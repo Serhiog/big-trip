@@ -4,7 +4,6 @@ import HeaderTripPresenter from "./presenter/header.js";
 import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
-import StatisticsView from "./view/statistics.js";
 import { render, RenderPosition } from "./utils/render.js";
 import Api from "./api.js";
 import { UpdateType } from "./consts.js";
@@ -22,9 +21,9 @@ const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-ma
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
+
 const filterModel = new FilterModel();
 const pointsModel = new PointsModel();
-// pointsModel.setPoints(points);
 
 api.getDestinations().then((destinations) => {
   api.getOffers().then((offers) => {
@@ -33,13 +32,8 @@ api.getDestinations().then((destinations) => {
     }).catch((error) => {
       pointsModel.setPoints(UpdateType.INIT, []);
     });
-
-    const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api, offers, destinations);
-    const headerPresenter = new HeaderTripPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
-
+    const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api, offers, destinations, siteHeaderMainTripContainer, siteHeaderFilterTrip);
     tripPresenter.init();
+    tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
   });
 });
-
-// render(siteMainContainer, new StatisticsView(pointsModel), RenderPosition.AFTEREND);
-// headerPresenter.init();

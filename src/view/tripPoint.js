@@ -13,7 +13,9 @@ export default class PointView extends Abstract {
 
   createTripPointTemplate(point) {
     const MAX_COUNT_OPTIONS = 3;
-    let { type, startDate, endDate, id } = point;
+    let { startDate, endDate, id } = point;
+    let { type } = point
+    type = type[0].toUpperCase() + type.substring(1)
     let city = point.city;
     let durMiliseconds = endDate.getTime() - startDate.getTime();
     let duration = msToTime(durMiliseconds);
