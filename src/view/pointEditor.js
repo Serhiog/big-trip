@@ -104,6 +104,7 @@ export default class PointEditView extends SmartView {
     </datalist>
   </div>`;
 
+
     let aboutPoint = ``;
     if (this._data == null) {
       aboutPoint = ``;
@@ -113,15 +114,15 @@ export default class PointEditView extends SmartView {
         placePhoto += `<img class="event__photo" src="${place.src}" alt="${place.description}">`;
       });
       aboutPoint = `<section class="event__section  event__section--destination">
-    <h3 class="event__section-title  event__section-title--destination">${this._data.city === `` ? `` : `Destination`}</h3>
-    <p class="event__destination-description">${this._data.destination.description}</p>
+          <h3 class="event__section-title  event__section-title--destination">${this._data.city === `` ? `` : `Destination`}</h3>
+          <p class="event__destination-description">${this._data.destination.description}</p>
 
-    <div class="event__photos-container">
-      <div class="event__photos-tape">
-        ${placePhoto}
-      </div>
-    </div>
-  </section>`;
+          <div class="event__photos-container">
+            <div class="event__photos-tape">
+              ${placePhoto}
+            </div>
+          </div>
+        </section>`;
     }
 
     const formatedStartDate = formatedStartEndDate(startDate) + formatTaskDueDate(startDate);
@@ -143,15 +144,30 @@ export default class PointEditView extends SmartView {
       });
       optionTemplate += `
         <div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="${option.title}" type="checkbox" name="${option.title}" data-price="${option.price}" ${checked}>
-        <label class="event__offer-label" for="${option.title}">
-        <span class="event__offer-title">${option.title}</span>
+          <input class="event__offer-checkbox  visually-hidden" id="${option.title}" type="checkbox" name="${option.title}" data-price="${option.price}" ${checked}>
+            <label class="event__offer-label" for="${option.title}">
+              <span class="event__offer-title">${option.title}</span>
         +
         €&nbsp;<span class="event__offer-price">${option.price}</span>
-        </label>
+            </label>
         </div>
         `;
     });
+
+    let optionsContainer = ``;
+
+    if (!this._data.options.length) {
+      optionsContainer = ``;
+    } else {
+      optionsContainer = `<section class="event__details">
+        <section class="event__section  event__section--offers">
+          <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+
+          <div class="event__available-offers">
+            ${optionTemplate}
+          </div>
+        </section>`;
+    }
 
     let types = ``;
 
@@ -163,8 +179,8 @@ export default class PointEditView extends SmartView {
         checked = `checked`;
       }
       types += `<div class="event__type-item">
-                  <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
-                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element[0].toUpperCase() + element.substring(1)}</label>
+            <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
+              <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element[0].toUpperCase() + element.substring(1)}</label>
                </div>`;
     });
 
@@ -175,74 +191,67 @@ export default class PointEditView extends SmartView {
         checked = `checked`;
       }
       extraTypes += `<div class="event__type-item">
-                  <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
-                  <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element[0].toUpperCase() + element.substring(1)}</label>
+              <input id="event-type-${element.toLowerCase()}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${element.toLowerCase()}" ${checked}>
+                <label class="event__type-label  event__type-label--${element.toLowerCase()}" for="event-type-${element.toLowerCase()}-1" ${``}>${element[0].toUpperCase() + element.substring(1)}</label>
                </div>`;
     });
 
 
     return `<form class="event  event--edit" action="#" method="post">
-          <header class="event__header">
-            <div class="event__type-wrapper">
-              <label class="event__type  event__type-btn" for="event-type-toggle-1">
-                <span class="visually-hidden">Choose event type</span>
-                <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
+                <header class="event__header">
+                  <div class="event__type-wrapper">
+                    <label class="event__type  event__type-btn" for="event-type-toggle-1">
+                      <span class="visually-hidden">Choose event type</span>
+                      <img class="event__type-icon" width="17" height="17" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
       </label>
-                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+                      <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
-                  <div class="event__type-list">
-                    <fieldset class="event__type-group">
-                      <legend class="visually-hidden">Transfer</legend>
+                        <div class="event__type-list">
+                          <fieldset class="event__type-group">
+                            <legend class="visually-hidden">Transfer</legend>
                       ${types}
-                    </fieldset>
+                          </fieldset>
 
-                    <fieldset class="event__type-group">
-                      <legend class="visually-hidden">Activity</legend>
+                          <fieldset class="event__type-group">
+                            <legend class="visually-hidden">Activity</legend>
                       ${extraTypes}
-                    </fieldset>
-                  </div>
+                          </fieldset>
+                        </div>
     </div>
 ${citiesList}
-                  <div class="event__field-group  event__field-group--time">
-                    <label class="visually-hidden" for="event-start-time-1">
-                      From
+                      <div class="event__field-group  event__field-group--time">
+                        <label class="visually-hidden" for="event-start-time-1">
+                          From
       </label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${formatedStartDate}>—<label class="visually-hidden" for="event-end-time-1">To</label>
-                      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${formatedEndDate}>
+                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${formatedStartDate}>—<label class="visually-hidden" for="event-end-time-1">To</label>
+                          <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${formatedEndDate}>
     </div>
 
-                      <div class="event__field-group  event__field-group--price">
-                        <label class="event__label" for="event-price-1">
-                          <span class="visually-hidden">Price</span>
+                          <div class="event__field-group  event__field-group--price">
+                            <label class="event__label" for="event-price-1">
+                              <span class="visually-hidden">Price</span>
         €
       </label>
-                        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
     </div>
 
-                        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                        <button class="event__reset-btn" type="reset">Delete</button>
+                            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                            <button class="event__reset-btn" type="reset">Delete</button>
 
-                        <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${point.isFavorite ? `checked` : ``}>
-                          <label class="event__favorite-btn" for="event-favorite-1">
-                            <span class="visually-hidden">Add to favorite</span>
-                            <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-                              <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
-                            </svg>
-                          </label>
+                            <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${point.isFavorite ? `checked` : ``}>
+                              <label class="event__favorite-btn" for="event-favorite-1">
+                                <span class="visually-hidden">Add to favorite</span>
+                                <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+                                  <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
+                                </svg>
+                              </label>
 
-                          <button class="event__rollup-btn" type="button">
-                            <span class="visually-hidden">Open event</span>
-                          </button>
+                              <button class="event__rollup-btn" type="button">
+                                <span class="visually-hidden">Open event</span>
+                              </button>
   </header>
 
-                        <section class="event__details">
-                          <section class="event__section  event__section--offers">
-                            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-                            <div class="event__available-offers">
-                              ${optionTemplate}
-                            </div>
-                          </section>
+    ${optionsContainer}
     ${aboutPoint}
   </form>`;
   }
@@ -338,13 +347,11 @@ ${citiesList}
       return;
     }
     let city = evt.target.value;
-    const selectedCity = this._destinations.filter(function (e) {
-      return e.name === city;
-    });
+    const selectedCity = this._destinations.find(element => element.name === city);
 
     this.updateData({
       city,
-      destination: selectedCity[0],
+      destination: selectedCity,
     });
   }
 

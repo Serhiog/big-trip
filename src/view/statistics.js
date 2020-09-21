@@ -2,11 +2,15 @@
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Abstract from "./abstract.js";
+import { TYPES } from "../consts.js";
+import { msToTime4Stats } from "../utils/dates.js";
+
 import {
   countCompletedTaskInDateRange,
   makeItemsUniq,
   countPointsByType,
   countPointsByPrice,
+  eventTypeToEmojiMap,
   colorToHex,
   countTasksInDateRange,
   parseChartDate,
@@ -17,18 +21,30 @@ const BAR_HEIGHT = 55;
 
 const renderTransportChart = (transportCtx, points) => {
 
-  const pointTypes = points.map((point) => point.type.toUpperCase());
-  const uniqTypes = makeItemsUniq(pointTypes);
-  const pointByTypeCount = uniqTypes.map((point) => countPointsByType(points, point))
+  const pointTypes = points.filter((point) => TYPES.includes(point.type)).map((point) => point.type.toUpperCase());
+  const uniqPointTypes = makeItemsUniq(pointTypes);
 
-  transportCtx.height = BAR_HEIGHT * uniqTypes.length - 1;
+
+  let typesAndIcons = [];
+  uniqPointTypes.forEach(element => {
+    eventTypeToEmojiMap.find(function (item) {
+      if (item.id === element) {
+        typesAndIcons.push(item.icon + ` ` + item.id);
+      }
+    });
+  });
+
+
+  const valueOfPointType = uniqPointTypes.map((point) => countPointsByType(points, point))
+
+  transportCtx.height = BAR_HEIGHT * uniqPointTypes.length - 1;
   const transportChart = new Chart(transportCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: uniqTypes,
+      labels: typesAndIcons,
       datasets: [{
-        data: pointByTypeCount,
+        data: valueOfPointType,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -89,28 +105,46 @@ const renderTransportChart = (transportCtx, points) => {
 };
 
 const renderMoneyChart = (moneyCtx, points) => {
-  const pointPrices = points.map((point) => point.price); // - все цены
-  console.log(points);
-  console.log(`все цены: ` + pointPrices);
-  const pointTypes = points.map((point) => point.type.toUpperCase()); // все типы
-  console.log(`все типы: ` + pointTypes);
-  const uniqTypes = makeItemsUniq(pointTypes); // уникальные типы
-  console.log(`уникальные типы: ` + uniqTypes);
 
-  const pointByPriceSum = uniqTypes.map((point) => countPointsByPrice(points, point));
-  // console.log(pointByPriceSum);
-  pointByPriceSum.forEach(element => {
-    console.log(element);
+  const pointTypes = points.map((point) => point.type.toUpperCase());
+
+  const composePoints = (points) => {
+    return points.reduce((info, point, index) => {
+      if (!info.type.includes(point.type)) {
+        info.type.push(point.type);
+        info.sumPrice.push(point.price)
+      } else {
+        info.sumPrice[info.type.indexOf(point.type)] += point.price;
+      }
+      return info;
+    },
+      {
+        type: [],
+        sumPrice: [],
+      }
+    );
+  };
+
+  const uniqPointTypes = makeItemsUniq(pointTypes);
+
+  let typesAndIcons = [];
+  uniqPointTypes.forEach(element => {
+    eventTypeToEmojiMap.find(function (item) {
+      if (item.id === element) {
+        typesAndIcons.push(item.icon + ` ` + item.id);
+      }
+    });
   });
 
-  moneyCtx.height = BAR_HEIGHT * pointByPriceSum.length - 1;
+
+  moneyCtx.height = BAR_HEIGHT * uniqPointTypes.length;
   const moneyChart = new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: uniqTypes,
+      labels: typesAndIcons,
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],
+        data: composePoints(points).sumPrice,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -171,14 +205,44 @@ const renderMoneyChart = (moneyCtx, points) => {
 };
 
 const renderTimeChart = (timeCtx, points) => {
-  timeCtx.height = BAR_HEIGHT * 6;
+  const pointTypes = points.map((point) => point.type.toUpperCase());
+  const uniqPointTypes = makeItemsUniq(pointTypes);
+  const typesAndIcons = [];
+  uniqPointTypes.forEach(element => {
+    eventTypeToEmojiMap.find(function (item) {
+      if (item.id === element) {
+        typesAndIcons.push(item.icon + ` ` + item.id);
+      }
+    });
+  });
+
+  const composePoints = (points) => {
+    return points.reduce((info, point, index) => {
+      if (!info.type.includes(point.type)) {
+        info.type.push(point.type);
+        info.durTotalTime.push(
+          point.endDate.getTime() - point.startDate.getTime()
+        );
+      } else {
+        info.durTotalTime[info.type.indexOf(point.type)] += (point.endDate.getTime() - point.startDate.getTime());
+      }
+      return info;
+    },
+      {
+        type: [],
+        durTotalTime: [],
+      }
+    );
+  };
+
+  timeCtx.height = BAR_HEIGHT * uniqPointTypes.length;
   const timeChart = new Chart(timeCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`✈️ FLY`, `???? STAY`, `???? DRIVE`, `????️ LOOK`, `???? EAT`, `???? RIDE`],
+      labels: typesAndIcons,
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],
+        data: [].slice.call(composePoints(points).durTotalTime.map((date) => msToTime4Stats(date))),
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -198,7 +262,7 @@ const renderTimeChart = (timeCtx, points) => {
       },
       title: {
         display: true,
-        text: `MONEY`,
+        text: `Time-Spend`,
         fontColor: `#000000`,
         fontSize: 23,
         position: `left`

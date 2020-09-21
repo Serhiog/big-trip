@@ -12,15 +12,19 @@ export const formatTaskDueDate = (dueDate) => {
   return moment(dueDate).format(`D MMMM`);
 };
 
+export const msToTime4Stats = (durMiliseconds) => {
+  let days = Math.floor((durMiliseconds / (1000 * 60 * 60 * 24))).toFixed();
+  return days;
+}
 
 export const msToTime = (durMiliseconds) => {
-  let minutes = Math.floor((durMiliseconds / (1000 * 60)) % 60).toFixed();
-  minutes <= 0 ? minutes = `` : minutes = minutes + `M `;
-  let hours = (Math.floor((durMiliseconds / (1000 * 60 * 60)) % 24)).toFixed();
-  hours <= 0 ? hours = `` : hours = hours + `H `;
   let days = Math.floor((durMiliseconds / (1000 * 60 * 60 * 24))).toFixed();
   days <= 0 ? days = `` : days = days + `D `;
-  const duration = hours + minutes + days;
+  let hours = (Math.floor((durMiliseconds / (1000 * 60 * 60)) % 24)).toFixed();
+  hours <= 0 ? hours = `` : hours = hours + `H `;
+  let minutes = Math.floor((durMiliseconds / (1000 * 60)) % 60).toFixed();
+  minutes <= 0 ? minutes = `` : minutes = minutes + `M `;
+  const duration = days + hours + minutes;
   return duration;
 };
 

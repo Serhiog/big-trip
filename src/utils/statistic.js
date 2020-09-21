@@ -22,6 +22,32 @@ export const countPointsByPrice = (points, point) => {
   return points.filter((typeOfTrip) => typeOfTrip.type === point.toLowerCase());
 };
 
+// export const eventTypeToEmojiMap = [
+//   [`🚕 ` + `TAXI`],
+//   [`🚌 ` + `BUS`],
+//   [`🚂 ` + `TRAIN`],
+//   [`🛳️ ` + `SHIP`],
+//   [`🚆 ` + `TRANSPORT`],
+//   [`🚗 ` + `DRIVE`],
+//   [`✈️ ` + `FLIGHT`],
+//   [`🏨 ` + `CHECK_IN`],
+//   [`🏛️ ` + `SIGHTSEEING`],
+//   [`🍴 ` + `RESTAURANT`],
+// ];
+
+export const eventTypeToEmojiMap = [
+  { id: `TAXI`, icon: `🚕` },
+  { id: `BUS`, icon: `🚌` },
+  { id: `TRAIN`, icon: `🚂` },
+  { id: `SHIP`, icon: `🛳️` },
+  { id: `TRANSPORT`, icon: `🚆` },
+  { id: `DRIVE`, icon: `🚗` },
+  { id: `FLIGHT`, icon: `✈️` },
+  { id: `CHECK-IN`, icon: `🏨` },
+  { id: `SIGHTSEEING`, icon: `🏛️` },
+  { id: `RESTAURANT`, icon: `🍴` },
+];
+
 // export const countTasksInDateRange = (dates, tasks) => {
 //   return dates.map(
 //     (date) => tasks.filter(

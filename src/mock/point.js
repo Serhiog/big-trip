@@ -24,6 +24,7 @@ export const allOffers = TYPES.reduce((offers, type) => {
 
 }, {});
 
+
 const generatePhotos = () => {
   const randomPhotos = [`http://picsum.photos/248/152?r=${Math.random()}`, `http://picsum.photos/248/152?r=${Math.random()}`, `http://picsum.photos/248/152?r=${Math.random()}`];
   return randomPhotos;
@@ -124,7 +125,7 @@ const point = (date) => {
     type,
     city,
     options: getOffers(type),
-    destination: allDestinations[city],
+    destination: ``,
     startDate: time1,
     price: getRandomInteger(25, 150),
     endDate: time2,
@@ -138,7 +139,7 @@ export const generateMocks = (size) => {
   const mocks = [];
 
   let date = new Date();
-  date.setDate(date.getDate() - 2);  
+  date.setDate(date.getDate() - 2);
 
   for (let i = 0; i < size; i++) {
     const p = point(date);
