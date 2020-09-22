@@ -54,6 +54,7 @@ export default class PointNew {
     render(this.innerTripPointList, this._pointEditComponent, RenderPosition.BEFOREEND);
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
+    // new NewEventBtnTemplate().setBtnDisabled();
   }
 
   destroy() {
@@ -65,6 +66,7 @@ export default class PointNew {
     this._pointEditComponent = null;
 
     document.removeEventListener(`keydown`, this._escKeyDownHandler);
+    this._enabaleNewPointBtn();
   }
 
   setAborting() {
@@ -75,26 +77,33 @@ export default class PointNew {
         isDeleting: false
       });
     };
-
     this._pointEditComponent.shake(resetFormState);
   }
 
+  _enabaleNewPointBtn() {
+    document.querySelector(`#ADD_NEW_EVENT`).removeAttribute(`disabled`, ``)
+  }
+
   _handleFormSubmit(point) {
+    this._enabaleNewPointBtn();
     this._changeData(point, UserAction.ADD_POINT, UpdateType.MINOR);
   }
 
   _handleDeleteClick() {
+    this._enabaleNewPointBtn();
     this.destroy();
   }
 
   _escKeyDownHandler(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
+      this._enabaleNewPointBtn();
       this.destroy();
     }
   }
 
   setSaving() {
+    this._enabaleNewPointBtn();
     this._pointEditComponent.updateData({
       isDisabled: true,
       isSaving: true

@@ -34,13 +34,16 @@ export default class HeaderPresenter {
   init() {
     const majorTripRouteView = this._prevMajorTripRouteViewComponent;
     this._prevMajorTripRouteViewComponent = new MajorTripRouteView(this._pointsModel.getPoints(), this.sortedByDefaultPoints);
-    const majorTripCostView = this._prevMajorTripCostViewComponent;
-    this._prevMajorTripCostViewComponent = new MajorTripCostView(this._pointsModel.getPoints());
+    // const majorTripCostView = this._prevMajorTripCostViewComponent;
+    // this._prevMajorTripCostViewComponent = new MajorTripCostView(this._pointsModel.getPoints());
 
-    if (majorTripRouteView === null || majorTripCostView === null) {
+    if (majorTripRouteView === null) {
       render(this._siteHeaderMainTripContainer, this._prevMajorTripRouteViewComponent, RenderPosition.AFTERBEGIN);
-      const siteMajorInfoTrip = this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
-      render(siteMajorInfoTrip, this._prevMajorTripCostViewComponent, RenderPosition.BEFOREEND);
+      //const siteMajorInfoTrip = this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
+      // render(this._prevMajorTripRouteViewComponent, this._prevMajorTripCostViewComponent, RenderPosition.BEFOREEND);
+    } else {
+      replace(this._prevMajorTripRouteViewComponent, majorTripRouteView);
+      // replace(this._prevMajorTripCostViewComponent, majorTripCostView);
     }
     this.initStats();
   }
@@ -68,6 +71,7 @@ export default class HeaderPresenter {
         this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
         this._tripPresenter.init();
         this._tripPresenter.createPoint(this._handlePointNewFormClose);
+        // this._prevNewEventBtnComponent.getElement().setAttribute(`disabled`, ``);
         // this._siteMenuComponent.getElement().querySelector(`[value=${MenuItem.ADD_NEW_EVENT}]`).disabled = true;
         break;
       case MenuItem.TABLE:

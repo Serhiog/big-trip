@@ -10,12 +10,13 @@ import { UserAction, UpdateType, TYPES, EXTRA_TYPES } from "../consts.js";
 import he from "he";
 
 export default class PointEditView extends SmartView {
-  constructor(point, offers, destinations) {
+  constructor(point, offers, destinations, isNew) {
     super();
     this._point = point;
+    this._isNew = isNew;
     this._offers = offers;
     this._destinations = destinations;
-    this._data = PointEditView.parsePointToData(point);
+    this._data = PointEditView.parsePointToData(this._point);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
     this._typesClickHandler = this._typesClickHandler.bind(this);
     this._citiesClickHandler = this._citiesClickHandler.bind(this);
@@ -41,19 +42,30 @@ export default class PointEditView extends SmartView {
   }
 
   _setStartDatePicker() {
+    // console.log(this._data);
+    // console.log(this._point);
     if (this._startDatePicker) {
       this._startDatePicker.destroy();
       this._startDatePicker = null;
     }
 
     if (this._data.startDate) {
-      this._startDatePicker = flatpickr(this.getElement().querySelector(`#event-start-time-1`), { dateFormat: `j F`, defaultDate: this._data.startDate, onChange: this._tripStartDateChangeHandler }
+      this._startDatePicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          minDate: new Date(),
+          time_24hr: true,
+          dateFormat: `d/m/y H:i`,
+          defaultDate: this._data.startDate,
+          onChange: this._tripStartDateChangeHandler
+        }
       );
     }
   }
 
   _tripStartDateChangeHandler([userDate]) {
-    userDate.setHours(23, 59, 59, 999);
+    // userDate.setHours(23, 59, 59, 999);
 
     this.updateData({
       startDate: userDate
@@ -67,13 +79,22 @@ export default class PointEditView extends SmartView {
     }
 
     if (this._data.endDate) {
-      this._endtDatePicker = flatpickr(this.getElement().querySelector(`#event-end-time-1`), { dateFormat: `j F`, defaultDate: this._data.endDate, onChange: this._tripEndDateChangeHandler }
+      this._endtDatePicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          minDate: this._data.startDate,
+          time_24hr: true,
+          dateFormat: `d/m/y H:i`,
+          defaultDate: this._data.endDate,
+          onChange: this._tripEndDateChangeHandler
+        }
       );
     }
   }
 
   _tripEndDateChangeHandler([userDate]) {
-    userDate.setHours(23, 59, 59, 999);
+    // userDate.setHours(23, 59, 59, 999);
 
     this.updateData({
       endDate: userDate
@@ -156,7 +177,7 @@ export default class PointEditView extends SmartView {
 
     let optionsContainer = ``;
 
-    if (!this._data.options.length) {
+    if (!fixedOptions.length) {
       optionsContainer = ``;
     } else {
       optionsContainer = `<section class="event__details">
@@ -250,7 +271,6 @@ ${citiesList}
                                 <span class="visually-hidden">Open event</span>
                               </button>
   </header>
-
     ${optionsContainer}
     ${aboutPoint}
   </form>`;
@@ -309,7 +329,8 @@ ${citiesList}
     const type = evt.target.previousElementSibling.value;
     evt.target.previousElementSibling.setAttribute(`checked`, ``);
     this.updateData({
-      type
+      type,
+      options: []
     });
   }
 
@@ -330,8 +351,8 @@ ${citiesList}
         price: +element.getAttribute(`data-price`),
       };
       offers.push(optionsPoint);
-      this.updateData({ options: offers });
     });
+    this.updateData({ options: offers });
   }
 
   setOffersHandler() {

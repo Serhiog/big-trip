@@ -159,6 +159,7 @@ export default class TripPresenter {
           this._pointsModel.addPoint(updateType, response);
         })
           .catch((error) => {
+            console.log(error);
             this._pointNewPresenter.setAborting();
           });
         break;
