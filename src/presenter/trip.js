@@ -34,7 +34,6 @@ export default class TripPresenter {
     this._loadingComponent = new LoadingView();
     this._api = api;
     this._prevNoPointsComponent = null;
-    this.sortedByDefaultPoints = [];
     this.statistic = null;
   }
 
@@ -94,7 +93,6 @@ export default class TripPresenter {
     for (let [key, points] of groups.entries()) {
       this._renderGroup(points, dayNumber);
       dayNumber++;
-      this.sortedByDefaultPoints.push(points);
     }
   }
 
@@ -226,7 +224,7 @@ export default class TripPresenter {
   }
 
   initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
-    const headerPresenter = new HeaderPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter, this.sortedByDefaultPoints);
+    const headerPresenter = new HeaderPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
   }
 
   initStats() {

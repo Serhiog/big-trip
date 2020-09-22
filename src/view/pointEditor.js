@@ -54,7 +54,7 @@ export default class PointEditView extends SmartView {
         this.getElement().querySelector(`#event-start-time-1`),
         {
           enableTime: true,
-          minDate: new Date(),
+          minDate: this._data.startDate,
           time_24hr: true,
           dateFormat: `d/m/y H:i`,
           defaultDate: this._data.startDate,
@@ -257,7 +257,7 @@ ${citiesList}
     </div>
 
                             <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                            <button class="event__reset-btn" type="reset">Delete</button>
+                            <button class="event__reset-btn" type="reset">${this._isNew === true ? `Cancel` : `Delete`}</button>
 
                             <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${point.isFavorite ? `checked` : ``}>
                               <label class="event__favorite-btn" for="event-favorite-1">

@@ -9,7 +9,7 @@ import { FilterType, UpdateType, MenuItem } from "../consts.js";
 import { filter } from "../utils/filter.js";
 
 export default class HeaderPresenter {
-  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter, sortedByDefaultPoints) {
+  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
     this._siteHeaderMainTripContainer = siteHeaderMainTripContainer;
     this._siteHeaderFilterTrip = siteHeaderFilterTrip;
     this._siteMainContainer = siteMainContainer;
@@ -28,12 +28,11 @@ export default class HeaderPresenter {
     this._prevSiteMenuComponent = null;
     this._prevNewEventBtnComponent = null;
     this._statisticsComponent = null;
-    this.sortedByDefaultPoints = sortedByDefaultPoints;
   }
 
   init() {
     const majorTripRouteView = this._prevMajorTripRouteViewComponent;
-    this._prevMajorTripRouteViewComponent = new MajorTripRouteView(this._pointsModel.getPoints(), this.sortedByDefaultPoints);
+    this._prevMajorTripRouteViewComponent = new MajorTripRouteView(this._pointsModel.getPoints());
     // const majorTripCostView = this._prevMajorTripCostViewComponent;
     // this._prevMajorTripCostViewComponent = new MajorTripCostView(this._pointsModel.getPoints());
 
