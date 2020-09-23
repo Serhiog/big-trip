@@ -1,4 +1,3 @@
-
 import {createElement} from "../utils/render.js";
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
@@ -14,7 +13,6 @@ export default class Abstract {
 
   getTemplate() {
     throw new Error(`Abstract method not implemented: getTemplate`);
-    
   }
 
   getElement() {

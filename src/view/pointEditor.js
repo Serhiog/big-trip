@@ -323,6 +323,7 @@ export default class PointEditView extends SmartView {
     if (this._isNew) {
       return;
     }
+
     this._callback.editClick = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
   }
@@ -336,6 +337,7 @@ export default class PointEditView extends SmartView {
     if (this._isNew) {
       return;
     }
+
     this._callback.favoriteClick = callback;
     this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._favoriteClickHandler);
   }
@@ -461,4 +463,3 @@ export default class PointEditView extends SmartView {
     this.setTypesHandler(this._typesClickHandler);
   }
 }
-

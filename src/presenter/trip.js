@@ -1,4 +1,3 @@
-
 import SortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
 import GroupPresenter from './group.js';

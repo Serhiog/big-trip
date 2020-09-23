@@ -1,4 +1,3 @@
-
 import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
@@ -30,3 +29,7 @@ api.getDestinations().then((destinations) => {
     tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
   });
 });
+
+new HeaderTripPresenter(points, siteHeaderMainTripContainer, siteHeaderFilterTrip).init();
+new BoardPointsPresenter(siteMainContainer, points).init();
+new PointsPresenter(siteMainContainer, points).init();

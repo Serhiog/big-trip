@@ -1,4 +1,3 @@
-
 import {date4User, date4UserEnd} from "../utils/dates.js";
 import Abstract from "./abstract.js";
 import {compare} from "../utils/filter.js";

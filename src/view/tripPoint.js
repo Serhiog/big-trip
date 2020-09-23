@@ -77,7 +77,6 @@ export default class PointView extends Abstract {
   </li > `;
   }
 
-
   getTemplate() {
     return this.createTripPointTemplate(this._point);
   }
@@ -100,3 +99,4 @@ export default class PointView extends Abstract {
     this.setPointClickHandler();
   }
 }
+

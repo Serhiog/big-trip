@@ -2,7 +2,6 @@ import Abstract from "./abstract.js";
 
 
 export default class TripFilterView extends Abstract {
-
   constructor(filters, currentFilter) {
     super();
     this._filters = filters;
