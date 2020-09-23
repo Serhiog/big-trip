@@ -53,7 +53,6 @@ export default class GroupPresenter {
       .forEach((presenter) => presenter.resetView());
   }
 
-  // груп презентер находит презентер нужной точки и вывзывает у него setViewState
   setViewState(point, state, newBtnSaveName) {
     this._pointPresenter[point.id].setViewState(state, newBtnSaveName);
   }

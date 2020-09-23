@@ -1,8 +1,6 @@
 
 import { formatTaskDueDate, msToTime } from "../utils/dates.js";
 import Abstract from "./abstract.js";
-import { remove } from "../utils/render.js";
-import SmartView from "./smart.js";
 import { EXTRA_TYPES } from "../consts.js";
 
 export default class PointView extends Abstract {

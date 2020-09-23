@@ -6,8 +6,6 @@ export const countCompletedpointInDateRange = (points, dateFrom, dateTo) => {
       return counter;
     }
 
-    // С помощью moment.js проверям, сколько задач с дедлайном
-    // попадают в диапазон дат
     if (
       moment(point.dueDate).isSame(dateFrom) ||
       moment(point.dueDate).isBetween(dateFrom, dateTo) ||

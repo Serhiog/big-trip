@@ -1,12 +1,9 @@
 
 import { formatTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
-// import { allDestinations } from "../mock/point.js";
 import SmartView from "./smart.js";
-import { remove } from "../utils/render.js";
-import { CITIES } from "../consts.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import { UserAction, UpdateType, TYPES, EXTRA_TYPES } from "../consts.js";
+import { TYPES, EXTRA_TYPES } from "../consts.js";
 import he from "he";
 
 export default class PointEditView extends SmartView {
@@ -42,8 +39,6 @@ export default class PointEditView extends SmartView {
   }
 
   _setStartDatePicker() {
-    // console.log(this._data);
-    // console.log(this._point);
     if (this._startDatePicker) {
       this._startDatePicker.destroy();
       this._startDatePicker = null;
@@ -66,7 +61,6 @@ export default class PointEditView extends SmartView {
   }
 
   _tripStartDateChangeHandler([userDate]) {
-    // userDate.setHours(23, 59, 59, 999);
 
     this.updateData({
       startDate: userDate
@@ -108,7 +102,6 @@ export default class PointEditView extends SmartView {
   }
 
   _tripEndDateChangeHandler([userDate]) {
-    // userDate.setHours(23, 59, 59, 999);
 
     this.updateData({
       endDate: userDate
@@ -117,7 +110,7 @@ export default class PointEditView extends SmartView {
 
   createTripEditTemplate(point) {
 
-    const { type, city, price, startDate, endDate, options, destination } = point;
+    const { type, price, startDate, endDate } = point;
     let citiesList = ``;
     let cityName = ``;
     if (this._destinations == null) {
@@ -305,10 +298,6 @@ ${citiesList}
     return Object.assign({}, point, {});
   }
 
-  // static(point) {
-  //   return Object.assign({}, point, {});
-  // }
-
   getTemplate() {
     return this.createTripEditTemplate(this._data);
   }
@@ -358,8 +347,6 @@ ${citiesList}
   }
 
   _offersClickHandler(evt) {
-    // evt.preventDefault();
-    // evt.target.setAttribute(`checked`, ``);
     const offers = [];
     const checkedOffers = this.getElement().querySelectorAll(`.event__offer-checkbox:checked`)
     checkedOffers.forEach(element => {
@@ -381,7 +368,6 @@ ${citiesList}
 
   _citiesClickHandler(evt) {
     evt.preventDefault();
-
     let city = evt.target.value;
     const even = (element) => element.name === city;
     if (this._destinations.some(even)) {

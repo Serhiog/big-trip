@@ -70,12 +70,10 @@ export default class Points extends Observer {
       }
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedPoint.date_to;
     delete adaptedPoint.date_from;
     delete adaptedPoint.offers;
     delete adaptedPoint.base_price;
-    // delete adaptedPoint.type;
     delete adaptedPoint.is_favorite;
 
     return adaptedPoint;
@@ -86,26 +84,20 @@ export default class Points extends Observer {
       {},
       point,
       {
-        // id — д.б. строкой
         "id": String(point.id),
         "date_to": point.endDate.toString(),
         "date_from": point.startDate.toString(),
         "offers": point.options,
-        // сервер ждет число
         "base_price": parseInt(point.price, 10),
-        // type должен начинаться со строчной буквы
         "type": point.type.toLowerCase(),
         "is_favorite": point.isFavorite,
       }
     );
 
-    // Ненужные ключи мы удаляем
     delete adaptedPoint.endDate;
     delete adaptedPoint.startDate;
     delete adaptedPoint.options;
     delete adaptedPoint.price;
-    // Удаляешь нужный ключ
-    // delete adaptedPoint.type;
     delete adaptedPoint.isFavorite;
 
     return adaptedPoint;

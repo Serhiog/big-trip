@@ -1,5 +1,4 @@
 import PointEditView from "../view/pointEditor.js";
-// import { generateId } from "../utils/common.js";
 import { remove, render, RenderPosition } from "../utils/render.js";
 import { UserAction, UpdateType } from "../consts.js";
 import TripPointListView from "../view/tripPointsList.js";
@@ -34,7 +33,7 @@ export default class PointNew {
     this._destinations = destinations;
   }
 
-  init(point, callback) {
+  init(callback) {
     let newPoint = true;
     this._destroyCallback = callback;
     if (this._pointEditComponent !== null) {
@@ -51,7 +50,6 @@ export default class PointNew {
     render(this.innerTripPointList, this._pointEditComponent, RenderPosition.BEFOREEND);
 
     document.addEventListener(`keydown`, this._escKeyDownHandler);
-    // new NewEventBtnTemplate().setBtnDisabled();
   }
 
   destroy() {

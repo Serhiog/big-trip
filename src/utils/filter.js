@@ -13,7 +13,7 @@ export const compare = (a, b) => {
   }
   if (a.startDate.getTime() == b.startDate.getTime()) {
     return 0;
-  } // если равны
+  }
   if (a.startDate.getTime() < b.startDate.getTime()) {
     return -1;
   }

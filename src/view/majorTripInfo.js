@@ -1,4 +1,3 @@
-const MAX_CITIES_LIST = 4;
 
 import { date4User, date4UserEnd } from "../utils/dates.js";
 import Abstract from "./abstract.js";

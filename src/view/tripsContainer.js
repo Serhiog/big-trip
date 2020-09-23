@@ -5,7 +5,6 @@ export default class TripsContainerView extends Abstract {
 
   createTripsContainerTemplate() {
     return `<ul class="trip-days">
-
     </ul>`;
   }
 

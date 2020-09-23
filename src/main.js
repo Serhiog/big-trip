@@ -1,19 +1,12 @@
 
-// import { generateMocks } from "./mock/point.js";
-import HeaderTripPresenter from "./presenter/header.js";
 import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
-import { render, RenderPosition } from "./utils/render.js";
 import Api from "./api.js";
 import { UpdateType } from "./consts.js";
 
-// const COUNT_RENDER_DAYS_TRIP = 5;
-
 const AUTHORIZATION = `Basic er883jdzbdw`;
 const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
-
-// const points = generateMocks(COUNT_RENDER_DAYS_TRIP);
 
 const siteMainContainer = document.querySelector(`.trip-events`);
 const siteHeaderMainTripContainer = document.querySelector(`.trip-main`);

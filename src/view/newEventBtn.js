@@ -6,7 +6,6 @@ export default class NewEventBtnTemplate extends Abstract {
   constructor() {
     super();
     this._newEventBtnClickHandler = this._newEventBtnClickHandler.bind(this);
-    // this.setNewEventBtnClickHandler = this.setNewEventBtnClickHandler.bind(this)
   }
 
   createNewEventBtnTemplate() {
@@ -29,17 +28,7 @@ export default class NewEventBtnTemplate extends Abstract {
     this.getElement().addEventListener(`click`, this._newEventBtnClickHandler);
   }
 
-  setClickBtn(menuItem) {
-    // const item = this.getElement().querySelector(`[value=${menuItem}]`);
-
-    // if (item !== null) {
-    //   item.setAttribute(`disabled`, ``)
-    //   // item.setAttribute(`checked`, ``)
-    // }
-  }
   setBtnDisabled() {
-    console.log(`log`);
     this.getElement().setAttribute(`disabled`, ``);
-    console.log(this.getElement());
   }
 }

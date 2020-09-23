@@ -8,7 +8,6 @@ const Mode = {
   EDITING: `EDITING`
 };
 
-
 export default class PointPresenter {
   constructor(container, changeMode, changeData, points, offers, destinations) {
     this._container = container;

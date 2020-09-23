@@ -3,13 +3,12 @@ import SortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
 import GroupPresenter from './group.js';
 import { render, RenderPosition, remove } from "../utils/render.js";
-import { SortType, UpdateType, UserAction, FilterType, State } from "../consts.js";
+import { SortType, UpdateType, UserAction, State } from "../consts.js";
 import NoPoints from "../view/no-Points.js";
 import { filter } from "../utils/filter.js";
 import PointNewPresenter from "./point-new.js";
 import LoadingView from "../view/loading.js";
 import HeaderPresenter from "./header.js";
-import StatisticsView from "../view/statistics.js";
 
 export default class TripPresenter {
   constructor(siteMainContainer, pointsModel, filterModel, api, offers, destinations) {
@@ -22,11 +21,9 @@ export default class TripPresenter {
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._pointsModel = pointsModel;
-    // this._pointsModel.addObserver(this._handleModelEvent);
     this._sortComponent = null;
     this._filterModel = filterModel;
     this._offers = offers;
-    // this._filterModel.addObserver(this._handleModelEvent);
     this._destinations = destinations;
     this._pointNewPresenter = new PointNewPresenter(this._containerView, this._handleViewAction, this._offers, this._destinations);
     this._filter = filter;
@@ -54,8 +51,6 @@ export default class TripPresenter {
 
 
   createPoint(callback) {
-    // this._currentSortType = SortType.DEFAULT;
-    // this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init(this._pointsModel, callback);
   }
 
@@ -138,7 +133,6 @@ export default class TripPresenter {
     return groups;
   }
 
-  // добавил dayNumber, чтобы находить нужную группу
   _handleViewAction(update, actionType, updateType, dayNumber) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
@@ -234,8 +228,5 @@ export default class TripPresenter {
 
   initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
     const headerPresenter = new HeaderPresenter(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
-  }
-
-  initStats() {
   }
 }

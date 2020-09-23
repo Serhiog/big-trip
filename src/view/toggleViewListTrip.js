@@ -24,7 +24,6 @@ export default class TripListToggleView extends Abstract {
   setMenuItem(menuItem) {
     const item = this.getElement().querySelector(`[id=${menuItem}]`);
     if (item !== null) {
-      // item.checked = true;
       item.setAttribute(`checked`, ``)
     }
   }

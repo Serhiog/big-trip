@@ -6,15 +6,10 @@ import { TYPES } from "../consts.js";
 import { msToTime4Stats } from "../utils/dates.js";
 
 import {
-  countCompletedTaskInDateRange,
+
   makeItemsUniq,
   countPointsByType,
-  countPointsByPrice,
   eventTypeToEmojiMap,
-  colorToHex,
-  countTasksInDateRange,
-  parseChartDate,
-  getDatesInRange
 } from "../utils/statistic.js";
 
 const BAR_HEIGHT = 55;
