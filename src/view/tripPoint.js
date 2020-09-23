@@ -14,7 +14,7 @@ export default class PointView extends Abstract {
     const {startDate, endDate, id} = point;
     let {type} = point;
     type = type[0].toUpperCase() + type.substring(1);
-    let city = point.city;
+    const city = point.city;
     const durMiliseconds = endDate.getTime() - startDate.getTime();
     const duration = msToTime(durMiliseconds);
 
