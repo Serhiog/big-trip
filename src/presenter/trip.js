@@ -76,6 +76,7 @@ export default class TripPresenter {
       case SortType.DEFAULT:
         return filtredPoints.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
     }
+    return filtredPoints;
   }
 
   _renderGroups() {
@@ -86,7 +87,7 @@ export default class TripPresenter {
     const groups = this._groupPoints();
     let dayNumber = 1;
     for (let [key, points] of groups.entries()) {
-      this._renderGroup(points, dayNumber);
+      this._renderGroup(points, dayNumber, key);
       dayNumber++;
     }
   }
@@ -141,7 +142,7 @@ export default class TripPresenter {
           .then((response) => {
             this._pointsModel.updatePoint(updateType, response);
           })
-          .catch((error) => {
+          .catch(() => {
             this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, `Save`);
           });
         break;
@@ -150,7 +151,7 @@ export default class TripPresenter {
         this._api.addPoint(update).then((response) => {
           this._pointsModel.addPoint(updateType, response);
         })
-          .catch((error) => {
+          .catch(() => {
             this._pointNewPresenter.setAborting();
           });
         break;
@@ -168,7 +169,7 @@ export default class TripPresenter {
           .then((response) => {
             this._pointsModel.updatePoint(updateType, response);
           })
-          .catch((error) => {
+          .catch(() => {
             this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
           });
         break;

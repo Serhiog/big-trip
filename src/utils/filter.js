@@ -11,10 +11,11 @@ export const compare = (a, b) => {
   if (a.startDate.getTime() > b.startDate.getTime()) {
     return 1;
   }
-  if (a.startDate.getTime() == b.startDate.getTime()) {
+  if (a.startDate.getTime() === b.startDate.getTime()) {
     return 0;
   }
   if (a.startDate.getTime() < b.startDate.getTime()) {
     return -1;
   }
+  return true;
 };

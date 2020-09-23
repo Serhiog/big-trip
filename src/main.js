@@ -22,7 +22,7 @@ api.getDestinations().then((destinations) => {
   api.getOffers().then((offers) => {
     api.getPoints().then((points) => {
       pointsModel.setPoints(UpdateType.INIT, points);
-    }).catch((error) => {
+    }).catch(() => {
       pointsModel.setPoints(UpdateType.INIT, []);
     });
     const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api, offers, destinations, siteHeaderMainTripContainer, siteHeaderFilterTrip);

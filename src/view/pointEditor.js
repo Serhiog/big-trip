@@ -113,7 +113,7 @@ export default class PointEditView extends SmartView {
     const {type, price, startDate, endDate} = point;
     let citiesList = ``;
     let cityName = ``;
-    if (this._destinations == null) {
+    if (this._destinations === null) {
       cityName = ``;
     } else {
       this._destinations.forEach((place) => {
@@ -136,7 +136,7 @@ export default class PointEditView extends SmartView {
 
 
     let aboutPoint = ``;
-    if (this._data == null) {
+    if (this._data === null) {
       aboutPoint = ``;
     } else {
       let placePhoto = ``;
@@ -331,7 +331,7 @@ ${citiesList}
   }
 
   _typesClickHandler(evt) {
-    // evt.preventDefault();
+    evt.preventDefault();
     const type = evt.target.previousElementSibling.value;
     evt.target.previousElementSibling.setAttribute(`checked`, ``);
     this.updateData({
@@ -346,7 +346,7 @@ ${citiesList}
     });
   }
 
-  _offersClickHandler(evt) {
+  _offersClickHandler() {
     const offers = [];
     const checkedOffers = this.getElement().querySelectorAll(`.event__offer-checkbox:checked`);
     checkedOffers.forEach((element) => {

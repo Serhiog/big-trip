@@ -99,12 +99,12 @@ const renderTransportChart = (transportCtx, points) => {
   });
 };
 
-const renderMoneyChart = (moneyCtx, points) => {
+const renderMoneyChart = (moneyCtx, places) => {
 
-  const pointTypes = points.map((point) => point.type.toUpperCase());
+  const pointTypes = places.map((point) => point.type.toUpperCase());
 
   const composePoints = (points) => {
-    return points.reduce((info, point, index) => {
+    return points.reduce((info, point) => {
       if (!info.type.includes(point.type)) {
         info.type.push(point.type);
         info.sumPrice.push(point.price);
@@ -139,7 +139,7 @@ const renderMoneyChart = (moneyCtx, points) => {
     data: {
       labels: typesAndIcons,
       datasets: [{
-        data: composePoints(points).sumPrice,
+        data: composePoints(places).sumPrice,
         backgroundColor: `#ffffff`,
         hoverBackgroundColor: `#ffffff`,
         anchor: `start`
@@ -211,8 +211,8 @@ const renderTimeChart = (timeCtx, points) => {
     });
   });
 
-  const composePoints = (points) => {
-    return points.reduce((info, point, index) => {
+  const composePoints = (places) => {
+    return places.reduce((info, point) => {
       if (!info.type.includes(point.type)) {
         info.type.push(point.type);
         info.durTotalTime.push(

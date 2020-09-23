@@ -67,6 +67,7 @@ export default class MajorTripRouteView extends Abstract {
 
       }
     }
+    return true;
   }
 
   getTemplate() {

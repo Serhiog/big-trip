@@ -15,11 +15,23 @@ export const msToTime4Stats = (durMiliseconds) => {
 
 export const msToTime = (durMiliseconds) => {
   let days = Math.floor((durMiliseconds / (1000 * 60 * 60 * 24))).toFixed();
-  days <= 0 ? days = `` : days = days + `D `;
+  if (days <= 0) {
+    days = ``;
+  } else {
+    days = days + `D `;
+  }
   let hours = (Math.floor((durMiliseconds / (1000 * 60 * 60)) % 24)).toFixed();
-  hours <= 0 ? hours = `` : hours = hours + `H `;
+  if (hours <= 0) {
+    hours = ``;
+  } else {
+    hours = hours + `H `;
+  }
   let minutes = Math.floor((durMiliseconds / (1000 * 60)) % 60).toFixed();
-  minutes <= 0 ? minutes = `` : minutes = minutes + `M `;
+  if (minutes <= 0) {
+    minutes = ``;
+  } else {
+    minutes = minutes + `M `;
+  }
   const duration = days + hours + minutes;
   return duration;
 };
