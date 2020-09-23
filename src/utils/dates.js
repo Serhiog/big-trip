@@ -9,7 +9,7 @@ export const formatTaskDueDate = (dueDate) => {
 };
 
 export const msToTime4Stats = (durMiliseconds) => {
-  let hours = (Math.floor((durMiliseconds / (1000 * 60 * 60)))).toFixed();
+  const hours = (Math.floor((durMiliseconds / (1000 * 60 * 60)))).toFixed();
   return hours;
 };
 

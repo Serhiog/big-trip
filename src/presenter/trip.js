@@ -85,7 +85,7 @@ export default class TripPresenter {
     }
     const groups = this._groupPoints();
     let dayNumber = 1;
-    for (let [key, points] of groups.entries()) {
+    for (const [key, points] of groups.entries()) {
       this._renderGroup(points, dayNumber, key);
       dayNumber++;
     }

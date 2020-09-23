@@ -2,7 +2,7 @@ import {date4User} from "../utils/dates.js";
 import Abstract from "./abstract.js";
 
 const createTripPointsListTemplate = (date, dayNumber, showDate) => {
-  let userDate = showDate ? date4User(date) : ``;
+  const userDate = showDate ? date4User(date) : ``;
 
   return `<li class="trip-days__item  day">
             <div div class="day__info">

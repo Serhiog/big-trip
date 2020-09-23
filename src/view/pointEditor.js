@@ -51,8 +51,6 @@ export default class PointEditView extends SmartView {
         {
           enableTime: true,
           maxDate: this._data.endDate,
-          // eslint-disable-next-line
-          time_24hr: true,
           dateFormat: `d/m/y H:i`,
           defaultDate: this._data.startDate,
           onChange: this._tripStartDateChangeHandler,
@@ -88,8 +86,6 @@ export default class PointEditView extends SmartView {
         {
           enableTime: true,
           minDate: this._data.startDate,
-          // eslint-disable-next-line
-          time_24hr: true,
           dateFormat: `d/m/y H:i`,
           defaultDate: this._data.endDathe,
           onChange: this._tripEndDateChangeHandler,

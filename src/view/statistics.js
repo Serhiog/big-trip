@@ -15,7 +15,7 @@ const renderTransportChart = (transportCtx, points) => {
   const pointTypes = points.filter((point) => TYPES.includes(point.type)).map((point) => point.type.toUpperCase());
   const uniqPointTypes = makeItemsUniq(pointTypes);
 
-  let typesAndIcons = [];
+  const typesAndIcons = [];
   uniqPointTypes.forEach((element) => {
     eventTypeToEmojiMap.find(function (item) {
       if (item.id === element) {

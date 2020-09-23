@@ -34,7 +34,7 @@ export default class PointNew {
   }
 
   init(callback) {
-    let newPoint = true;
+    const newPoint = true;
     this._destroyCallback = callback;
     if (this._pointEditComponent !== null) {
       return;
