@@ -1,9 +1,9 @@
 
-import { formatTaskDueDate, formatedStartEndDate } from "../utils/dates.js";
+import {formatTaskDueDate, formatedStartEndDate} from "../utils/dates.js";
 import SmartView from "./smart.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import { TYPES, EXTRA_TYPES } from "../consts.js";
+import {TYPES, EXTRA_TYPES} from "../consts.js";
 import he from "he";
 
 export default class PointEditView extends SmartView {
@@ -46,16 +46,16 @@ export default class PointEditView extends SmartView {
 
     if (this._data.startDate) {
       this._startDatePicker = flatpickr(
-        this.getElement().querySelector(`#event-start-time-1`),
-        {
-          enableTime: true,
-          minDate: this._data.startDate,
-          time_24hr: true,
-          dateFormat: `d/m/y H:i`,
-          defaultDate: this._data.startDate,
-          onChange: this._tripStartDateChangeHandler,
-          onClose: this._tripStartDateCloseHandler
-        }
+          this.getElement().querySelector(`#event-start-time-1`),
+          {
+            enableTime: true,
+            minDate: this._data.startDate,
+            time_24hr: true,
+            dateFormat: `d/m/y H:i`,
+            defaultDate: this._data.startDate,
+            onChange: this._tripStartDateChangeHandler,
+            onClose: this._tripStartDateCloseHandler
+          }
       );
     }
   }
@@ -81,16 +81,16 @@ export default class PointEditView extends SmartView {
 
     if (this._data.endDate) {
       this._endtDatePicker = flatpickr(
-        this.getElement().querySelector(`#event-end-time-1`),
-        {
-          enableTime: true,
-          minDate: this._data.startDate,
-          time_24hr: true,
-          dateFormat: `d/m/y H:i`,
-          defaultDate: this._data.endDate,
-          onChange: this._tripEndDateChangeHandler,
-          onClose: this._tripEndDateCloseHandler
-        }
+          this.getElement().querySelector(`#event-end-time-1`),
+          {
+            enableTime: true,
+            minDate: this._data.startDate,
+            time_24hr: true,
+            dateFormat: `d/m/y H:i`,
+            defaultDate: this._data.endDate,
+            onChange: this._tripEndDateChangeHandler,
+            onClose: this._tripEndDateCloseHandler
+          }
       );
     }
   }
@@ -110,13 +110,13 @@ export default class PointEditView extends SmartView {
 
   createTripEditTemplate(point) {
 
-    const { type, price, startDate, endDate } = point;
+    const {type, price, startDate, endDate} = point;
     let citiesList = ``;
     let cityName = ``;
     if (this._destinations == null) {
       cityName = ``;
     } else {
-      this._destinations.forEach(place => {
+      this._destinations.forEach((place) => {
         cityName += `<option value=${place.name}></option>`;
       });
     }
@@ -140,7 +140,7 @@ export default class PointEditView extends SmartView {
       aboutPoint = ``;
     } else {
       let placePhoto = ``;
-      this._data.destination.pictures.forEach(place => {
+      this._data.destination.pictures.forEach((place) => {
         placePhoto += `<img class="event__photo" src="${place.src}" alt="${place.description}">`;
       });
       aboutPoint = `<section class="event__section  event__section--destination">
@@ -167,7 +167,7 @@ export default class PointEditView extends SmartView {
     fixedOptions.forEach((option) => {
       let checked = ``;
 
-      point.options.forEach(element => {
+      point.options.forEach((element) => {
         if (element.title === option.title) {
           checked = `checked`;
         }
@@ -203,7 +203,7 @@ export default class PointEditView extends SmartView {
 
     const currentType = this._data.type;
 
-    TYPES.forEach(element => {
+    TYPES.forEach((element) => {
       let checked = ``;
       if (currentType === element) {
         checked = `checked`;
@@ -215,7 +215,7 @@ export default class PointEditView extends SmartView {
     });
 
     let extraTypes = ``;
-    EXTRA_TYPES.forEach(element => {
+    EXTRA_TYPES.forEach((element) => {
       let checked = ``;
       if (currentType === element) {
         checked = `checked`;
@@ -341,26 +341,26 @@ ${citiesList}
   }
 
   setTypesHandler() {
-    this.getElement().querySelectorAll(`.event__type-label`).forEach(type => {
+    this.getElement().querySelectorAll(`.event__type-label`).forEach((type) => {
       type.addEventListener(`click`, this._typesClickHandler);
     });
   }
 
   _offersClickHandler(evt) {
     const offers = [];
-    const checkedOffers = this.getElement().querySelectorAll(`.event__offer-checkbox:checked`)
-    checkedOffers.forEach(element => {
+    const checkedOffers = this.getElement().querySelectorAll(`.event__offer-checkbox:checked`);
+    checkedOffers.forEach((element) => {
       const optionsPoint = {
         title: element.getAttribute(`id`),
         price: +element.getAttribute(`data-price`),
       };
       offers.push(optionsPoint);
     });
-    this.updateData({ options: offers });
+    this.updateData({options: offers});
   }
 
   setOffersHandler() {
-    this.getElement().querySelectorAll(`.event__offer-checkbox`).forEach(offer => {
+    this.getElement().querySelectorAll(`.event__offer-checkbox`).forEach((offer) => {
       offer.addEventListener(`click`, this._offersClickHandler);
     });
 
@@ -371,7 +371,7 @@ ${citiesList}
     let city = evt.target.value;
     const even = (element) => element.name === city;
     if (this._destinations.some(even)) {
-      const selectedCity = this._destinations.find(element => element.name === city);
+      const selectedCity = this._destinations.find((element) => element.name === city);
       this.updateData({
         city,
         destination: selectedCity,
@@ -430,7 +430,7 @@ ${citiesList}
   }
 
   setdisabledSelects() {
-    this.getElement().querySelectorAll(`input`).forEach(input => {
+    this.getElement().querySelectorAll(`input`).forEach((input) => {
       input.setAttribute(`disabled`, ``);
     });
   }

@@ -33,7 +33,7 @@ export default class TripFilterView extends Abstract {
   }
 
   getTemplate() {
-    return this.createMainTripFilterTemplate()
+    return this.createMainTripFilterTemplate();
   }
 
   _filterTypeChangeHandler(evt) {
@@ -43,15 +43,15 @@ export default class TripFilterView extends Abstract {
 
   setFilterTypeChangeHandler(callback) {
     this._callback.filterTypeChange = callback;
-    this.getElement().querySelectorAll(`.trip-filters__filter-input`).forEach(filter => {
+    this.getElement().querySelectorAll(`.trip-filters__filter-input`).forEach((filter) => {
       filter.addEventListener(`click`, this._filterTypeChangeHandler);
     });
   }
 
   setCheckedAttribute() {
-    this.getElement().querySelectorAll(`.trip-filters__filter-input`).forEach(element => {
+    this.getElement().querySelectorAll(`.trip-filters__filter-input`).forEach((element) => {
       if (element.value === this._currentFilter) {
-        element.setAttribute(`checked`, ``)
+        element.setAttribute(`checked`, ``);
       }
     });
   }

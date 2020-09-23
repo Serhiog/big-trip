@@ -3,7 +3,7 @@ import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import Api from "./api.js";
-import { UpdateType } from "./consts.js";
+import {UpdateType} from "./consts.js";
 
 const AUTHORIZATION = `Basic er883jdzbdw`;
 const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;

@@ -1,6 +1,6 @@
 import PointEditView from "../view/pointEditor.js";
-import { remove, render, RenderPosition } from "../utils/render.js";
-import { UserAction, UpdateType } from "../consts.js";
+import {remove, render, RenderPosition} from "../utils/render.js";
+import {UserAction, UpdateType} from "../consts.js";
 import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
 
@@ -76,7 +76,7 @@ export default class PointNew {
   }
 
   _enabaleNewPointBtn() {
-    document.querySelector(`#ADD_NEW_EVENT`).removeAttribute(`disabled`, ``)
+    document.querySelector(`#ADD_NEW_EVENT`).removeAttribute(`disabled`, ``);
   }
 
   _handleFormSubmit(point) {

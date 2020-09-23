@@ -1,4 +1,4 @@
-import { FilterType } from "../consts.js";
+import {FilterType} from "../consts.js";
 
 const dateNow = new Date().getTime();
 export const filter = {

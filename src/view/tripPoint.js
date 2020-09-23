@@ -1,7 +1,7 @@
 
-import { formatTaskDueDate, msToTime } from "../utils/dates.js";
+import {formatTaskDueDate, msToTime} from "../utils/dates.js";
 import Abstract from "./abstract.js";
-import { EXTRA_TYPES } from "../consts.js";
+import {EXTRA_TYPES} from "../consts.js";
 
 export default class PointView extends Abstract {
   constructor(point) {
@@ -12,9 +12,9 @@ export default class PointView extends Abstract {
 
   createTripPointTemplate(point) {
     const MAX_COUNT_OPTIONS = 3;
-    let { startDate, endDate, id } = point;
-    let { type } = point
-    type = type[0].toUpperCase() + type.substring(1)
+    let {startDate, endDate, id} = point;
+    let {type} = point;
+    type = type[0].toUpperCase() + type.substring(1);
     let city = point.city;
     let durMiliseconds = endDate.getTime() - startDate.getTime();
     let duration = msToTime(durMiliseconds);
@@ -27,8 +27,8 @@ export default class PointView extends Abstract {
     const fixedOptions = [];
     let optionName;
     let optionPrice = 0;
-    point.options.forEach(offer => {
-      fixedOptions.push(offer)
+    point.options.forEach((offer) => {
+      fixedOptions.push(offer);
     });
 
     let totalOfferPrice = 0;

@@ -57,17 +57,17 @@ export default class Points extends Observer {
 
   static adaptToClient(point) {
     const adaptedPoint = Object.assign(
-      {},
-      point,
-      {
-        endDate: new Date(point.date_to),
-        startDate: new Date(point.date_from),
-        options: point.offers,
-        price: +point.base_price,
-        type: point.type,
-        isFavorite: point.is_favorite,
-        id: +point.id,
-      }
+        {},
+        point,
+        {
+          endDate: new Date(point.date_to),
+          startDate: new Date(point.date_from),
+          options: point.offers,
+          price: +point.base_price,
+          type: point.type,
+          isFavorite: point.is_favorite,
+          id: +point.id,
+        }
     );
 
     delete adaptedPoint.date_to;
@@ -81,17 +81,17 @@ export default class Points extends Observer {
 
   static adaptToServer(point) {
     const adaptedPoint = Object.assign(
-      {},
-      point,
-      {
-        "id": String(point.id),
-        "date_to": point.endDate.toString(),
-        "date_from": point.startDate.toString(),
-        "offers": point.options,
-        "base_price": parseInt(point.price, 10),
-        "type": point.type.toLowerCase(),
-        "is_favorite": point.isFavorite,
-      }
+        {},
+        point,
+        {
+          "id": String(point.id),
+          "date_to": point.endDate.toString(),
+          "date_from": point.startDate.toString(),
+          "offers": point.options,
+          "base_price": parseInt(point.price, 10),
+          "type": point.type.toLowerCase(),
+          "is_favorite": point.isFavorite,
+        }
     );
 
     delete adaptedPoint.endDate;

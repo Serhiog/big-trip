@@ -1,7 +1,7 @@
 
-import { date4User, date4UserEnd } from "../utils/dates.js";
+import {date4User, date4UserEnd} from "../utils/dates.js";
 import Abstract from "./abstract.js";
-import { compare } from "../utils/filter.js";
+import {compare} from "../utils/filter.js";
 
 
 export default class MajorTripRouteView extends Abstract {
@@ -32,7 +32,7 @@ export default class MajorTripRouteView extends Abstract {
     let totalPrice = 0;
     points.forEach((point) => {
       totalPrice += point.price;
-      point.options.forEach(element => {
+      point.options.forEach((element) => {
         totalPrice += element.price;
       });
     });

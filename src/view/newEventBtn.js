@@ -1,6 +1,6 @@
 
 import Abstract from "./abstract.js";
-import { MenuItem } from "../consts.js";
+import {MenuItem} from "../consts.js";
 
 export default class NewEventBtnTemplate extends Abstract {
   constructor() {

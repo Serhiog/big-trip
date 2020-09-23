@@ -2,8 +2,8 @@
 import Chart from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import Abstract from "./abstract.js";
-import { TYPES } from "../consts.js";
-import { msToTime4Stats } from "../utils/dates.js";
+import {TYPES} from "../consts.js";
+import {msToTime4Stats} from "../utils/dates.js";
 
 import {
 
@@ -21,7 +21,7 @@ const renderTransportChart = (transportCtx, points) => {
 
 
   let typesAndIcons = [];
-  uniqPointTypes.forEach(element => {
+  uniqPointTypes.forEach((element) => {
     eventTypeToEmojiMap.find(function (item) {
       if (item.id === element) {
         typesAndIcons.push(item.icon + ` ` + item.id);
@@ -30,7 +30,7 @@ const renderTransportChart = (transportCtx, points) => {
   });
 
 
-  const valueOfPointType = uniqPointTypes.map((point) => countPointsByType(points, point))
+  const valueOfPointType = uniqPointTypes.map((point) => countPointsByType(points, point));
 
   transportCtx.height = BAR_HEIGHT * uniqPointTypes.length - 1;
   const transportChart = new Chart(transportCtx, {
@@ -107,23 +107,23 @@ const renderMoneyChart = (moneyCtx, points) => {
     return points.reduce((info, point, index) => {
       if (!info.type.includes(point.type)) {
         info.type.push(point.type);
-        info.sumPrice.push(point.price)
+        info.sumPrice.push(point.price);
       } else {
         info.sumPrice[info.type.indexOf(point.type)] += point.price;
       }
       return info;
     },
-      {
-        type: [],
-        sumPrice: [],
-      }
+    {
+      type: [],
+      sumPrice: [],
+    }
     );
   };
 
   const uniqPointTypes = makeItemsUniq(pointTypes);
 
   let typesAndIcons = [];
-  uniqPointTypes.forEach(element => {
+  uniqPointTypes.forEach((element) => {
     eventTypeToEmojiMap.find(function (item) {
       if (item.id === element) {
         typesAndIcons.push(item.icon + ` ` + item.id);
@@ -152,8 +152,8 @@ const renderMoneyChart = (moneyCtx, points) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `€ ${val}`
         }
       },
@@ -203,7 +203,7 @@ const renderTimeChart = (timeCtx, points) => {
   const pointTypes = points.map((point) => point.type.toUpperCase());
   const uniqPointTypes = makeItemsUniq(pointTypes);
   const typesAndIcons = [];
-  uniqPointTypes.forEach(element => {
+  uniqPointTypes.forEach((element) => {
     eventTypeToEmojiMap.find(function (item) {
       if (item.id === element) {
         typesAndIcons.push(item.icon + ` ` + item.id);
@@ -216,17 +216,17 @@ const renderTimeChart = (timeCtx, points) => {
       if (!info.type.includes(point.type)) {
         info.type.push(point.type);
         info.durTotalTime.push(
-          point.endDate.getTime() - point.startDate.getTime()
+            point.endDate.getTime() - point.startDate.getTime()
         );
       } else {
         info.durTotalTime[info.type.indexOf(point.type)] += (point.endDate.getTime() - point.startDate.getTime());
       }
       return info;
     },
-      {
-        type: [],
-        durTotalTime: [],
-      }
+    {
+      type: [],
+      durTotalTime: [],
+    }
     );
   };
 
@@ -250,8 +250,8 @@ const renderTimeChart = (timeCtx, points) => {
             size: 13
           },
           color: `#000000`,
-          anchor: 'end',
-          align: 'start',
+          anchor: `end`,
+          align: `start`,
           formatter: (val) => `${val}H`
         }
       },

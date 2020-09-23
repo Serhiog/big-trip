@@ -11,7 +11,7 @@ export const formatTaskDueDate = (dueDate) => {
 export const msToTime4Stats = (durMiliseconds) => {
   let hours = (Math.floor((durMiliseconds / (1000 * 60 * 60)))).toFixed();
   return hours;
-}
+};
 
 export const msToTime = (durMiliseconds) => {
   let days = Math.floor((durMiliseconds / (1000 * 60 * 60 * 24))).toFixed();

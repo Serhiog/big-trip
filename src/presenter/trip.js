@@ -2,10 +2,10 @@
 import SortView from "../view/tripSort.js";
 import TripsContainerView from "../view/tripsContainer.js";
 import GroupPresenter from './group.js';
-import { render, RenderPosition, remove } from "../utils/render.js";
-import { SortType, UpdateType, UserAction, State } from "../consts.js";
+import {render, RenderPosition, remove} from "../utils/render.js";
+import {SortType, UpdateType, UserAction, State} from "../consts.js";
 import NoPoints from "../view/no-Points.js";
-import { filter } from "../utils/filter.js";
+import {filter} from "../utils/filter.js";
 import PointNewPresenter from "./point-new.js";
 import LoadingView from "../view/loading.js";
 import HeaderPresenter from "./header.js";
@@ -42,7 +42,7 @@ export default class TripPresenter {
   }
 
   destroy() {
-    this._clearTrip({ resetSortType: true });
+    this._clearTrip({resetSortType: true});
     remove(this._containerView);
 
     this._pointsModel.removeObserver(this._handleModelEvent);
@@ -185,7 +185,7 @@ export default class TripPresenter {
         this._renderGroups();
         break;
       case UpdateType.MAJOR:
-        this._clearTrip({ resetRenderedTripCount: true, resetSortType: true });
+        this._clearTrip({resetRenderedTripCount: true, resetSortType: true});
         this._renderGroups();
         break;
       case UpdateType.INIT:
@@ -222,7 +222,7 @@ export default class TripPresenter {
 
   _handleSortTypeChange(sortType) {
     this._currentSortType = sortType;
-    this._clearTrip({ resetRenderedPointkCount: true });
+    this._clearTrip({resetRenderedPointkCount: true});
     this._renderGroups();
   }
 

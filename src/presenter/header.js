@@ -3,9 +3,9 @@ import TripListToggleView from "../view/toggleViewListTrip.js";
 import TripFilterView from "../view/mainTripFilter.js";
 import NewEventBtnTemplate from "../view/newEventBtn.js";
 import StatisticsView from '../view/statistics';
-import { render, RenderPosition, replace, remove } from "../utils/render.js";
-import { FilterType, UpdateType, MenuItem } from "../consts.js";
-import { filter } from "../utils/filter.js";
+import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {FilterType, UpdateType, MenuItem} from "../consts.js";
+import {filter} from "../utils/filter.js";
 
 export default class HeaderPresenter {
   constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
@@ -20,7 +20,7 @@ export default class HeaderPresenter {
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
-    this._handleSiteMenuClick = this._handleSiteMenuClick.bind(this)
+    this._handleSiteMenuClick = this._handleSiteMenuClick.bind(this);
     this._tripPresenter = tripPresenter;
     this._prevMajorTripRouteViewComponent = null;
     this._prevMajorTripCostViewComponent = null;

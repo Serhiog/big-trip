@@ -1,7 +1,7 @@
 import PointView from "../view/tripPoint.js";
 import PointEditView from "../view/pointEditor.js";
-import { render, RenderPosition, replace, remove } from "../utils/render.js";
-import { UserAction, UpdateType, State } from "../consts.js";
+import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {UserAction, UpdateType, State} from "../consts.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -102,13 +102,13 @@ export default class PointPresenter {
         this._pointEditComponent.updateData({
         });
         this._pointEditComponent.setdisabledSelects();
-        this._pointEditComponent.changeNameSaveBtn(newBtnSaveName)
+        this._pointEditComponent.changeNameSaveBtn(newBtnSaveName);
         break;
       case State.DELETING:
         this._pointEditComponent.updateData({
         });
         this._pointEditComponent.setdisabledSelects();
-        this._pointEditComponent.changeNameSaveBtn(newBtnSaveName)
+        this._pointEditComponent.changeNameSaveBtn(newBtnSaveName);
         break;
       case State.ABORTING:
         this._pointEditComponent.setdisabledSelects();
@@ -129,11 +129,11 @@ export default class PointPresenter {
 
   _handleFavoriteClick() {
     this._changeData(Object.assign({},
-      this._point,
-      {
-        isFavorite: !this._point.isFavorite
-      }),
-      UserAction.UPDATE_FAVORITE, UpdateType.MAJOR);
+        this._point,
+        {
+          isFavorite: !this._point.isFavorite
+        }),
+    UserAction.UPDATE_FAVORITE, UpdateType.MAJOR);
   }
 
 
