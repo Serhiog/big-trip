@@ -1,8 +1,6 @@
-
-import { humanizeTaskDueDate, msToTime } from "../utils/dates.js";
+import {formatTaskDueDate, msToTime} from "../utils/dates.js";
 import Abstract from "./abstract.js";
-import { remove } from "../utils/render.js";
-
+import {EXTRA_TYPES} from "../consts.js";
 
 export default class PointView extends Abstract {
   constructor(point) {
@@ -13,35 +11,45 @@ export default class PointView extends Abstract {
 
   createTripPointTemplate(point) {
     const MAX_COUNT_OPTIONS = 3;
-    let { type, city, price, options, startDate, endDate, id } = point;
-
+    let {startDate, endDate, id} = point;
+    let {type} = point;
+    type = type[0].toUpperCase() + type.substring(1);
+    let city = point.city;
     let durMiliseconds = endDate.getTime() - startDate.getTime();
     let duration = msToTime(durMiliseconds);
 
-    const t1 = humanizeTaskDueDate(startDate);
-    const t2 = humanizeTaskDueDate(endDate);
+    const t1 = formatTaskDueDate(startDate);
+    const t2 = formatTaskDueDate(endDate);
 
     let optionsHtml = ``;
 
-    let totalPrice = 0;
-    options.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
-      totalPrice += option[1];
+    const fixedOptions = [];
+    let optionName;
+    let optionPrice = 0;
+    point.options.forEach((offer) => {
+      fixedOptions.push(offer);
+    });
+
+    const typeCompare = (pointType) => pointType === type[0].toLowerCase() + type.substring(1);
+
+    fixedOptions.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
+      optionName = option.title;
+      optionPrice = option.price;
+
       optionsHtml += `
-          <li class="event__offer">
-                <span class="event__offer-title">${option[0]}</span>
-                 + €&nbsp;
-                 <span class="event__offer-price">${option[1]}</span>
-            </li >
+        <li class="event__offer">
+          <span class="event__offer-title">${optionName}</span> + €&nbsp;<span class="event__offer-price">${optionPrice}</span>
+        </li >
       `;
     });
 
     return `<li class="trip-events__item">
-    <div class="event">
+      <div class="event">
         <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png"
                 alt="Event type icon">
         </div>
-        <h3 class="event__title"> ${type} to ${city}</h3>
+        <h3 class="event__title"> ${type} ${EXTRA_TYPES.some(typeCompare) ? `in` : `to`} ${city}</h3>
 
         <div class="event__schedule">
             <p class="event__time">
@@ -54,7 +62,7 @@ export default class PointView extends Abstract {
 
 
         <p class="event__price">
-            € <span class="event__price-value">${price}</span>
+            € <span class="event__price-value">${point.price}</span>
         </p>
 
   <h4 class="visually-hidden">Offers:</h4>
@@ -68,7 +76,6 @@ export default class PointView extends Abstract {
     </div >
   </li > `;
   }
-
 
   getTemplate() {
     return this.createTripPointTemplate(this._point);
@@ -86,6 +93,10 @@ export default class PointView extends Abstract {
 
   removePointClickHandler() {
     this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
+
+  restoreHandlers() {
+    this.setPointClickHandler();
   }
 }
 

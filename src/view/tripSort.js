@@ -2,17 +2,19 @@
 import Abstract from "./abstract.js";
 
 export default class TripSortView extends Abstract {
-  constructor() {
+  constructor(currentSortType) {
     super();
     this._toChangeSort = this._toChangeSort.bind(this);
+    this._currentSortType = currentSortType;
+    this.setCheckedAttribute();
   }
 
   createTripSortTemplate() {
     return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    <span class="trip-sort__item  trip-sort__item--day">Day</span>
+    <span class="trip-sort__item  trip-sort__item--day">${this._currentSortType === `sort-event` ? `Day` : ``}</span>
 
     <div class="trip-sort__item  trip-sort__item--event">
-      <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event" checked="">
+      <input id="sort-event" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-event">
       <label class="trip-sort__btn" for="sort-event">Event</label>
     </div>
 
@@ -51,9 +53,16 @@ export default class TripSortView extends Abstract {
 
   setSortTypeChangeHandler(callback) {
     this._callback.sortHandler = callback;
-    document.querySelectorAll(`.trip-sort__btn`).forEach(element => {
+    document.querySelectorAll(`.trip-sort__btn`).forEach((element) => {
       element.addEventListener(`click`, this._toChangeSort);
     });
+  }
 
+  setCheckedAttribute() {
+    this.getElement().querySelectorAll(`.trip-sort__input`).forEach((element) => {
+      if (element.value === this._currentSortType) {
+        element.setAttribute(`checked`, ``);
+      }
+    });
   }
 }

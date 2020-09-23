@@ -13,8 +13,8 @@ export default class MajorTripCostView extends Abstract {
 
     points.forEach((point) => {
       totalPrice += point.price;
-      point.options.forEach((price) => {
-        totalPrice += price[1];
+      point.options.forEach((element) => {
+        totalPrice += element.price;
       });
     });
 
