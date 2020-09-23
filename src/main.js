@@ -1,47 +1,32 @@
-import {render} from "./view/util.js";
-import {createMajorTripInfoTemplate} from "./view/majorTripInfo.js";
-import {createMajorTripCostTemplate} from "./view/majorTripCost.js";
-import {createToggleViewListTripTemplate} from "./view/toggleViewListTrip.js";
-import {createMainTripFilterTemplate} from "./view/mainTripFilter.js";
-import {createTripSortTemplate} from "./view/tripSort.js";
-import {createTripEventEditContainerTemplate} from "./view/tripEventEditContainer.js";
-import {createTripEditorHeaderTemplate} from "./view/tripEditorHeader.js";
-import {createTripEditorDetailsTemplate} from "./view/tripEditorDetails.js";
-import {createTripPointsListTemplate} from "./view/tripPointsList.js";
-import {createTripPointTemplate} from "./view/tripPoint.js";
 
-const COUNT_RENDER_DAYS_TRIP = 3;
+import TripPresenter from "./presenter/trip.js";
+import PointsModel from "./model/points.js";
+import FilterModel from "./model/filter.js";
+import Api from "./api.js";
+import {UpdateType} from "./consts.js";
 
-const sitePageBodyContent = document.querySelector(`.page-body`);
-const siteHeaderContainer = sitePageBodyContent.querySelector(`.page-header`);
-const siteHeaderMainTripContainer = siteHeaderContainer.querySelector(`.trip-main`);
+const AUTHORIZATION = `Basic er883jdzbdw`;
+const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
 
-render(siteHeaderMainTripContainer, createMajorTripInfoTemplate(), `afterbegin`);
-const siteMajorInfoTrip = document.querySelector(`.trip-main__trip-info`);
-
-render(siteMajorInfoTrip, createMajorTripCostTemplate(), `beforeend`);
-
+const siteMainContainer = document.querySelector(`.trip-events`);
+const siteHeaderMainTripContainer = document.querySelector(`.trip-main`);
 const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-main__trip-controls`);
-const siteHeaderFilterToggleView = siteHeaderFilterTrip.querySelector(`.trip-main__trip-controls h2`);
-render(siteHeaderFilterToggleView, createToggleViewListTripTemplate(), `afterEnd`);
-render(siteHeaderFilterTrip, createMainTripFilterTemplate(), `beforeend`);
 
-const siteSiteMainContainer = sitePageBodyContent.querySelector(`.page-body__page-main`);
-const siteTripConstructor = siteSiteMainContainer.querySelector(`.trip-events h2`);
+const api = new Api(END_POINT, AUTHORIZATION);
 
-render(siteTripConstructor, createTripSortTemplate(), `afterend`);
-const siteTripSortTemplate = siteSiteMainContainer.querySelector(`.trip-events__trip-sort`);
 
-render(siteTripSortTemplate, createTripEventEditContainerTemplate(), `afterend`);
-const siteTripEventEditContainer = siteSiteMainContainer.querySelector(`.trip-events__item`);
+const filterModel = new FilterModel();
+const pointsModel = new PointsModel();
 
-render(siteTripEventEditContainer, createTripEditorHeaderTemplate(), `afterbegin`);
-
-render(siteTripEventEditContainer, createTripEditorDetailsTemplate(), `beforeend`);
-
-render(siteTripEventEditContainer, createTripPointsListTemplate(), `afterend`);
-const siteTripListPoints = siteSiteMainContainer.querySelector(`.trip-days`);
-
-for (let i = 0; i < COUNT_RENDER_DAYS_TRIP; i++) {
-  render(siteTripListPoints, createTripPointTemplate(), `afterbegin`);
-}
+api.getDestinations().then((destinations) => {
+  api.getOffers().then((offers) => {
+    api.getPoints().then((points) => {
+      pointsModel.setPoints(UpdateType.INIT, points);
+    }).catch(() => {
+      pointsModel.setPoints(UpdateType.INIT, []);
+    });
+    const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api, offers, destinations, siteHeaderMainTripContainer, siteHeaderFilterTrip);
+    tripPresenter.init();
+    tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
+  });
+});
