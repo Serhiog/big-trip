@@ -1,4 +1,4 @@
-import { render, RenderPosition } from "../utils/render.js";
+import {render, RenderPosition} from "../utils/render.js";
 import TripSortView from "../view/tripSort.js";
 
 export default class BoardPointsPresenter {

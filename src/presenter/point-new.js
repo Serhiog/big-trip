@@ -4,13 +4,12 @@ import {UserAction, UpdateType} from "../consts.js";
 import TripPointListView from "../view/tripPointsList.js";
 import InnerTripPointList from "../view/innerPointsList.js";
 
-const date = new Date();
 const BLANK_POINT = {
   type: `Flight`,
   city: ``,
   price: ``,
-  startDate: date,
-  endDate: new Date().setHours(date.getHours() + 1),
+  startDate: new Date(),
+  endDate: new Date(),
   options: [],
   isFavorite: false,
   destination: {

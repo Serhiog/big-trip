@@ -44,10 +44,11 @@ export default class HeaderPresenter {
   initStats() {
     const MenuComponent = this._prevSiteMenuComponent;
     const NewBtnComponent = this._prevNewEventBtnComponent;
-    this._prevSiteMenuComponent = new TripListToggleView();
-    this._prevNewEventBtnComponent = new NewEventBtnTemplate();
 
     if (MenuComponent === null || NewBtnComponent === null) {
+      this._prevSiteMenuComponent = new TripListToggleView();
+      this._prevNewEventBtnComponent = new NewEventBtnTemplate();
+
       render(this._siteHeaderFilterTrip, this._prevSiteMenuComponent, RenderPosition.AFTERBEGIN);
       render(this._siteHeaderMainTripContainer, this._prevNewEventBtnComponent, RenderPosition.BEFOREEND);
       this._handleSiteMenuClick();

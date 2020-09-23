@@ -2,7 +2,6 @@ import {date4User, date4UserEnd} from "../utils/dates.js";
 import Abstract from "./abstract.js";
 import {compare} from "../utils/filter.js";
 
-
 export default class MajorTripRouteView extends Abstract {
   constructor(points) {
     super();
@@ -19,14 +18,11 @@ export default class MajorTripRouteView extends Abstract {
       <p class="trip-info__cost">
         Total: €&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>
       </p>
-  </section > `;
+  </section> `;
   }
 
-
   createMajorTripInfoTemplate(points) {
-
     const sortedStartDatePoints = points.slice().sort(compare);
-
 
     let totalPrice = 0;
     points.forEach((point) => {
@@ -50,7 +46,8 @@ export default class MajorTripRouteView extends Abstract {
 
     } else {
       userDate = date4User(sortedStartDatePoints[0].startDate);
-      userTripsEnd = date4UserEnd(date4User(sortedStartDatePoints[sortedStartDatePoints.length - 1].endDate));
+      const lastPoint = sortedStartDatePoints[sortedStartDatePoints.length - 1];
+      userTripsEnd = date4UserEnd(date4User(lastPoint.endDate));
       if (sortedStartDatePoints.length === 1) {
         route = sortedStartDatePoints[0].city;
         return this._routeTemplate(route, userDate, userTripsEnd, totalPrice);

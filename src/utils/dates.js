@@ -41,9 +41,6 @@ export const date4User = (date) => {
 };
 
 export const date4UserEnd = (date) => {
-  if (!(date instanceof Date)) {
-    return ``;
-  }
   return date.split(` `).join().slice(4, 6);
 };
 

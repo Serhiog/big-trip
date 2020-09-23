@@ -3,7 +3,7 @@ import SmartView from "./smart.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 import {TYPES, EXTRA_TYPES} from "../consts.js";
-import {getDestinationsPattern} from '../utils/common'
+import {getDestinationsPattern} from '../utils/common';
 import he from "he";
 
 export default class PointEditView extends SmartView {
@@ -46,21 +46,19 @@ export default class PointEditView extends SmartView {
       this._startDatePicker = null;
     }
 
-    if (this._data.startDate) {
-      this._startDatePicker = flatpickr(
-          this.getElement().querySelector(`#event-start-time-1`),
-          {
-            enableTime: true,
-            maxDate: this._data.endDate,
-            // eslint-disable-next-line
-            time_24hr: true,
-            dateFormat: `d/m/y H:i`,
-            defaultDate: this._data.startDate,
-            onChange: this._tripStartDateChangeHandler,
-            onClose: this._tripStartDateCloseHandler
-          }
-      );
-    }
+    this._startDatePicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          maxDate: this._data.endDate,
+          // eslint-disable-next-line
+          time_24hr: true,
+          dateFormat: `d/m/y H:i`,
+          defaultDate: this._data.startDate,
+          onChange: this._tripStartDateChangeHandler,
+          onClose: this._tripStartDateCloseHandler
+        }
+    );
   }
 
   _tripStartDateChangeHandler([userDate]) {
@@ -85,21 +83,19 @@ export default class PointEditView extends SmartView {
       this._endtDatePicker = null;
     }
 
-    if (this._data.endDate) {
-      this._endtDatePicker = flatpickr(
-          this.getElement().querySelector(`#event-end-time-1`),
-          {
-            enableTime: true,
-            minDate: this._data.startDate,
-            // eslint-disable-next-line
-            time_24hr: true,
-            dateFormat: `d/m/y H:i`,
-            defaultDate: this._data.endDate,
-            onChange: this._tripEndDateChangeHandler,
-            onClose: this._tripEndDateCloseHandler
-          }
-      );
-    }
+    this._endtDatePicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          minDate: this._data.startDate,
+          // eslint-disable-next-line
+          time_24hr: true,
+          dateFormat: `d/m/y H:i`,
+          defaultDate: this._data.endDathe,
+          onChange: this._tripEndDateChangeHandler,
+          onClose: this._tripEndDateCloseHandler
+        }
+    );
   }
 
   _tripEndDateCloseHandler([userDate]) {
