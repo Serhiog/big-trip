@@ -22,7 +22,6 @@ export default class PointView extends Abstract {
     const t2 = formatTaskDueDate(endDate);
 
     let optionsHtml = ``;
-
     const fixedOptions = [];
     let optionName;
     let optionPrice = 0;
