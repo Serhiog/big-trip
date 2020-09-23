@@ -1,155 +1,102 @@
-export const createTripPointTemplate = () => {
-  return `<li class="trip-days__item  day">
-  <div class="day__info">
-    <span class="day__counter">1</span>
-    <time class="day__date" datetime="2019-03-18">MAR 18</time>
-  </div>
+import {formatTaskDueDate, msToTime} from "../utils/dates.js";
+import Abstract from "./abstract.js";
+import {EXTRA_TYPES} from "../consts.js";
 
-  <ul class="trip-events__list">
-    <li class="trip-events__item">
+export default class PointView extends Abstract {
+  constructor(point) {
+    super();
+    this._point = point;
+    this._editClickHandler = this._editClickHandler.bind(this);
+  }
+
+  createTripPointTemplate(point) {
+    const MAX_COUNT_OPTIONS = 3;
+    let {startDate, endDate, id} = point;
+    let {type} = point;
+    type = type[0].toUpperCase() + type.substring(1);
+    let city = point.city;
+    let durMiliseconds = endDate.getTime() - startDate.getTime();
+    let duration = msToTime(durMiliseconds);
+
+    const t1 = formatTaskDueDate(startDate);
+    const t2 = formatTaskDueDate(endDate);
+
+    let optionsHtml = ``;
+
+    const fixedOptions = [];
+    let optionName;
+    let optionPrice = 0;
+    point.options.forEach((offer) => {
+      fixedOptions.push(offer);
+    });
+
+    const typeCompare = (pointType) => pointType === type[0].toLowerCase() + type.substring(1);
+
+    fixedOptions.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
+      optionName = option.title;
+      optionPrice = option.price;
+
+      optionsHtml += `
+        <li class="event__offer">
+          <span class="event__offer-title">${optionName}</span> + €&nbsp;<span class="event__offer-price">${optionPrice}</span>
+        </li >
+      `;
+    });
+
+    return `<li class="trip-events__item">
       <div class="event">
         <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+            <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png"
+                alt="Event type icon">
         </div>
-        <h3 class="event__title">Taxi to Amsterdam</h3>
+        <h3 class="event__title"> ${type} ${EXTRA_TYPES.some(typeCompare) ? `in` : `to`} ${city}</h3>
 
         <div class="event__schedule">
-          <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
-            —
-            <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
-          </p>
-          <p class="event__duration">30M</p>
+            <p class="event__time">
+                <time class="event__start-time" datetime=${startDate}>${t1}</time>
+                —
+                <time class="event__end-time" datetime=${endDate}>${t2}</time>
+            </p>
+            <p class="event__duration">${duration}</p >
         </div>
+
 
         <p class="event__price">
-          €&nbsp;<span class="event__price-value">20</span>
+            € <span class="event__price-value">${point.price}</span>
         </p>
 
-        <h4 class="visually-hidden">Offers:</h4>
-        <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Order Uber</span>
-            +
-            €&nbsp;<span class="event__offer-price">20</span>
-           </li>
-        </ul>
+  <h4 class="visually-hidden">Offers:</h4>
+    <ul class="event__selected-offers">
+      ${optionsHtml}
+    </ul>
 
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
-      </div>
-    </li>
+    <button class="event__rollup-btn" type="button" data-index=${id}>
+      <span class="visually-hidden">Open event</span>
+    </button>
+    </div >
+  </li > `;
+  }
 
-    <li class="trip-events__item">
-      <div class="event">
-        <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/flight.png" alt="Event type icon">
-        </div>
-        <h3 class="event__title">Flight to Chamonix</h3>
 
-        <div class="event__schedule">
-          <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T12:25">12:25</time>
-            —
-            <time class="event__end-time" datetime="2019-03-18T13:35">13:35</time>
-          </p>
-          <p class="event__duration">1H 10M</p>
-        </div>
+  getTemplate() {
+    return this.createTripPointTemplate(this._point);
+  }
 
-        <p class="event__price">
-          €&nbsp;<span class="event__price-value">160</span>
-        </p>
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
 
-        <h4 class="visually-hidden">Offers:</h4>
-        <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Add luggage</span>
-            +
-            €&nbsp;<span class="event__offer-price">50</span>
-           </li>
-           <li class="event__offer">
-             <span class="event__offer-title">Switch to comfort</span>
-             +
-             €&nbsp;<span class="event__offer-price">80</span>
-            </li>
-        </ul>
+  setPointClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._editClickHandler);
+  }
 
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
-      </div>
-    </li>
+  removePointClickHandler() {
+    this.getElement().querySelector(`.event__rollup-btn`).removeEventListener(`click`, this._editClickHandler);
+  }
 
-    <li class="trip-events__item">
-      <div class="event">
-        <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/drive.png" alt="Event type icon">
-        </div>
-        <h3 class="event__title">Drive to Chamonix</h3>
-
-        <div class="event__schedule">
-          <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
-            —
-            <time class="event__end-time" datetime="2019-03-18T16:05">16:05</time>
-          </p>
-          <p class="event__duration">1H 35M</p>
-        </div>
-
-        <p class="event__price">
-          €&nbsp;<span class="event__price-value">160</span>
-        </p>
-
-        <h4 class="visually-hidden">Offers:</h4>
-        <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Rent a car</span>
-            +
-            €&nbsp;<span class="event__offer-price">200</span>
-           </li>
-        </ul>
-
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
-      </div>
-    </li>
-
-    <li class="trip-events__item">
-      <div class="event">
-        <div class="event__type">
-          <img class="event__type-icon" width="42" height="42" src="img/icons/check-in.png" alt="Event type icon">
-        </div>
-        <h3 class="event__title">Check-in in Chamonix</h3>
-
-        <div class="event__schedule">
-          <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T12:25">16:20</time>
-            —
-            <time class="event__end-time" datetime="2019-03-18T13:35">17:00</time>
-          </p>
-          <p class="event__duration">40M</p>
-        </div>
-
-        <p class="event__price">
-          €&nbsp;<span class="event__price-value">600</span>
-        </p>
-
-        <h4 class="visually-hidden">Offers:</h4>
-        <ul class="event__selected-offers">
-          <li class="event__offer">
-            <span class="event__offer-title">Add breakfast</span>
-            +
-            €&nbsp;<span class="event__offer-price">50</span>
-           </li>
-        </ul>
-
-        <button class="event__rollup-btn" type="button">
-          <span class="visually-hidden">Open event</span>
-        </button>
-      </div>
-    </li>
-  </ul>
-</li>`;
-};
+  restoreHandlers() {
+    this.setPointClickHandler();
+  }
+}
