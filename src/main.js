@@ -29,7 +29,3 @@ api.getDestinations().then((destinations) => {
     tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
   });
 });
-
-new HeaderTripPresenter(points, siteHeaderMainTripContainer, siteHeaderFilterTrip).init();
-new BoardPointsPresenter(siteMainContainer, points).init();
-new PointsPresenter(siteMainContainer, points).init();
