@@ -1,5 +1,4 @@
 import MajorTripRouteView from "../view/majorTripInfo.js";
-import MajorTripCostView from "../view/majorTripCost.js";
 import TripListToggleView from "../view/toggleViewListTrip.js";
 import TripFilterView from "../view/mainTripFilter.js";
 import NewEventBtnTemplate from "../view/newEventBtn.js";
@@ -33,16 +32,11 @@ export default class HeaderPresenter {
   init() {
     const majorTripRouteView = this._prevMajorTripRouteViewComponent;
     this._prevMajorTripRouteViewComponent = new MajorTripRouteView(this._pointsModel.getPoints());
-    // const majorTripCostView = this._prevMajorTripCostViewComponent;
-    // this._prevMajorTripCostViewComponent = new MajorTripCostView(this._pointsModel.getPoints());
 
     if (majorTripRouteView === null) {
       render(this._siteHeaderMainTripContainer, this._prevMajorTripRouteViewComponent, RenderPosition.AFTERBEGIN);
-      //const siteMajorInfoTrip = this._siteHeaderMainTripContainer.querySelector(`.trip-main__trip-info`);
-      // render(this._prevMajorTripRouteViewComponent, this._prevMajorTripCostViewComponent, RenderPosition.BEFOREEND);
     } else {
       replace(this._prevMajorTripRouteViewComponent, majorTripRouteView);
-      // replace(this._prevMajorTripCostViewComponent, majorTripCostView);
     }
     this.initStats();
   }
@@ -54,9 +48,8 @@ export default class HeaderPresenter {
     this._prevNewEventBtnComponent = new NewEventBtnTemplate();
 
     if (MenuComponent === null || NewBtnComponent === null) {
-      render(this._siteHeaderFilterTrip, this._prevSiteMenuComponent, RenderPosition.AFTERBEGIN); // - table stats
-      render(this._siteHeaderMainTripContainer, this._prevNewEventBtnComponent, RenderPosition.BEFOREEND); // - кнопка
-      this._handlePointNewFormClose();
+      render(this._siteHeaderFilterTrip, this._prevSiteMenuComponent, RenderPosition.AFTERBEGIN);
+      render(this._siteHeaderMainTripContainer, this._prevNewEventBtnComponent, RenderPosition.BEFOREEND);
       this._handleSiteMenuClick();
     }
     this.initStartFilter();
@@ -66,18 +59,20 @@ export default class HeaderPresenter {
 
     switch (menuItem) {
       case MenuItem.ADD_NEW_EVENT:
+        this._prevSiteMenuComponent.setActiveBtn(menuItem);
+        if (this._statisticsComponent !== null) {
+          remove(this._statisticsComponent);
+        }
         this._tripPresenter.destroy();
         this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
         this._tripPresenter.init();
-        this._tripPresenter.createPoint(this._handlePointNewFormClose);
-        // this._prevNewEventBtnComponent.getElement().setAttribute(`disabled`, ``);
-        // this._siteMenuComponent.getElement().querySelector(`[value=${MenuItem.ADD_NEW_EVENT}]`).disabled = true;
+        this._tripPresenter.createPoint();
         break;
       case MenuItem.TABLE:
         remove(this._statisticsComponent);
         this._tripPresenter.destroy();
         this._tripPresenter.init();
-
+        this._prevSiteMenuComponent.setActiveBtn(menuItem);
         break;
       case MenuItem.STATISTICS:
         if (this._statisticsComponent !== null) {
@@ -86,18 +81,11 @@ export default class HeaderPresenter {
         this._tripPresenter.destroy();
         this._statisticsComponent = new StatisticsView(this._pointsModel.getPoints());
         render(this._siteMainContainer, this._statisticsComponent, RenderPosition.BEFOREEND);
+        this._prevSiteMenuComponent.setActiveBtn(menuItem);
         break;
     }
-
     this._prevSiteMenuComponent.setMenuClickHandler(this._handleSiteMenuClick);
     this._prevNewEventBtnComponent.setNewEventBtnClickHandler(this._handleSiteMenuClick);
-  }
-
-  _handlePointNewFormClose() {
-    // this._siteMenuComponent.getElement().querySelector(`[id=${MenuItem.TABLE}]`).disabled = false;
-    // this._siteMenuComponent.setMenuItem(MenuItem.TABLE);
-    // this._newEventBtn.getElement().querySelector(`[id=${MenuItem.ADD_NEW_EVENT}]`).disabled = false;
-    // this._newEventBtn.setClickBtn(MenuItem.ADD_NEW_EVENT);
   }
 
   initStartFilter() {
@@ -109,7 +97,7 @@ export default class HeaderPresenter {
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      render(this._siteHeaderFilterTrip, this._filterComponent, RenderPosition.BEFOREEND); // everything future past
+      render(this._siteHeaderFilterTrip, this._filterComponent, RenderPosition.BEFOREEND);
       return;
     }
 
@@ -128,7 +116,7 @@ export default class HeaderPresenter {
       return;
     }
 
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterModel.setFilter(UpdateType.MINOR, filterType);
   }
 
   _getFilters() {

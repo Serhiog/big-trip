@@ -35,5 +35,6 @@ export const MenuItem = {
 export const State = {
   SAVING: `SAVING`,
   DELETING: `DELETING`,
-  ABORTING: `ABORTING`
+  ABORTING: `ABORTING`,
+  ADD_POINT: `ADD_POINT`,
 };

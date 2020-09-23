@@ -41,10 +41,6 @@ export default class PointNew {
       return;
     }
 
-    if (this._destroyCallback !== null) {
-      this._destroyCallback();
-    }
-
     this._pointEditComponent = new PointEditView(BLANK_POINT, this._offers, this._destinations, newPoint);
     this._pointEditComponent.submitPoint(this._handleFormSubmit);
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
@@ -109,5 +105,6 @@ export default class PointNew {
       isDisabled: true,
       isSaving: true
     });
+    this._pointEditComponent.setdisabledSelects();
   }
 }

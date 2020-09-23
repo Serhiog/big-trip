@@ -3,6 +3,7 @@ import { formatTaskDueDate, msToTime } from "../utils/dates.js";
 import Abstract from "./abstract.js";
 import { remove } from "../utils/render.js";
 import SmartView from "./smart.js";
+import { EXTRA_TYPES } from "../consts.js";
 
 export default class PointView extends Abstract {
   constructor(point) {
@@ -35,9 +36,9 @@ export default class PointView extends Abstract {
     let totalOfferPrice = 0;
     fixedOptions.forEach((option) => {
       totalOfferPrice += option.price;
-    })
+    });
 
-
+    const typeCompare = (pointType) => pointType === type[0].toLowerCase() + type.substring(1);
 
     fixedOptions.slice(0, MAX_COUNT_OPTIONS).forEach((option) => {
       optionName = option.title;
@@ -60,7 +61,7 @@ export default class PointView extends Abstract {
             <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png"
                 alt="Event type icon">
         </div>
-        <h3 class="event__title"> ${type} to ${city}</h3>
+        <h3 class="event__title"> ${type} ${EXTRA_TYPES.some(typeCompare) ? `in` : `to`} ${city}</h3>
 
         <div class="event__schedule">
             <p class="event__time">

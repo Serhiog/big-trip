@@ -101,21 +101,23 @@ export default class PointPresenter {
     switch (state) {
       case State.SAVING:
         this._pointEditComponent.updateData({
-          // isDisabled: true,
-          // isSaving: true
-          // isFavorite: true
         });
+        this._pointEditComponent.setdisabledSelects();
         this._pointEditComponent.changeNameSaveBtn(newBtnSaveName)
         break;
       case State.DELETING:
         this._pointEditComponent.updateData({
-          // isDisabled: true,
-          // isDeleting: true
         });
+        this._pointEditComponent.setdisabledSelects();
+        this._pointEditComponent.changeNameSaveBtn(newBtnSaveName)
         break;
       case State.ABORTING:
+        this._pointEditComponent.setdisabledSelects();
         this._pointComponent.shake(resetFormState);
         this._pointEditComponent.shake(resetFormState);
+        break;
+      case State.ADD_POINT:
+        this._pointEditComponent.setdisabledSelects();
         break;
     }
 
@@ -127,7 +129,12 @@ export default class PointPresenter {
   }
 
   _handleFavoriteClick() {
-    this._changeData(Object.assign({}, this._point, { isFavorite: !this._point.isFavorite }), UserAction.UPDATE_POINT, UpdateType.MINOR);
+    this._changeData(Object.assign({},
+      this._point,
+      {
+        isFavorite: !this._point.isFavorite
+      }),
+      UserAction.UPDATE_FAVORITE, UpdateType.MAJOR);
   }
 
 

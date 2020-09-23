@@ -58,7 +58,8 @@ export default class PointEditView extends SmartView {
           time_24hr: true,
           dateFormat: `d/m/y H:i`,
           defaultDate: this._data.startDate,
-          onChange: this._tripStartDateChangeHandler
+          onChange: this._tripStartDateChangeHandler,
+          onClose: this._tripStartDateCloseHandler
         }
       );
     }
@@ -67,6 +68,12 @@ export default class PointEditView extends SmartView {
   _tripStartDateChangeHandler([userDate]) {
     // userDate.setHours(23, 59, 59, 999);
 
+    this.updateData({
+      startDate: userDate
+    });
+  }
+
+  _tripStartDateCloseHandler([userDate]) {
     this.updateData({
       startDate: userDate
     });
@@ -87,10 +94,17 @@ export default class PointEditView extends SmartView {
           time_24hr: true,
           dateFormat: `d/m/y H:i`,
           defaultDate: this._data.endDate,
-          onChange: this._tripEndDateChangeHandler
+          onChange: this._tripEndDateChangeHandler,
+          onClose: this._tripEndDateCloseHandler
         }
       );
     }
+  }
+
+  _tripEndDateCloseHandler([userDate]) {
+    this.updateData({
+      endDate: userDate
+    });
   }
 
   _tripEndDateChangeHandler([userDate]) {
@@ -113,13 +127,15 @@ export default class PointEditView extends SmartView {
         cityName += `<option value=${place.name}></option>`;
       });
     }
-    const typeTrip = this._data.type[0].toUpperCase() + this._data.type.substring(1)
+    const typeTrip = this._data.type[0].toUpperCase() + this._data.type.substring(1);
+
+    const typeCompare = (pointType) => pointType === this._data.type;
 
     citiesList = `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
-    ${typeTrip} to
+    ${typeTrip} ${EXTRA_TYPES.some(typeCompare) ? `in` : `to`}
     </label>
-    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.city}" list="destination-list-1">
+    <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${this._data.city}" list="destination-list-1" autocomplete="off">
     <datalist id="destination-list-1">
     ${cityName}
     </datalist>
@@ -253,10 +269,10 @@ ${citiesList}
                               <span class="visually-hidden">Price</span>
         €
       </label>
-                            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+                            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
     </div>
 
-                            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+                           <span class="event-container"><button class="event__save-btn  btn  btn--blue" type="submit">Save</button></span>
                             <button class="event__reset-btn" type="reset">${this._isNew === true ? `Cancel` : `Delete`}</button>
 
                             <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${point.isFavorite ? `checked` : ``}>
@@ -267,9 +283,10 @@ ${citiesList}
                                 </svg>
                               </label>
 
-                              <button class="event__rollup-btn" type="button">
-                                <span class="visually-hidden">Open event</span>
-                              </button>
+                              ${this._isNew === true ? `` : `<button class="event__rollup-btn" type="button">
+                              <span class="visually-hidden">Open event</span>
+                            </button>`}
+
   </header>
     ${optionsContainer}
     ${aboutPoint}
@@ -364,16 +381,18 @@ ${citiesList}
 
   _citiesClickHandler(evt) {
     evt.preventDefault();
-    if (!evt.target.value) {
+
+    let city = evt.target.value;
+    const even = (element) => element.name === city;
+    if (this._destinations.some(even)) {
+      const selectedCity = this._destinations.find(element => element.name === city);
+      this.updateData({
+        city,
+        destination: selectedCity,
+      });
+    } else {
       return;
     }
-    let city = evt.target.value;
-    const selectedCity = this._destinations.find(element => element.name === city);
-
-    this.updateData({
-      city,
-      destination: selectedCity,
-    });
   }
 
   setCitiesHandler() {
@@ -383,6 +402,7 @@ ${citiesList}
   _formDeleteClickHandler(evt) {
     evt.preventDefault();
     this._callback.deleteClick(PointEditView.parseDataToPoint(this._data));
+
   }
 
   setDeleteClickHandler(callback) {
@@ -413,7 +433,20 @@ ${citiesList}
   }
 
   changeNameSaveBtn(newName) {
-    this.getElement().querySelector(`.event__save-btn`).textContent = newName;
+    switch (newName) {
+      case `Saving`:
+        this.getElement().querySelector(`.event__save-btn`).textContent = newName;
+        break;
+      case `Deleting`:
+        this.getElement().querySelector(`.event__reset-btn`).textContent = newName;
+        break;
+    }
+  }
+
+  setdisabledSelects() {
+    this.getElement().querySelectorAll(`input`).forEach(input => {
+      input.setAttribute(`disabled`, ``);
+    });
   }
 
   restoreHandlers() {

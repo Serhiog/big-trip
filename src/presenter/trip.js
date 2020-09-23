@@ -148,7 +148,7 @@ export default class TripPresenter {
             this._pointsModel.updatePoint(updateType, response);
           })
           .catch((error) => {
-            this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
+            this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, `Save`);
           });
         break;
       case UserAction.ADD_POINT:
@@ -157,17 +157,26 @@ export default class TripPresenter {
           this._pointsModel.addPoint(updateType, response);
         })
           .catch((error) => {
-            console.log(error);
             this._pointNewPresenter.setAborting();
           });
         break;
       case UserAction.DELETE_POINT:
-        this._groupPresenter[dayNumber].setViewState(update, State.DELETING);
+        this._groupPresenter[dayNumber].setViewState(update, State.DELETING, `Deleting`);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
         }).catch(() => {
-          this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
+          this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, `Delete`);
         });
+        break;
+      case UserAction.UPDATE_FAVORITE:
+        this._groupPresenter[dayNumber].setViewState(update, State.SAVING);
+        this._api.updatePoint(update)
+          .then((response) => {
+            this._pointsModel.updatePoint(updateType, response);
+          })
+          .catch((error) => {
+            this._groupPresenter[dayNumber].setViewState(update, State.ABORTING);
+          });
         break;
     }
   }

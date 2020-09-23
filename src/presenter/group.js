@@ -31,8 +31,6 @@ export default class GroupPresenter {
   }
 
   _handlePointChange(updatedPoint, userAction, updateType) {
-    // this._changeData это _handleViewAction из trip.js
-    // передаю dayNumber чтобы в _handleViewAction можно было найти нужый груп презентер
     this._changeData(updatedPoint, userAction, updateType, this.dayNumber);
   }
 

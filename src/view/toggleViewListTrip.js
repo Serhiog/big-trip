@@ -3,9 +3,10 @@ import Abstract from "./abstract.js";
 import { MenuItem } from "../consts.js";
 
 export default class TripListToggleView extends Abstract {
-  constructor() {
+  constructor(isEnable) {
     super();
     this._menuClickHandler = this._menuClickHandler.bind(this);
+    this._isEnable = isEnable;
   }
 
   _menuClickHandler(evt) {
@@ -30,12 +31,30 @@ export default class TripListToggleView extends Abstract {
 
   createToggleViewListTripTemplate() {
     return `<nav class="trip-controls__trip-tabs  trip-tabs">
-    <a class="trip-tabs__btn  trip-tabs__btn--active" href="#" id="${MenuItem.TABLE}">Table</a>
+    <a class="trip-tabs__btn trip-tabs__btn--active" href="#" id="${MenuItem.TABLE}">Table</a>
     <a class="trip-tabs__btn" href="#" id="${MenuItem.STATISTICS}">Stats</a>
   </nav>`;
   }
 
   getTemplate() {
     return this.createToggleViewListTripTemplate();
+  }
+
+  setActiveBtn(btn) {
+    switch (btn) {
+      case `STATISTICS`:
+        this.getElement().querySelector(`#TABLE`).classList.remove(`trip-tabs__btn--active`)
+        this.getElement().querySelector(`#STATISTICS`).classList.add(`trip-tabs__btn--active`)
+        break;
+
+      case `TABLE`:
+        this.getElement().querySelector(`#STATISTICS`).classList.remove(`trip-tabs__btn--active`)
+        this.getElement().querySelector(`#TABLE`).classList.add(`trip-tabs__btn--active`)
+        break;
+      default:
+        this.getElement().querySelector(`#STATISTICS`).classList.remove(`trip-tabs__btn--active`)
+        this.getElement().querySelector(`#TABLE`).classList.add(`trip-tabs__btn--active`)
+        break;
+    }
   }
 }
