@@ -49,21 +49,21 @@ Promise.all([getDestinations, getOffers, getPoints])
   .then((data) => { setData(data[2], data[0], data[1]) })
   .catch((error) => console.log(error));
 
-// window.addEventListener(`load`, () => {
-//   navigator.serviceWorker.register(`/sw.js`)
-//     .then(() => {
-//       // Действие, в случае успешной регистрации ServiceWorker
-//     }).catch(() => {
-//       // Действие, в случае ошибки при регистрации ServiceWorker
-//       console.error(`ServiceWorker isn't available`); // eslint-disable-line
-//     });
-// });
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`)
+    .then(() => {
+      // Действие, в случае успешной регистрации ServiceWorker
+    }).catch(() => {
+      // Действие, в случае ошибки при регистрации ServiceWorker
+      console.error(`ServiceWorker isn't available`); // eslint-disable-line
+    });
+});
 
-// window.addEventListener(`online`, () => {
-//   document.title = document.title.replace(` [offline]`, ``);
-//   apiWithProvider.sync();
-// });
+window.addEventListener(`online`, () => {
+  document.title = document.title.replace(` [offline]`, ``);
+  apiWithProvider.sync();
+});
 
-// window.addEventListener(`offline`, () => {
-//   document.title += ` [offline]`;
-// });
+window.addEventListener(`offline`, () => {
+  document.title += ` [offline]`;
+});
