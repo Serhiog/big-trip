@@ -1,6 +1,6 @@
-import MajorTripRouteView from "../view/majorTripInfo.js";
-import TripListToggleView from "../view/toggleViewListTrip.js";
-import TripFilterView from "../view/mainTripFilter.js";
+import MajorTripRouteView from "../view/major-trip-info.js";
+import TripListToggleView from "../view/toggle-view-list-trip.js";
+import TripFilterView from "../view/main-trip-filter.js";
 import NewEventBtnTemplate from "../view/newEventBtn.js";
 import StatisticsView from '../view/statistics';
 import {render, RenderPosition, replace, remove} from "../utils/render.js";

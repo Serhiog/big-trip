@@ -2,7 +2,7 @@ import {formatTaskDueDate, formatedStartEndDate} from "../utils/dates";
 import SmartView from "./smart.js";
 import flatpickr from "flatpickr";
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
-import {TYPES, EXTRA_TYPES} from "../consts.js";
+import {TYPES, EXTRA_TYPES, BtnNames} from "../consts.js";
 import {getDestinationsPattern} from '../utils/common';
 import he from "he";
 
@@ -427,10 +427,10 @@ export default class PointEditView extends SmartView {
 
   changeNameSaveBtn(newName) {
     switch (newName) {
-      case `Saving`:
+      case BtnNames.SAVING:
         this.getElement().querySelector(`.event__save-btn`).textContent = newName;
         break;
-      case `Deleting`:
+      case BtnNames.DELETING:
         this.getElement().querySelector(`.event__reset-btn`).textContent = newName;
         break;
     }

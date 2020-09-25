@@ -1,8 +1,8 @@
 import SortView from "../view/tripSort.js";
-import TripsContainerView from "../view/tripsContainer.js";
+import TripsContainerView from "../view/trips-container.js";
 import GroupPresenter from './group.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
-import {SortType, UpdateType, UserAction, State} from "../consts.js";
+import {SortType, UpdateType, UserAction, State, BtnNames} from "../consts.js";
 import NoPoints from "../view/no-Points.js";
 import {filter} from "../utils/filter.js";
 import PointNewPresenter from "./point-new.js";
@@ -136,13 +136,13 @@ export default class TripPresenter {
   _handleViewAction(update, actionType, updateType, dayNumber) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._groupPresenter[dayNumber].setViewState(update, State.SAVING, `Saving`);
+        this._groupPresenter[dayNumber].setViewState(update, State.SAVING, BtnNames.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
             this._pointsModel.updatePoint(updateType, response);
           })
           .catch(() => {
-            this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, `Save`);
+            this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, BtnNames.SAVE);
           });
         break;
       case UserAction.ADD_POINT:
@@ -155,11 +155,11 @@ export default class TripPresenter {
           });
         break;
       case UserAction.DELETE_POINT:
-        this._groupPresenter[dayNumber].setViewState(update, State.DELETING, `Deleting`);
+        this._groupPresenter[dayNumber].setViewState(update, State.DELETING, BtnNames.DELETING);
         this._api.deletePoint(update).then(() => {
           this._pointsModel.deletePoint(updateType, update);
         }).catch(() => {
-          this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, `Delete`);
+          this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, BtnNames.DELETE);
         });
         break;
       case UserAction.UPDATE_FAVORITE:

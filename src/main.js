@@ -1,8 +1,10 @@
 import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
-import Api from "./api.js";
-import {UpdateType} from "./consts.js";
+import Api from "./api/index.js";
+import { UpdateType } from "./consts.js";
+import Store from "./api/store.js";
+import Provider from "./api/provider.js";
 
 const AUTHORIZATION = `Basic er883jdzbdw`;
 const END_POINT = `https://12.ecmascript.pages.academy/big-trip`;
@@ -13,19 +15,55 @@ const siteHeaderFilterTrip = siteHeaderMainTripContainer.querySelector(`.trip-ma
 
 const api = new Api(END_POINT, AUTHORIZATION);
 
-
 const filterModel = new FilterModel();
 const pointsModel = new PointsModel();
 
-api.getDestinations().then((destinations) => {
-  api.getOffers().then((offers) => {
-    api.getPoints().then((points) => {
-      pointsModel.setPoints(UpdateType.INIT, points);
-    }).catch(() => {
-      pointsModel.setPoints(UpdateType.INIT, []);
-    });
-    const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, api, offers, destinations, siteHeaderMainTripContainer, siteHeaderFilterTrip);
-    tripPresenter.init();
-    tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
-  });
+const STORE_PREFIX = `big-trip-localstorage`;
+const STORE_VER = `v12`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
+
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
+
+const setData = (points, destinations, offers) => {
+  const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, apiWithProvider, offers, destinations, siteHeaderMainTripContainer, siteHeaderFilterTrip);
+  tripPresenter.init();
+  tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
+  pointsModel.setPoints(UpdateType.INIT, points);
+};
+
+const getDestinations = new Promise((resolve) => {
+  apiWithProvider.getDestinations().then((destinations) => { resolve(destinations) });
 });
+
+const getOffers = new Promise((resolve) => {
+  apiWithProvider.getOffers().then((offers) => { resolve(offers) });
+});
+
+const getPoints = new Promise((resolve) => {
+  apiWithProvider.getPoints().then((points) => { resolve(points) });
+});
+
+Promise.all([getDestinations, getOffers, getPoints])
+  // .then((data) => { console.log(data[2], data[0], data[1]) })
+  .then((data) => { setData(data[2], data[0], data[1]) })
+  .catch((error) => console.log(error));
+
+// window.addEventListener(`load`, () => {
+//   navigator.serviceWorker.register(`/sw.js`)
+//     .then(() => {
+//       // Действие, в случае успешной регистрации ServiceWorker
+//     }).catch(() => {
+//       // Действие, в случае ошибки при регистрации ServiceWorker
+//       console.error(`ServiceWorker isn't available`); // eslint-disable-line
+//     });
+// });
+
+// window.addEventListener(`online`, () => {
+//   document.title = document.title.replace(` [offline]`, ``);
+//   apiWithProvider.sync();
+// });
+
+// window.addEventListener(`offline`, () => {
+//   document.title += ` [offline]`;
+// });

@@ -38,3 +38,10 @@ export const State = {
   ABORTING: `ABORTING`,
   ADD_POINT: `ADD_POINT`,
 };
+
+export const BtnNames = {
+  SAVE: `Save`,
+  SAVING: `Saving`,
+  DELETE: `Delete`,
+  DELETING: `Deleting`,
+};

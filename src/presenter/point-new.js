@@ -1,7 +1,7 @@
 import PointEditView from "../view/pointEditor.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
 import {UserAction, UpdateType} from "../consts.js";
-import TripPointListView from "../view/tripPointsList.js";
+import TripPointListView from "../view/trip-points-list.js";
 import InnerTripPointList from "../view/innerPointsList.js";
 
 const BLANK_POINT = {
