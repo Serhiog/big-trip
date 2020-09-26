@@ -3,12 +3,12 @@ import TripListToggleView from "../view/toggle-view-list-trip.js";
 import TripFilterView from "../view/main-trip-filter.js";
 import NewEventBtnTemplate from "../view/newEventBtn.js";
 import StatisticsView from '../view/statistics';
-import { render, RenderPosition, replace, remove } from "../utils/render.js";
-import { FilterType, UpdateType, MenuItem } from "../consts.js";
-import { filter } from "../utils/filter.js";
+import {render, RenderPosition, replace, remove} from "../utils/render.js";
+import {FilterType, UpdateType, MenuItem} from "../consts.js";
+import {filter} from "../utils/filter.js";
 
 export default class HeaderPresenter {
-  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter, store) {
+  constructor(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter) {
     this._siteHeaderMainTripContainer = siteHeaderMainTripContainer;
     this._siteHeaderFilterTrip = siteHeaderFilterTrip;
     this._siteMainContainer = siteMainContainer;
@@ -27,7 +27,6 @@ export default class HeaderPresenter {
     this._prevSiteMenuComponent = null;
     this._prevNewEventBtnComponent = null;
     this._statisticsComponent = null;
-    this._store = store;
   }
 
   init() {

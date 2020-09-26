@@ -2,7 +2,7 @@ import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import Api from "./api/index.js";
-import { UpdateType } from "./consts.js";
+import {UpdateType} from "./consts.js";
 import Store from "./api/store.js";
 import Provider from "./api/provider.js";
 
@@ -33,19 +33,27 @@ const setData = (points, destinations, offers) => {
 };
 
 const getDestinations = new Promise((resolve) => {
-  apiWithProvider.getDestinations().then((destinations) => { resolve(destinations) });
+  apiWithProvider.getDestinations().then((destinations) => {
+    resolve(destinations);
+  });
 });
 
 const getOffers = new Promise((resolve) => {
-  apiWithProvider.getOffers().then((offers) => { resolve(offers) });
+  apiWithProvider.getOffers().then((offers) => {
+    resolve(offers);
+  });
 });
 
 const getPoints = new Promise((resolve) => {
-  apiWithProvider.getPoints().then((points) => { resolve(points) });
+  apiWithProvider.getPoints().then((points) => {
+    resolve(points);
+  });
 });
 
 Promise.all([getDestinations, getOffers, getPoints])
-  .then((data) => { setData(data[2], data[0], data[1]) })
+  .then((data) => {
+    setData(data[2], data[0], data[1]);
+  })
   .catch((error) => console.error(error)); // eslint-disable-line
 
 window.addEventListener(`load`, () => {

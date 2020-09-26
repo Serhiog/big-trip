@@ -1,9 +1,9 @@
-import { nanoid } from "nanoid";
+import {nanoid} from "nanoid";
 import PointsModel from "../model/points.js";
 
 const getSyncedPoints = (items) => {
-  return items.filter(({ success }) => success)
-    .map(({ payload }) => payload.point);
+  return items.filter(({success}) => success)
+    .map(({payload}) => payload.point);
 };
 
 const createStoreStructure = (items) => {
@@ -87,7 +87,7 @@ export default class Provider {
     }
 
     const localNewPointId = nanoid();
-    const localNewPoint = Object.assign({}, point, { id: localNewPointId });
+    const localNewPoint = Object.assign({}, point, {id: localNewPointId});
 
     this._store.setPoint(localNewPoint.id, PointsModel.adaptToServer(localNewPoint));
     return Promise.resolve(localNewPoint);

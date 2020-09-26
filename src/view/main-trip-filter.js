@@ -9,6 +9,7 @@ export default class TripFilterView extends Abstract {
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
     this.setCheckedAttribute();
     this._points = points;
+    this._checkPointDate();
   }
 
   createMainTripFilterTemplate() {
@@ -54,5 +55,25 @@ export default class TripFilterView extends Abstract {
         element.setAttribute(`checked`, ``);
       }
     });
+  }
+
+  _checkPointDate() {
+    if (this._points.every(this._checkFuturePoints)) {
+      const t = this.getElement().querySelector(`#filter-past`);
+      t.setAttribute(`disabled`, ``);
+      t.setCustomValidity(`opa`);
+
+    }
+    if (this._points.every(this._checkPastPoints)) {
+      this.getElement().querySelector(`#filter-future`).setAttribute(`disabled`, ``);
+    }
+  }
+
+  _checkFuturePoints(point) {
+    return point.startDate > new Date().getTime();
+  }
+
+  _checkPastPoints(point) {
+    return point.startDate < new Date().getTime();
   }
 }
