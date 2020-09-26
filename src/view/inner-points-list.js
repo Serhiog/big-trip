@@ -7,7 +7,6 @@ export default class InnerTripPointList extends Abstract {
             </ul>`;
   }
 
-
   getTemplate() {
     return this.innerListPointsTemplate();
   }
