@@ -1,6 +1,6 @@
 
 import TripPointListView from "../view/trip-points-list.js";
-import InnerTripPointList from "../view/innerPointsList.js";
+import InnerTripPointList from "../view/inner-points-list.js";
 import PointPresenter from './point.js';
 import {render, RenderPosition, remove} from "../utils/render.js";
 

@@ -1,6 +1,8 @@
 import {date4User, date4UserEnd} from "../utils/dates.js";
 import Abstract from "./abstract.js";
 import {compare} from "../utils/filter.js";
+import {countCities} from "../consts.js";
+
 
 export default class MajorTripRouteView extends Abstract {
   constructor(points) {
@@ -47,17 +49,21 @@ export default class MajorTripRouteView extends Abstract {
     } else {
       userDate = date4User(sortedStartDatePoints[0].startDate);
       const lastPoint = sortedStartDatePoints[sortedStartDatePoints.length - 1];
-      userTripsEnd = date4UserEnd(date4User(lastPoint.endDate));
-      if (sortedStartDatePoints.length === 1) {
+      if (sortedStartDatePoints[sortedStartDatePoints.length - 1].endDate.getMonth() !== sortedStartDatePoints[0].startDate.getMonth()) {
+        userTripsEnd = date4User(lastPoint.endDate);
+      } else {
+        userTripsEnd = date4UserEnd(date4User(lastPoint.endDate));
+      }
+      if (sortedStartDatePoints.length === countCities.ONE_CITY) {
         route = sortedStartDatePoints[0].city;
         return this._routeTemplate(route, userDate, userTripsEnd, totalPrice);
-      } if (sortedStartDatePoints.length === 2) {
+      } if (sortedStartDatePoints.length === countCities.TWO_CITY) {
         route = sortedStartDatePoints[0].city + `  —  ` + sortedStartDatePoints[1].city;
         return this._routeTemplate(route, userDate, userTripsEnd, totalPrice);
-      } if (sortedStartDatePoints.length === 3) {
+      } if (sortedStartDatePoints.length === countCities.THREE_CITY) {
         route = sortedStartDatePoints[0].city + `  —  ` + sortedStartDatePoints[1].city + `  —  ` + sortedStartDatePoints[2].city;
         return this._routeTemplate(route, userDate, userTripsEnd, totalPrice);
-      } if (sortedStartDatePoints.length >= 4) {
+      } if (sortedStartDatePoints.length >= countCities.FOUR_CITY) {
         route = sortedStartDatePoints[0].city + `  —  ... —  ` + sortedStartDatePoints[sortedStartDatePoints.length - 1].city;
         return this._routeTemplate(route, userDate, userTripsEnd, totalPrice);
 

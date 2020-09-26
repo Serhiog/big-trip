@@ -1,3 +1,5 @@
+import {routeNames} from "../consts.js";
+
 export default class Store {
   constructor(key, storage) {
     this._storage = storage;
@@ -21,7 +23,7 @@ export default class Store {
 
   getDestinations() {
     try {
-      return JSON.parse(this._storage.getItem(this._storeKey + `-` + `destinations`)) || {};
+      return JSON.parse(this._storage.getItem(this._storeKey + `-` + routeNames.DESTINATIONS)) || {};
     } catch (err) {
       return {};
     }
@@ -29,14 +31,14 @@ export default class Store {
 
   setDestinations(destinations) {
     this._storage.setItem(
-        this._storeKey + `-` + `destinations`,
+        this._storeKey + `-` + routeNames.DESTINATIONS,
         JSON.stringify(destinations)
     );
   }
 
   getOffers() {
     try {
-      return JSON.parse(this._storage.getItem(this._storeKey + `-` + `offers`)) || {};
+      return JSON.parse(this._storage.getItem(this._storeKey + `-` + routeNames.OFFERS)) || {};
     } catch (err) {
       return {};
     }
@@ -44,7 +46,7 @@ export default class Store {
 
   setOffers(offers) {
     this._storage.setItem(
-        this._storeKey + `-` + `offers`,
+        this._storeKey + `-` + routeNames.OFFERS,
         JSON.stringify(offers)
     );
   }

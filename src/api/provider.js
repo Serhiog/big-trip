@@ -45,10 +45,6 @@ export default class Provider {
 
     const storeDestinations = Object.values(this._store.getDestinations());
     return Promise.resolve(storeDestinations);
-    // const storeDestinations = Object.values(this._store.getDestinations());
-    // const storeOffers = Object.values(this._store.getOffers());
-
-    // return Promise.all([storePoints, storeDestinations, storeOffers]).then((data) => console.log(data[0], data[1], data[2]));  // eslint-disable-line
   }
 
   getOffers() {
@@ -109,12 +105,8 @@ export default class Provider {
 
       return this._api.sync(storePoints)
         .then((response) => {
-          // Забираем из ответа синхронизированные задачи
           const createdPoints = getSyncedPoints(response.created);
           const updatedPoints = getSyncedPoints(response.updated);
-
-          // Добавляем синхронизированные задачи в хранилище.
-          // Хранилище должно быть актуальным в любой момент.
           const points = createStoreStructure([...createdPoints, ...updatedPoints]);
 
           this._store.setPoints(points);

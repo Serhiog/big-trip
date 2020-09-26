@@ -21,12 +21,12 @@ export default class TripFilterView extends Abstract {
 
     <div class="trip-filters__filter">
       <input id="filter-future" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="future">
-      <label class="trip-filters__filter-label" for="filter-future">Future</label>
+      <label class="trip-filters__filter-label" for="filter-future" id="future">Future</label>
     </div>
 
     <div class="trip-filters__filter">
       <input id="filter-past" class="trip-filters__filter-input  visually-hidden" type="radio" name="trip-filter" value="past">
-      <label class="trip-filters__filter-label" for="filter-past">Past</label>
+      <label class="trip-filters__filter-label" for="filter-past" id="past">Past</label>
     </div>
 
     <button class="visually-hidden" type="submit">Accept filter</button>
@@ -59,13 +59,15 @@ export default class TripFilterView extends Abstract {
 
   _checkPointDate() {
     if (this._points.every(this._checkFuturePoints)) {
-      const t = this.getElement().querySelector(`#filter-past`);
-      t.setAttribute(`disabled`, ``);
-      t.setCustomValidity(`opa`);
-
-    }
-    if (this._points.every(this._checkPastPoints)) {
-      this.getElement().querySelector(`#filter-future`).setAttribute(`disabled`, ``);
+      const filterPastElement = this.getElement().querySelector(`#filter-past`);
+      filterPastElement.setAttribute(`disabled`, ``);
+      this.getElement().querySelector(`#past`).classList.add(`disabled`);
+      this.getElement().querySelector(`#past`).style.cursor = `not-allowed`;
+    } else if (this._points.every(this._checkPastPoints)) {
+      const filterFutureElement = this.getElement().querySelector(`#filter-future`);
+      filterFutureElement.setAttribute(`disabled`, ``);
+      this.getElement().querySelector(`#future`).classList.add(`disabled`);
+      this.getElement().querySelector(`#future`).style.cursor = `not-allowed`;
     }
   }
 

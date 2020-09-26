@@ -1,4 +1,4 @@
-import SortView from "../view/tripSort.js";
+import SortView from "../view/trip-sort.js";
 import TripsContainerView from "../view/trips-container.js";
 import GroupPresenter from './group.js';
 import {render, RenderPosition, remove} from "../utils/render.js";

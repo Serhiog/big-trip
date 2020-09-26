@@ -45,3 +45,26 @@ export const BtnNames = {
   DELETE: `Delete`,
   DELETING: `Deleting`,
 };
+
+export const routeNames = {
+  DESTINATIONS: `destinations`,
+  OFFERS: `offers`,
+  POINTS: `points`,
+};
+
+export const keyBtns = {
+  ESCAPE: `Escape`,
+  ESC: `Esc`,
+};
+
+export const timeOuts = {
+  STANDART: 1000,
+};
+
+export const countCities = {
+  ONE_CITY: 1,
+  TWO_CITY: 2,
+  THREE_CITY: 3,
+  FOUR_CITY: 4,
+};
+

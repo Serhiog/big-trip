@@ -1,8 +1,8 @@
-import PointEditView from "../view/pointEditor.js";
+import PointEditView from "../view/point-editor.js";
 import {remove, render, RenderPosition} from "../utils/render.js";
-import {UserAction, UpdateType} from "../consts.js";
+import {UserAction, UpdateType, keyBtns} from "../consts.js";
 import TripPointListView from "../view/trip-points-list.js";
-import InnerTripPointList from "../view/innerPointsList.js";
+import InnerTripPointList from "../view/inner-points-list.js";
 
 const BLANK_POINT = {
   type: `Flight`,
@@ -90,7 +90,7 @@ export default class PointNew {
   }
 
   _escKeyDownHandler(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+    if (evt.key === keyBtns.ESCAPE || evt.key === keyBtns.ESC) {
       evt.preventDefault();
       this._enabaleNewPointBtn();
       this.destroy();

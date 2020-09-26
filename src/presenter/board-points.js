@@ -1,5 +1,5 @@
 import {render, RenderPosition} from "../utils/render.js";
-import TripSortView from "../view/tripSort.js";
+import TripSortView from "../view/trip-sort.js";
 
 export default class BoardPointsPresenter {
   constructor(siteMainContainer, points) {

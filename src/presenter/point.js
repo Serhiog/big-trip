@@ -1,7 +1,7 @@
-import PointView from "../view/tripPoint.js";
-import PointEditView from "../view/pointEditor.js";
+import PointView from "../view/trip-point.js";
+import PointEditView from "../view/point-editor.js";
 import {render, RenderPosition, replace, remove} from "../utils/render.js";
-import {UserAction, UpdateType, State} from "../consts.js";
+import {UserAction, UpdateType, State, keyBtns} from "../consts.js";
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -82,7 +82,7 @@ export default class PointPresenter {
   }
 
   _onEscKeyDown(evt) {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
+    if (evt.key === keyBtns.ESCAPE || evt.key === keyBtns.ESC) {
       evt.preventDefault();
       this._replaceEditToPoint();
     }

@@ -1,5 +1,5 @@
 import PointsModel from "../model/points.js";
-
+import {routeNames} from "../consts.js";
 
 const Method = {
   GET: `GET`,
@@ -20,18 +20,18 @@ export default class Api {
   }
 
   getPoints() {
-    return this._load({url: `points`})
+    return this._load({url: routeNames.POINTS})
       .then(Api.toJSON)
       .then((points) => points.map(PointsModel.adaptToClient));
   }
 
   getOffers() {
-    return this._load({url: `offers`})
+    return this._load({url: routeNames.OFFERS})
     .then(Api.toJSON);
   }
 
   getDestinations() {
-    return this._load({url: `destinations`})
+    return this._load({url: routeNames.DESTINATIONS})
     .then(Api.toJSON);
   }
 
