@@ -4,7 +4,7 @@ export default class Store {
     this._storeKey = key;
   }
 
-  getItems() {
+  getPoints() {
     try {
       return JSON.parse(this._storage.getItem(this._storeKey)) || {};
     } catch (err) {
@@ -12,15 +12,46 @@ export default class Store {
     }
   }
 
-  setItems(items) {
+  setPoints(points) {
     this._storage.setItem(
         this._storeKey,
-        JSON.stringify(items)
+        JSON.stringify(points)
     );
   }
 
-  setItem(key, value) {
-    const store = this.getItems();
+  getDestinations() {
+    try {
+      return JSON.parse(this._storage.getItem(this._storeKey + `-` + `destinations`)) || {};
+    } catch (err) {
+      return {};
+    }
+  }
+
+  setDestinations(destinations) {
+    this._storage.setItem(
+        this._storeKey + `-` + `destinations`,
+        JSON.stringify(destinations)
+    );
+  }
+
+  getOffers() {
+    try {
+      return JSON.parse(this._storage.getItem(this._storeKey + `-` + `offers`)) || {};
+    } catch (err) {
+      return {};
+    }
+  }
+
+  setOffers(offers) {
+    this._storage.setItem(
+        this._storeKey + `-` + `offers`,
+        JSON.stringify(offers)
+    );
+  }
+
+
+  setPoint(key, value) {
+    const store = this.getPoints();
 
     this._storage.setItem(
         this._storeKey,
@@ -32,8 +63,8 @@ export default class Store {
     );
   }
 
-  removeItem(key) {
-    const store = this.getItems();
+  removePoint(key) {
+    const store = this.getPoints();
 
     delete store[key];
 

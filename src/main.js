@@ -28,7 +28,7 @@ const apiWithProvider = new Provider(api, store);
 const setData = (points, destinations, offers) => {
   const tripPresenter = new TripPresenter(siteMainContainer, pointsModel, filterModel, apiWithProvider, offers, destinations, siteHeaderMainTripContainer, siteHeaderFilterTrip);
   tripPresenter.init();
-  tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter);
+  tripPresenter.initHeader(siteHeaderMainTripContainer, siteHeaderFilterTrip, siteMainContainer, filterModel, pointsModel, tripPresenter, store);
   pointsModel.setPoints(UpdateType.INIT, points);
 };
 
@@ -45,16 +45,14 @@ const getPoints = new Promise((resolve) => {
 });
 
 Promise.all([getDestinations, getOffers, getPoints])
-  // .then((data) => { console.log(data[2], data[0], data[1]) })
   .then((data) => { setData(data[2], data[0], data[1]) })
-  .catch((error) => console.log(error));
+  .catch((error) => console.error(error)); // eslint-disable-line
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)
     .then(() => {
-      // Действие, в случае успешной регистрации ServiceWorker
+      console.log(`ServiceWorker available`); // eslint-disable-line
     }).catch(() => {
-      // Действие, в случае ошибки при регистрации ServiceWorker
       console.error(`ServiceWorker isn't available`); // eslint-disable-line
     });
 });

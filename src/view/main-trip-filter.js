@@ -2,12 +2,13 @@ import Abstract from "./abstract.js";
 
 
 export default class TripFilterView extends Abstract {
-  constructor(filters, currentFilter) {
+  constructor(filters, currentFilter, points) {
     super();
     this._filters = filters;
     this._currentFilter = currentFilter;
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
     this.setCheckedAttribute();
+    this._points = points;
   }
 
   createMainTripFilterTemplate() {

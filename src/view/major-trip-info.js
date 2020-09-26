@@ -26,9 +26,9 @@ export default class MajorTripRouteView extends Abstract {
 
     let totalPrice = 0;
     points.forEach((point) => {
-      totalPrice += point.price;
+      totalPrice += +point.price;
       point.options.forEach((element) => {
-        totalPrice += element.price;
+        totalPrice += +element.price;
       });
     });
     const сities = [];
