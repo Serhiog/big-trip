@@ -2,7 +2,7 @@ import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import Api from "./api/index.js";
-import {UpdateType} from "./consts.js";
+import { UpdateType } from "./consts.js";
 import Store from "./api/store.js";
 import Provider from "./api/provider.js";
 
@@ -53,18 +53,13 @@ const getPoints = new Promise((resolve) => {
 Promise.all([getDestinations, getOffers, getPoints])
   .then((data) => {
     setData(data[2], data[0], data[1]);
-  })
-  // eslint-disable-next-line no-console
-  .catch((error) => console.error(error));
+  });
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)
     .then(() => {
       // eslint-disable-next-line no-console
       console.log(`ServiceWorker available`);
-    }).catch(() => {
-      // eslint-disable-next-line no-console
-      console.error(`ServiceWorker isn't available`);
     });
 });
 
