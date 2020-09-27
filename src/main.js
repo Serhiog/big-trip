@@ -54,7 +54,7 @@ Promise.all([getDestinations, getOffers, getPoints])
   .then((data) => {
     setData(data[2], data[0], data[1]);
   })
-  .catch((error) => ); // eslint-disable-line no-console
+  .catch((error) => console.error(error)); // eslint-disable-line no-console
 
 window.addEventListener(`load`, () => {
   navigator.serviceWorker.register(`/sw.js`)

@@ -119,7 +119,6 @@ export default class PointPresenter {
         this._pointEditComponent.setdisabledSelects();
         break;
     }
-
   }
 
   destroy() {

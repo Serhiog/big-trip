@@ -60,5 +60,4 @@ export default class GroupPresenter {
   setSaveBtnName(newBtnName) {
     return newBtnName;
   }
-
 }
