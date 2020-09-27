@@ -2,7 +2,7 @@ import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import Api from "./api/index.js";
-import { UpdateType } from "./consts.js";
+import {UpdateType} from "./consts.js";
 import Store from "./api/store.js";
 import Provider from "./api/provider.js";
 
@@ -56,11 +56,7 @@ Promise.all([getDestinations, getOffers, getPoints])
   });
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/sw.js`)
-    .then(() => {
-      // eslint-disable-next-line no-console
-      console.log(`ServiceWorker available`);
-    });
+  navigator.serviceWorker.register(`/sw.js`);
 });
 
 window.addEventListener(`online`, () => {
