@@ -2,7 +2,7 @@ import TripPresenter from "./presenter/trip.js";
 import PointsModel from "./model/points.js";
 import FilterModel from "./model/filter.js";
 import Api from "./api/index.js";
-import { UpdateType } from "./consts.js";
+import {UpdateType} from "./consts.js";
 import Store from "./api/store.js";
 import Provider from "./api/provider.js";
 
