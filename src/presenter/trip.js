@@ -162,7 +162,7 @@ export default class TripPresenter {
           this._groupPresenter[dayNumber].setViewState(update, State.ABORTING, BtnNames.DELETE);
         });
         break;
-      case UserAction.UPDATE_FAVORITE:
+      case UserAction.UPDATE_FAVORITE:``
         this._groupPresenter[dayNumber].setViewState(update, State.SAVING);
         this._api.updatePoint(update)
           .then((response) => {
